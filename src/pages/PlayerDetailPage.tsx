@@ -1,15 +1,6 @@
-import {
-  Box,
-  Flex,
-  Image,
-  Text,
-  VStack,
-  Button,
-  SimpleGrid,
-  Center,
-} from "@chakra-ui/react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Box, Flex, Image, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react"; // Import useEffect and useState
+import { useLocation, useNavigate } from "react-router-dom";
 import playerAvatar from "../assets/player_avatar.png";
 
 const PlayerDetailPage = () => {
@@ -19,6 +10,7 @@ const PlayerDetailPage = () => {
   const espnLogo1 = location.state?.espnLogo1; // Access the passed team logo
   const teamCity = location.state?.teamCity; // Access the passed teamCity
   const teamName = location.state?.teamName; // Access the passed teamName
+  const firstColor = location.state?.firstColor; // Access the passed teamName
 
   const [avatarSrc, setAvatarSrc] = useState(
     player?.espnID
@@ -37,13 +29,24 @@ const PlayerDetailPage = () => {
     return <div>No player data found</div>;
   }
 
-  // Function to go back to the team page
-  const handleBack = () => {
-    navigate(-1); // Go back to the previous page (team page)
-  };
+  // // Function to go back to the team page
+  // const handleBack = () => {
+  //   navigate(-1); // Go back to the previous page (team page)
+  // };
 
   return (
-    <Box as="section" padding="20px" borderRadius="md">
+    <Box
+      as="section"
+      padding="20px"
+      borderRadius="md"
+      w={"full"}
+      bg={`linear-gradient(360deg, #121212 30%, ${firstColor} 125%)`}
+      boxShadow={"2xl"}
+      rounded={"md"}
+      overflow={"hidden"}
+      border="1px solid #000"
+      mt={5}
+    >
       {/* Main Player Summary Section */}
       <Flex direction={["column", "row"]} align="center">
         {/* Left Side: Team Logo and Player Image */}
@@ -195,10 +198,9 @@ const PlayerDetailPage = () => {
         </Box>
       </Flex>
 
-      {/* Back Button */}
-      <Button mt={4} onClick={handleBack} colorScheme="teal">
+      {/* <Button mt={4} onClick={handleBack} colorScheme="teal">
         Back to Team
-      </Button>
+      </Button> */}
     </Box>
   );
 };

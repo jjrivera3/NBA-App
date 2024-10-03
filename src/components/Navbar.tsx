@@ -1,10 +1,26 @@
-import { HStack, Image, Link, Text, Box } from "@chakra-ui/react";
+import {
+  HStack,
+  Image,
+  Link,
+  Text,
+  Box,
+  IconButton,
+  useDisclosure,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  DrawerHeader,
+  DrawerBody,
+  VStack,
+} from "@chakra-ui/react";
+import { HamburgerIcon } from "@chakra-ui/icons";
 import SearchInput from "./SearchInput";
 import logo from "../assets/logo.svg";
-import ColorModeSwitch from "./ColorModeSwitch";
 
 const NavBar = () => {
-  // Define the onSearch function
+  const { isOpen, onOpen, onClose } = useDisclosure(); // Chakra UI hook to control the drawer
+
   const onSearch = (value: string) => {
     console.log("Search term:", value);
   };
@@ -15,9 +31,9 @@ const NavBar = () => {
       paddingX="15px"
       justify="space-between"
       width="100%"
-      bg="gray.800" // Set the background color of the navbar
-      color="white" // Set the text color to ensure contrast
-      boxShadow="md" // Optional: adds a shadow for a modern effect
+      bg="gray.800"
+      color="white"
+      boxShadow="md"
     >
       {/* Logo and Text */}
       <Link
@@ -54,8 +70,37 @@ const NavBar = () => {
         <SearchInput onSearch={onSearch} />
       </Box>
 
-      {/* Color Mode Switch */}
-      <ColorModeSwitch />
+      {/* Hamburger Menu Button */}
+      <IconButton
+        aria-label="Open menu"
+        icon={<HamburgerIcon />}
+        variant="outline"
+        onClick={onOpen}
+        color="#f8991d" // Set the icon color
+        borderColor="#f8991d" // Set the border color
+        _hover={{
+          backgroundColor: "#f8991d", // Set the background color on hover
+          color: "#1f2024", // Keep the icon color the same
+          borderColor: "#f8991d", // Change the border color on hover
+        }}
+      />
+
+      {/* Drawer for Menu */}
+      <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Menu</DrawerHeader>
+          <DrawerBody>
+            <VStack spacing={4}>
+              <Link href="/ATL">Page 1</Link>
+              <Link href="/page2">Page 2</Link>
+              <Link href="/page3">Page 3</Link>
+              {/* Add more links as needed */}
+            </VStack>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </HStack>
   );
 };

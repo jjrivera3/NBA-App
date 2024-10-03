@@ -64,7 +64,7 @@ const PlayerCard = ({
       <Box
         maxW={"350px"}
         w={"full"}
-        bg={useColorModeValue("white", "gray.800")}
+        bg={useColorModeValue("white", "#26262640")}
         boxShadow={"2xl"}
         rounded={"md"}
         overflow={"hidden"}
@@ -136,7 +136,7 @@ const PlayerCard = ({
           </Center>
           <Link
             to={playerProfileUrl}
-            state={{ espnLogo1, player, teamCity, teamName }} // Pass player and team info via state
+            state={{ espnLogo1, player, teamCity, teamName, firstColor }} // Pass player and team info via state
           >
             <Button
               w={"full"}

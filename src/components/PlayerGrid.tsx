@@ -46,7 +46,7 @@ const PlayerGrid = () => {
       {isTeamInfoLoading ? (
         // Show a spinner while loading team info
         <Flex justify="start" align="left" height="100px">
-          <Spinner size="lg" />
+          <Spinner size="lg" color="#f8991d" />
         </Flex>
       ) : (
         selectedTeam && (

@@ -40,7 +40,7 @@ const TeamList = ({ onSelectTeam, selectedTeamId }: NbaTeamListProps) => {
           <ListItem
             key={team.teamId}
             paddingY="7px"
-            paddingX="10px"
+            paddingX="5px"
             borderRadius="md"
             cursor="pointer"
             bg={team.teamId === selectedTeamId ? "#121212" : "transparent"} // Highlight if selected
