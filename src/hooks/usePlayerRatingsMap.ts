@@ -1,12 +1,21 @@
 import { useMemo } from "react";
-import { normalizeName } from "../utils/normalizeName"; // Import utility function
+import usePlayerRating from "../hooks/usePlayerRating";
 
-const usePlayerRatings = (players: any[], ratings: any[]) => {
-  // Use useMemo to optimize performance and recalculate only when dependencies change
+const normalizeName = (name: string) => {
+  return name
+    .toLowerCase()
+    .replace(/[\u0300-\u036f]/g, "") // Remove accents
+    .replace(/['’]/g, "") // Remove apostrophes
+    .replace(/\s+/g, " "); // Normalize white spaces
+};
+
+const usePlayerRatingsMap = (players: any[]) => {
+  const ratings = usePlayerRating();
+
   return useMemo(() => {
     const playerRatingsMap: { [key: string]: any } = {};
 
-    players.forEach((player: any) => {
+    players.forEach((player) => {
       const normalizedPlayerName = normalizeName(player.espnName);
 
       const playerRating = ratings.find((rating) => {
@@ -19,12 +28,11 @@ const usePlayerRatings = (players: any[], ratings: any[]) => {
       }
     });
 
-    // Return players enriched with their ratings
-    return players.map((player: any) => ({
+    return players.map((player) => ({
       ...player,
       rating: playerRatingsMap[player.espnName] || null,
     }));
-  }, [players, ratings]); // Recompute when players or ratings change
+  }, [players, ratings]);
 };
 
-export default usePlayerRatings;
+export default usePlayerRatingsMap;

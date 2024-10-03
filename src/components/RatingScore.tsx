@@ -6,8 +6,12 @@ interface Props {
 
 const RatingScore = ({ rating }: Props) => {
   let color = "";
+  let displayText = `2K Rating: ${rating}`;
 
-  if (rating >= 90) {
+  if (rating === 0) {
+    color = "gray";
+    displayText = "No Rating";
+  } else if (rating >= 90) {
     color = "green";
   } else if (rating >= 80) {
     color = "teal";
@@ -21,7 +25,7 @@ const RatingScore = ({ rating }: Props) => {
 
   return (
     <Badge colorScheme={color} fontSize="14px" paddingX={2} borderRadius="4px">
-      {rating} Rating
+      {displayText}
     </Badge>
   );
 };

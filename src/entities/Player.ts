@@ -15,4 +15,5 @@ export default interface Player {
   jerseyNum: string;
   espnName: string;
   rating: Ratings;
+  espnID: string;
 }

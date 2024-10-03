@@ -1,50 +1,36 @@
-# React + TypeScript + Vite
+# NBA Player Stats App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the NBA Player Stats App, a React-based application that displays NBA player stats using data fetched from a public API. This app provides detailed information about NBA players, including stats like PPG, RPG, APG, FG%, and more, along with team details and player headshots.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🏀 **Player Details**: Displays detailed information about individual NBA players, including their stats and team.
+- 🏆 **Team Information**: Shows team details including the team logo, city, and name.
+- 📊 **Player Stats**: Provides key stats for each player, including points per game (PPG), rebounds per game (RPG), assists per game (APG), field goal percentage (FG%), and more.
+- 🎨 **Modern UI**: Built using Chakra UI for a clean, responsive design.
 
-## Expanding the ESLint configuration
+## Technologies Used
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **React**: Frontend library for building the user interface.
+- **Chakra UI**: UI component library for styling the app.
+- **React Router**: For navigating between player and team pages.
+- **Axios** (or Fetch): For fetching data from a public NBA API.
+- **JavaScript/TypeScript**: Used for logic and data handling.
 
-- Configure the top-level `parserOptions` property like this:
+## Demo
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+You can view a live demo of the application [here](#). _(Add link once deployed)_
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Screenshots
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+![Player Stats Page](path-to-screenshot.png)
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+## Installation
+
+To get started with the NBA Player Stats App locally, follow these steps:
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/nba-player-stats-app.git
 ```

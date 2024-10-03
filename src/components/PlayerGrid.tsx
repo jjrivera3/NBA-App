@@ -1,6 +1,8 @@
 import { Flex, SimpleGrid, Spinner } from "@chakra-ui/react";
-import usePlayerRating from "../hooks/usePlayerRating";
-import usePlayerRatings from "../hooks/usePlayerRatings";
+import { useParams } from "react-router-dom";
+import nbaTeams from "../data/nbateams";
+import usePlayerRatingsMap from "../hooks/usePlayerRatingsMap";
+import useRoster from "../hooks/useRoster";
 import useSortedPlayers from "../hooks/useSortedPlayers";
 import useTeamColor from "../hooks/useTeamColor";
 import useTeamInfo from "../hooks/useTeamInfo";
@@ -9,30 +11,40 @@ import PlayerCardContainer from "./PlayerCardContainer";
 import TeamCardSkeleton from "./PlayerCardSkeleton";
 import TeamHeading from "./TeamHeading";
 
-interface Props {
-  selectedTeamId: string | null;
-}
+const PlayerGrid = () => {
+  const { teamAbv } = useParams<{ teamAbv?: string }>(); // Get teamAbv from the URL
+  const lowercasedTeamAbv = teamAbv ? teamAbv.toLowerCase() : null; // Lowercase the teamAbv
 
-const PlayerGrid = ({ selectedTeamId }: Props) => {
-  const teamColor = useTeamColor(selectedTeamId);
-  const { data: teamInfo, isLoading: isTeamInfoLoading } =
-    useTeamInfo(selectedTeamId);
-  const allTeams = teamInfo?.body || [];
-
-  // @ts-ignore
-  const selectedTeam = allTeams.find(
-    (team: { teamID: string | null }) => team.teamID === selectedTeamId
+  // Find the team that matches the lowercased teamAbv and get the teamId
+  const selectedAbv = nbaTeams.find(
+    (team) => team.info.abbrev.toLowerCase() === lowercasedTeamAbv
   );
-  const roster = selectedTeam?.Roster || {};
-  const players = Object.values(roster);
 
-  // Get ratings and sorted players using the custom hooks
-  const ratings = usePlayerRatings(players, usePlayerRating());
-  const sortedPlayers = useSortedPlayers(ratings);
+  const teamId = selectedAbv ? selectedAbv.teamId : null;
+
+  const teamColor = useTeamColor(teamId);
+  const { data: teamInfo, isLoading: isTeamInfoLoading } = useTeamInfo(teamId);
+
+  // Extract the roster using the custom hook
+  const roster = useRoster(teamInfo, teamId);
+
+  // Map player ratings and sort players
+  const playersWithRatings = usePlayerRatingsMap(roster);
+  const sortedPlayers = useSortedPlayers(playersWithRatings);
+
+  // Find the selected team from teamInfo based on selectedTeamId
+  //@ts-ignore
+  const selectedTeam = teamInfo?.body?.find(
+    (team: { teamID: string | null }) => team.teamID === teamId
+  );
+
+  // Provide a default color if teamColor is null
+  const defaultColor = "#000000"; // Use white or any fallback color you prefer
 
   return (
     <>
       {isTeamInfoLoading ? (
+        // Show a spinner while loading team info
         <Flex justify="start" align="left" height="100px">
           <Spinner size="lg" />
         </Flex>
@@ -45,13 +57,14 @@ const PlayerGrid = ({ selectedTeamId }: Props) => {
             espnLogo1={selectedTeam.espnLogo1}
             wins={selectedTeam.wins}
             loss={selectedTeam.loss}
+            firstColor={teamColor || defaultColor} // Use default color if teamColor is null
           />
         )
       )}
 
       <SimpleGrid
         columns={{ sm: 1, md: 2, lg: 3, xl: 5 }}
-        padding="10px"
+        padding="0px"
         spacing={2}
       >
         {isTeamInfoLoading
@@ -64,7 +77,10 @@ const PlayerGrid = ({ selectedTeamId }: Props) => {
               <PlayerCard
                 key={player.playerID}
                 player={player}
-                firstColor={teamColor}
+                firstColor={teamColor || defaultColor} // Ensure a valid color
+                espnLogo1={selectedTeam.espnLogo1}
+                teamCity={selectedTeam.teamCity}
+                teamName={selectedTeam.teamName}
               />
             ))}
       </SimpleGrid>

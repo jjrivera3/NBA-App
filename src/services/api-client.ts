@@ -1,6 +1,12 @@
 import axios, { AxiosRequestConfig } from "axios";
 
 export interface FetchResponse<T> {
+  loss: string;
+  wins: number;
+  espnLogo1: string;
+  conference: string;
+  teamName: string;
+  teamCity: string;
   find(
     arg0: (team: import("../entities/TeamInfo").default) => boolean
   ): unknown;

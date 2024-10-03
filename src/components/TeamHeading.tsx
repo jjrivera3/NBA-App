@@ -1,4 +1,4 @@
-import { Flex, Heading, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Image, Text, VStack } from "@chakra-ui/react";
 
 interface Props {
   teamCity: string;
@@ -7,6 +7,7 @@ interface Props {
   espnLogo1: string;
   wins: number;
   loss: string;
+  firstColor: string;
 }
 
 const TeamHeading = ({
@@ -16,25 +17,45 @@ const TeamHeading = ({
   espnLogo1,
   wins,
   loss,
+  firstColor,
 }: Props) => {
   return (
-    <>
-      <Flex align="center">
-        <Image boxSize="50px" src={espnLogo1} />
-        <Heading paddingLeft="10px">
-          <Text as="span" fontWeight={400}>
-            {teamCity}
-          </Text>{" "}
-          <Text as="span" fontWeight={400}>
-            {teamName}
+    <Box
+      borderRadius={5}
+      padding={5}
+      paddingY="20px"
+      paddingX="20px"
+      // Use linear-gradient with firstColor
+      background={`linear-gradient(295deg, ${firstColor} 0%, rgba(0, 0, 0, 0.3) 60%, rgb(12 12 12 / 80%) 100%)`}
+    >
+      <Flex align="center" justify="space-between">
+        {/* Left Side: Team Logo and Name */}
+        <Flex align="center">
+          <Image boxSize="40px" src={espnLogo1} />
+          <Heading paddingLeft="10px">
+            <Text as="span" fontWeight={200}>
+              {teamCity}
+            </Text>{" "}
+            <Text as="span" fontWeight={600}>
+              {teamName}
+            </Text>
+          </Heading>
+        </Flex>
+
+        {/* Right Side: Conference and Record */}
+        <VStack align="flex-end">
+          <Text fontWeight={600}>{conference}</Text>
+          <Text>
+            <Text as="span" fontWeight={600}>
+              Record:
+            </Text>
+            <Text as="span" fontWeight={400}>
+              {""} {wins}-{loss}
+            </Text>
           </Text>
-        </Heading>
+        </VStack>
       </Flex>
-      <Text paddingLeft="65px">{conference}</Text>
-      <Text paddingLeft="65px">
-        Record: {wins}-{loss}
-      </Text>
-    </>
+    </Box>
   );
 };
 

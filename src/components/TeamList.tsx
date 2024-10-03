@@ -9,20 +9,30 @@ import {
 import useTeams from "../hooks/useTeams";
 
 interface NbaTeamListProps {
-  onSelectTeam: (teamId: string) => void; // Accept onSelectTeam as a prop
+  onSelectTeam: (teamId: string, teamAbv: string) => void; // Accept both teamId and teamAbv
   selectedTeamId: string | null; // Add selectedTeamId as a prop
 }
 
-const NbaTeamList = ({ onSelectTeam, selectedTeamId }: NbaTeamListProps) => {
+const TeamList = ({ onSelectTeam, selectedTeamId }: NbaTeamListProps) => {
   const teams = useTeams();
 
   const handleTeamClick = (teamId: string) => {
-    onSelectTeam(teamId); // Notify parent component about the team selection
+    const selectedTeam = teams.find((team) => team.teamId === teamId);
+    if (selectedTeam) {
+      const selectedAbv = selectedTeam.info.abbrev; // Grab the teamAbv
+      onSelectTeam(teamId, selectedAbv); // Pass both teamId and teamAbv to the parent
+
+      // Scroll to the top of the page
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth", // Optional: add smooth scrolling animation
+      });
+    }
   };
 
   return (
     <>
-      <Heading fontSize="1xl" marginTop={9} marginBottom={3}>
+      <Heading fontSize="1xl" marginTop={5} marginBottom={3}>
         NBA Teams
       </Heading>
       <List spacing={2}>
@@ -60,4 +70,4 @@ const NbaTeamList = ({ onSelectTeam, selectedTeamId }: NbaTeamListProps) => {
   );
 };
 
-export default NbaTeamList;
+export default TeamList;
