@@ -1,26 +1,28 @@
-import { Box, Flex, Image, Text, VStack } from "@chakra-ui/react";
-import { useEffect, useState } from "react"; // Import useEffect and useState
-import { useLocation, useNavigate } from "react-router-dom";
-import playerAvatar from "../assets/player_avatar.png";
+import { Box, Flex } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import nbateams from "../data/nbateams";
+import { lighten } from "polished";
+import useAvatarSrc from "../hooks/useAvatarSrc";
+import PlayerImage from "../components/PlayerImage";
+import PlayerAdditionalInfo from "../components/PlayerAdditionalInfo";
+import PlayerInfo from "../components/PlayerInfo";
+import PlayerStats from "../components/PlayerStats";
 
 const PlayerDetailPage = () => {
   const location = useLocation();
-  const navigate = useNavigate();
-  const player = location.state?.player; // Access the passed player data
-  const espnLogo1 = location.state?.espnLogo1; // Access the passed team logo
-  const teamCity = location.state?.teamCity; // Access the passed teamCity
-  const teamName = location.state?.teamName; // Access the passed teamName
-  const firstColor = location.state?.firstColor; // Access the passed teamName
+  const player = location.state?.player;
+  const firstColor = location.state?.firstColor;
+  const teamID = location.state?.teamID;
+  const espnLogo1 = location.state?.espnLogo1;
+  const teamCity = location.state?.teamCity;
+  const teamName = location.state?.teamName;
 
-  const [avatarSrc, setAvatarSrc] = useState(
-    player?.espnID
-      ? `https://a.espncdn.com/i/headshots/nba/players/full/${player.espnID}.png`
-      : playerAvatar
-  );
+  const [avatarSrc] = useAvatarSrc(player); // Extract only avatarSrc, ignore setAvatarSrc
 
-  console.log(player);
+  const foundTeam = nbateams.find((team) => team.teamId === teamID);
+  const lightValue = foundTeam?.light || 0.2;
 
-  // Scroll to the top of the page when the component renders
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -29,178 +31,37 @@ const PlayerDetailPage = () => {
     return <div>No player data found</div>;
   }
 
-  // // Function to go back to the team page
-  // const handleBack = () => {
-  //   navigate(-1); // Go back to the previous page (team page)
-  // };
-
   return (
     <Box
       as="section"
       padding="20px"
       borderRadius="md"
       w={"full"}
-      bg={`linear-gradient(360deg, #121212 30%, ${firstColor} 125%)`}
+      bg={`linear-gradient(360deg, #26262640 30%, ${firstColor} 125%)`}
       boxShadow={"2xl"}
       rounded={"md"}
       overflow={"hidden"}
       border="1px solid #000"
       mt={5}
     >
-      {/* Main Player Summary Section */}
-      <Flex direction={["column", "row"]} align="center">
-        {/* Left Side: Team Logo and Player Image */}
-        <Flex direction="column" align="center" mr={[0, 8]} mb={[4, 0]}>
-          <Image
-            src={avatarSrc}
-            alt={`${player?.espnName} Headshot`}
-            boxSize="350px"
-            mt={4}
-            borderRadius="md"
-            objectFit="contain"
-            onError={() => setAvatarSrc(playerAvatar)} // Fallback to default image on error
-          />
-        </Flex>
-
-        {/* Right Side: Player Info */}
-        <VStack align="flex-start" spacing={2}>
-          {/* Team Logo and City/Name */}
-          <Flex align="center">
-            <Image
-              src={espnLogo1}
-              alt={`${teamName} Logo`}
-              title={`${teamName} Logo`}
-              boxSize="25px"
-              mr={2} // Add some margin to the right of the logo
-            />
-            <Text fontSize="md" fontWeight="400" color="white">
-              {teamCity} {teamName} • #{player?.jerseyNum} • {player?.pos}
-            </Text>
-          </Flex>
-
-          {/* Split the player's name into first and last names */}
-          <VStack align="flex-start" spacing={0}>
-            {/* First part of the name (light font weight) */}
-            <Text fontSize="4xl" fontWeight="light" color="white">
-              {player?.espnName?.split(" ")[0]} {/* First Name */}
-            </Text>
-
-            {/* Remaining parts of the name (bold font weight) */}
-            <Text fontSize="4xl" fontWeight="bold" color="white">
-              {player?.espnName?.split(" ").slice(1).join(" ")}{" "}
-              {/* Last Name */}
-            </Text>
-          </VStack>
-        </VStack>
+      <Flex direction="row" justify="space-between" align="center" w="full">
+        <PlayerImage avatarSrc={avatarSrc} playerName={player?.espnName} />{" "}
+        {/* Pass only avatarSrc */}
+        <PlayerInfo
+          player={player}
+          teamCity={teamCity}
+          teamName={teamName}
+          espnLogo1={espnLogo1}
+        />
+        <PlayerAdditionalInfo player={player} />
       </Flex>
 
-      {/* Divider */}
-      <Box height="1px" bg="gray.300" />
-
-      {/* Stats Section */}
-      <Flex
-        justify="space-between"
-        align="center"
-        position="relative"
-        _after={{
-          content: '""',
-          position: "absolute",
-          bottom: "0",
-          left: "0",
-          right: "0",
-          height: "1px",
-          bg: "gray.300",
-        }}
-      >
-        {/* PPG with vertical line on the left and right, and padding */}
-        <Box position="relative" flex="1" textAlign="center" padding="15px">
-          <Box
-            position="absolute"
-            left="0"
-            top="0"
-            bottom="0"
-            height="100%"
-            width="1px"
-            bg="gray.300"
-          />
-          <Text fontWeight="300" color="white">
-            PPG
-          </Text>
-          <Text fontWeight="600" fontSize="2xl" color="white">
-            {player?.stats?.pts}
-          </Text>
-          <Box
-            position="absolute"
-            right="0"
-            top="0"
-            bottom="0"
-            height="100%"
-            width="1px"
-            bg="gray.300"
-          />
-        </Box>
-
-        {/* RPG with vertical line on the right, and padding */}
-        <Box position="relative" flex="1" textAlign="center" padding="15px">
-          <Text fontWeight="300" color="white">
-            RPG
-          </Text>
-          <Text fontWeight="600" fontSize="2xl" color="white">
-            {player?.stats?.reb}
-          </Text>
-          <Box
-            position="absolute"
-            right="0"
-            top="0"
-            bottom="0"
-            height="100%"
-            width="1px"
-            bg="gray.300"
-          />
-        </Box>
-
-        {/* APG with vertical line on the right, and padding */}
-        <Box position="relative" flex="1" textAlign="center" padding="15px">
-          <Text fontWeight="300" color="white">
-            APG
-          </Text>
-          <Text fontWeight="600" fontSize="2xl" color="white">
-            {player?.stats?.ast}
-          </Text>
-          <Box
-            position="absolute"
-            right="0"
-            top="0"
-            bottom="0"
-            height="100%"
-            width="1px"
-            bg="gray.300"
-          />
-        </Box>
-
-        {/* FG% with vertical line on the right, and padding */}
-        <Box position="relative" flex="1" textAlign="center" padding="15px">
-          <Text fontWeight="300" color="white">
-            FG%
-          </Text>
-          <Text fontWeight="600" fontSize="2xl" color="white">
-            {player?.stats?.fgp}%
-          </Text>
-          <Box
-            position="absolute"
-            right="0"
-            top="0"
-            bottom="0"
-            height="100%"
-            width="1px"
-            bg="gray.300"
-          />
-        </Box>
-      </Flex>
-
-      {/* <Button mt={4} onClick={handleBack} colorScheme="teal">
-        Back to Team
-      </Button> */}
+      <Box height="1px" bg={lighten(lightValue, firstColor)} />
+      <PlayerStats
+        player={player}
+        firstColor={firstColor}
+        lightValue={lightValue}
+      />
     </Box>
   );
 };

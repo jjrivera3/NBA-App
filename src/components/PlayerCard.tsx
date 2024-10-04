@@ -25,6 +25,7 @@ interface Props {
   espnLogo1: string; // Add espnLogo1 as a prop
   teamCity: string;
   teamName: string;
+  teamID: string;
 }
 
 const PlayerCard = ({
@@ -33,6 +34,7 @@ const PlayerCard = ({
   espnLogo1,
   teamCity,
   teamName,
+  teamID,
 }: Props) => {
   const [avatarSrc, setAvatarSrc] = useState(
     player?.espnID
@@ -93,7 +95,7 @@ const PlayerCard = ({
 
         <Box p={6}>
           <Stack spacing={0} align={"center"} mb={5}>
-            <Heading fontSize={"18px"} fontWeight={500} fontFamily={"body"}>
+            <Heading fontSize={"16px"} fontWeight={500} fontFamily={"body"}>
               {player?.espnName}
             </Heading>
             <HStack mt={2} mb={2}>
@@ -136,7 +138,14 @@ const PlayerCard = ({
           </Center>
           <Link
             to={playerProfileUrl}
-            state={{ espnLogo1, player, teamCity, teamName, firstColor }} // Pass player and team info via state
+            state={{
+              espnLogo1,
+              player,
+              teamCity,
+              teamName,
+              firstColor,
+              teamID,
+            }} // Pass player and team info via state
           >
             <Button
               w={"full"}

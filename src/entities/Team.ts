@@ -4,5 +4,6 @@ import TeamInfo from "./TeamInfo";
 export default interface Team {
   teamId: string;
   name: string;
-  info: TeamInfo; // This references the corrected TeamInfo interface
+  info: TeamInfo;
+  light: number;
 }

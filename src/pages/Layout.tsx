@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import NavBar from "../components/Navbar";
 import TeamList from "../components/TeamList";
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Layout = () => {
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
@@ -24,12 +24,17 @@ const Layout = () => {
             lg: `"nav nav" "aside main"`,
           }}
           templateColumns={{
-            base: "1fr",
-            lg: "250px 1fr",
+            base: "1fr", // Single column on mobile
+            lg: "250px 1fr", // Two columns on large screens
           }}
         >
-          {/* NBA Team List (Aside) */}
-          <GridItem area="aside" paddingLeft={0} paddingRight={5}>
+          {/* NBA Team List (Aside) - Hidden on mobile */}
+          <GridItem
+            area="aside"
+            paddingLeft={0}
+            paddingRight={5}
+            display={{ base: "none", lg: "block" }} // Hide on mobile (base) and show on larger screens (lg)
+          >
             <TeamList
               onSelectTeam={handleTeamSelect}
               selectedTeamId={selectedTeamId} // Pass the selected team ID to the TeamList component

@@ -10,6 +10,7 @@ import PlayerCard from "./PlayerCard";
 import PlayerCardContainer from "./PlayerCardContainer";
 import TeamCardSkeleton from "./PlayerCardSkeleton";
 import TeamHeading from "./TeamHeading";
+import Utah_Jazz from "../assets/Utah_Jazz.png"; // Import Utah Jazz image
 
 const PlayerGrid = () => {
   const { teamAbv } = useParams<{ teamAbv?: string }>(); // Get teamAbv from the URL
@@ -38,6 +39,10 @@ const PlayerGrid = () => {
     (team: { teamID: string | null }) => team.teamID === teamId
   );
 
+  // If selected team's ID equals "29", set the espnLogo to the Utah Jazz logo
+  const espnLogo1 =
+    selectedTeam?.teamID === "29" ? Utah_Jazz : selectedTeam?.espnLogo1;
+
   // Provide a default color if teamColor is null
   const defaultColor = "#000000"; // Use white or any fallback color you prefer
 
@@ -54,7 +59,7 @@ const PlayerGrid = () => {
             teamCity={selectedTeam.teamCity}
             teamName={selectedTeam.teamName}
             conference={selectedTeam.conference}
-            espnLogo1={selectedTeam.espnLogo1}
+            espnLogo1={espnLogo1} // Use the conditional espnLogo1
             wins={selectedTeam.wins}
             loss={selectedTeam.loss}
             firstColor={teamColor || defaultColor} // Use default color if teamColor is null
@@ -78,9 +83,10 @@ const PlayerGrid = () => {
                 key={player.playerID}
                 player={player}
                 firstColor={teamColor || defaultColor} // Ensure a valid color
-                espnLogo1={selectedTeam.espnLogo1}
+                espnLogo1={espnLogo1} // Use the conditional espnLogo1
                 teamCity={selectedTeam.teamCity}
                 teamName={selectedTeam.teamName}
+                teamID={selectedTeam.teamID}
               />
             ))}
       </SimpleGrid>
