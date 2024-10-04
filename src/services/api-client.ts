@@ -15,8 +15,6 @@ export interface FetchResponse<T> {
     seasonId: string;
     roster: T[]; // Roster is the array of players
   };
-  totalItems: number;
-  responseCode: number;
 }
 
 const axiosInstance = axios.create({
