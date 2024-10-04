@@ -27,6 +27,8 @@ const Layout = () => {
             base: "1fr", // Single column on mobile
             lg: "250px 1fr", // Two columns on large screens
           }}
+          maxW="100vw" // Ensure the grid doesn't extend beyond the viewport width
+          overflowX="hidden" // Prevent the grid from adding a scrollbar
         >
           {/* NBA Team List (Aside) - Hidden on mobile */}
           <GridItem
@@ -42,8 +44,16 @@ const Layout = () => {
           </GridItem>
 
           {/* Main Content (PlayerGrid or other components via Outlet) */}
-          <GridItem area="main">
-            <Outlet />
+          <GridItem
+            area="main"
+            maxW="100%" // Ensure the main content stays within 100% of the grid column
+            overflowX="auto" // Allow horizontal scrolling for the content if necessary
+          >
+            <Box maxW="100%" overflowX="auto">
+              {" "}
+              {/* Wrap the Outlet in a Box for better control */}
+              <Outlet />
+            </Box>
           </GridItem>
         </Grid>
       </Box>

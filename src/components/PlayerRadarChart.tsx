@@ -103,6 +103,8 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
   const playmakingAverage = calculateAverage(playmakingAttributes);
   const defenseAverage = calculateAverage(defenseAttributes);
 
+  console.log(athleticismAttributes);
+
   const data = {
     labels: [
       "Overall",
@@ -225,28 +227,31 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
       alignItems="center"
     >
       {/* Heading above the Radar Chart */}
-      <Link
+      <Box
         className="sidebar-link pb-0"
-        href="/lists/missing-players"
-        title="NBA 2K25 Missing Players"
         display="flex"
         alignItems="center"
         textDecoration="none"
-        _hover={{ textDecoration: "underline" }}
         mb={4} // Margin bottom for spacing between heading and chart
       >
         <Image
           className="ml-0"
           src={twoKlogo}
           height="auto"
-          width="150px"
+          width="130px"
           alt="NBA 2K25 Missing Players"
           title="NBA 2K25 Missing Players"
         />
-        <Text className="align-middle" ml={2} fontSize="3xl" color="white">
+        <Text
+          className="align-middle"
+          ml={2}
+          fontSize="3xl"
+          color="white"
+          fontWeight="bold"
+        >
           ATTRIBUTES
         </Text>
-      </Link>
+      </Box>
 
       {/* Radar Chart */}
       <div style={{ width: "90%", height: "90%" }}>

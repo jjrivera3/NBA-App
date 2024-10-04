@@ -9,6 +9,7 @@ import PlayerRadarChart from "../components/PlayerRadarChart";
 import PlayerStats from "../components/PlayerStats";
 import nbateams from "../data/nbateams";
 import useAvatarSrc from "../hooks/useAvatarSrc";
+import StatsTable from "../components/PlayerStatsTable";
 
 const PlayerDetailPage = () => {
   const location = useLocation();
@@ -32,7 +33,7 @@ const PlayerDetailPage = () => {
     return <div>No player data found</div>;
   }
 
-  console.log(player.rating);
+  console.log(player);
 
   return (
     <>
@@ -71,20 +72,8 @@ const PlayerDetailPage = () => {
           firstColor={firstColor}
           lightValue={lightValue}
         />
+        <StatsTable />
       </Box>
-
-      <Box
-        as="section"
-        padding="20px"
-        borderRadius="md"
-        w={"full"}
-        bg={`linear-gradient(360deg, #26262640 30%, ${firstColor} 125%)`}
-        boxShadow={"2xl"}
-        rounded={"md"}
-        overflow={"hidden"}
-        border="1px solid #000"
-        mt={5}
-      ></Box>
 
       <PlayerRadarChart firstColor={firstColor} playerRating={player.rating} />
     </>
