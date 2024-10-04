@@ -73,6 +73,19 @@ const PlayerDetailPage = () => {
         />
       </Box>
 
+      <Box
+        as="section"
+        padding="20px"
+        borderRadius="md"
+        w={"full"}
+        bg={`linear-gradient(360deg, #26262640 30%, ${firstColor} 125%)`}
+        boxShadow={"2xl"}
+        rounded={"md"}
+        overflow={"hidden"}
+        border="1px solid #000"
+        mt={5}
+      ></Box>
+
       <PlayerRadarChart firstColor={firstColor} playerRating={player.rating} />
     </>
   );

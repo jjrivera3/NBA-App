@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Link, Image, Text } from "@chakra-ui/react"; // Import Chakra UI components
 import { Radar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -9,17 +9,27 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels"; // Import the plugin
 import { rgba } from "polished"; // Import rgba from polished
+import twoKlogo from "../assets/NBA-2K25-dark.svg";
 
-// Register necessary chart components
+// Register necessary chart components and the plugin
 ChartJS.register(
   RadialLinearScale,
   PointElement,
   LineElement,
   Filler,
   Tooltip,
-  Legend
+  Legend,
+  ChartDataLabels // Register ChartDataLabels plugin
 );
+
+// Utility function to calculate the average of an array of numbers
+const calculateAverage = (attributes: number[]) => {
+  return Math.round(
+    attributes.reduce((acc, curr) => acc + curr, 0) / attributes.length
+  );
+};
 
 // Define the props interface
 interface PlayerRadarChartProps {
@@ -31,7 +41,7 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
   firstColor,
   playerRating,
 }) => {
-  // Calculate the average of inside scoring attributes
+  // Group the attributes into arrays
   const insideScoringAttributes = [
     playerRating.layup,
     playerRating.standingDunk,
@@ -54,78 +64,44 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
 
   const reboundingAttributes = [
     playerRating.offensiveRebound,
-    playerRating.defensiveRebound, // Fixed typo here
+    playerRating.defensiveRebound,
   ];
 
   const athleticismAttributes = [
-    playerRating.speed, // Speed
-    playerRating.acceleration, // Acceleration (part of agility)
-    playerRating.strength, // Strength
-    playerRating.vertical, // Vertical
-    playerRating.stamina, // Stamina
-    playerRating.hustle, // Hustle
-    playerRating.overallDurability, // Overall Durability
+    playerRating.speed,
+    playerRating.acceleration,
+    playerRating.strength,
+    playerRating.vertical,
+    playerRating.stamina,
+    playerRating.hustle,
+    playerRating.overallDurability,
   ];
 
   const playmakingAttributes = [
-    playerRating.passAccuracy, // Pass Accuracy
-    playerRating.ballHandle, // Ball Handle
-    playerRating.speedWithBall, // Speed with Ball
-    playerRating.passIQ, // Pass IQ
-    playerRating.passVision, // Pass Vision
+    playerRating.passAccuracy,
+    playerRating.ballHandle,
+    playerRating.speedWithBall,
+    playerRating.passIQ,
+    playerRating.passVision,
   ];
 
   const defenseAttributes = [
-    playerRating.interiorDefense, // Interior Defense
-    playerRating.perimeterDefense, // Perimeter Defense
-    playerRating.steal, // Steal
-    playerRating.block, // Block
-    playerRating.helpDefenseIQ, // Help Defense IQ
-    playerRating.passPerception, // Pass Perception
-    playerRating.defensiveConsistency, // Defensive Consistency
+    playerRating.interiorDefense,
+    playerRating.perimeterDefense,
+    playerRating.steal,
+    playerRating.block,
+    playerRating.helpDefenseIQ,
+    playerRating.passPerception,
+    playerRating.defensiveConsistency,
   ];
 
-  // Calculate the rounded average for defense
-  const defenseAverage = Math.round(
-    defenseAttributes.reduce((acc, curr) => acc + curr, 0) /
-      defenseAttributes.length
-  );
-
-  // Calculate the rounded average for playmaking
-  const playmakingAverage = Math.round(
-    playmakingAttributes.reduce((acc, curr) => acc + curr, 0) /
-      playmakingAttributes.length
-  );
-
-  // Calculate the rounded average for athleticism
-  const athleticismAverage = Math.round(
-    athleticismAttributes.reduce((acc, curr) => acc + curr, 0) /
-      athleticismAttributes.length
-  );
-
-  // Calculate the rounded average for inside scoring
-  const insideScoringAverage = Math.round(
-    insideScoringAttributes.reduce((acc, curr) => acc + curr, 0) /
-      insideScoringAttributes.length
-  );
-
-  // Calculate the rounded average for inside scoring
-  const oustideScoringAverage = Math.round(
-    outsideScoringAttributes.reduce((acc, curr) => acc + curr, 0) /
-      outsideScoringAttributes.length
-  );
-
-  // Calculate the rounded average for rebounding
-  const reboundingAverage = Math.round(
-    reboundingAttributes.reduce((acc, curr) => acc + curr, 0) /
-      reboundingAttributes.length
-  );
-
-  console.log("Outside Scoring Average: ", oustideScoringAverage);
-  console.log("Athleticism Average: ", athleticismAverage);
-  console.log("Playmaking Average: ", playmakingAverage);
-  console.log("Rebounding Average: ", reboundingAverage);
-  console.log("Defense Average: ", defenseAverage);
+  // Use the utility function to calculate averages
+  const insideScoringAverage = calculateAverage(insideScoringAttributes);
+  const outsideScoringAverage = calculateAverage(outsideScoringAttributes);
+  const reboundingAverage = calculateAverage(reboundingAttributes);
+  const athleticismAverage = calculateAverage(athleticismAttributes);
+  const playmakingAverage = calculateAverage(playmakingAttributes);
+  const defenseAverage = calculateAverage(defenseAttributes);
 
   const data = {
     labels: [
@@ -139,11 +115,11 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
     ],
     datasets: [
       {
-        label: "Player A",
+        label: playerRating.name,
         data: [
           playerRating.overallAttribute,
           insideScoringAverage,
-          oustideScoringAverage,
+          outsideScoringAverage,
           athleticismAverage,
           playmakingAverage,
           reboundingAverage,
@@ -151,10 +127,13 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
         ],
         backgroundColor: rgba(firstColor, 0.3),
         borderColor: firstColor,
-        pointBackgroundColor: rgba(firstColor, 0.5), // Set opacity to 50%
-        pointBorderColor: firstColor, // Optional: Set border color for better visibility
-        pointHoverBackgroundColor: rgba(firstColor, 0.7), // Optional: Slightly higher opacity on hover
-        pointHoverBorderColor: "#ffffff", // Optional: Border color on hover
+        pointBackgroundColor: firstColor, // Background color for the points (dots)
+        pointBorderColor: "#ffffff", // Border color for the points
+        pointBorderWidth: 0, // Width of the border
+        pointRadius: 16, // Increase size of points to make space for numbers
+        pointHoverBorderColor: firstColor,
+        pointHoverRadius: 10, // Size of the points on hover
+        size: 24, // Optional: Adjust tick font size
       },
     ],
   };
@@ -163,23 +142,20 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
     scales: {
       r: {
         angleLines: {
-          color: "rgba(211, 211, 211, 0.8)", // Light gray for angle lines
+          color: "rgba(211, 211, 211, 0.5)", // Light gray for angle lines
         },
         grid: {
-          color: "rgba(211, 211, 211, 0.8)", // Light gray for grid lines
+          color: "rgba(211, 211, 211, 0.5)", // Light gray for grid lines
         },
         pointLabels: {
           color: "#ffffff", // White labels for better visibility
           font: {
-            size: 18, // Optional: Adjust label font size
+            size: 18, // Adjust label font size
           },
         },
         ticks: {
+          display: false, // Hide the tick numbers
           backdropColor: "transparent", // Removes the tick label background
-          color: "#ffffff", // White ticks for better visibility
-          font: {
-            size: 12, // Optional: Adjust tick font size
-          },
           stepSize: 20, // Optional: Define step size if needed
         },
         suggestedMin: 0,
@@ -191,25 +167,49 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
         display: false, // Hide the legend
       },
       tooltip: {
-        enabled: true, // Optional: Enable tooltips
+        enabled: true,
+        displayColors: false, // Disable the color box in the tooltip
         callbacks: {
           label: function (context: any) {
             return `${context.dataset.label}: ${context.parsed.r}`;
           },
         },
-        backgroundColor: "rgba(0, 0, 0, 0.7)", // Optional: Customize tooltip background
-        titleColor: "#ffffff", // Optional: Customize tooltip title color
-        bodyColor: "#ffffff", // Optional: Customize tooltip body color
+        backgroundColor: "rgba(0, 0, 0, 0.7)", // Customize tooltip background
+        titleColor: "#ffffff", // Customize tooltip title color
+        bodyColor: "#ffffff", // Customize tooltip body color
+        titleFont: {
+          size: 14, // Increase the title font size
+        },
+        bodyFont: {
+          size: 14, // Increase the body text font size
+        },
+      },
+      datalabels: {
+        color: "#ffffff", // Color of the label text (numbers inside circles)
+        backgroundColor: "#26262640", // Background color behind the number
+        borderRadius: 50, // Circular background for the numbers
+        padding: 5, // Space between the number and the circle
+        borderColor: firstColor, // firstColor border around the circle
+        borderWidth: 3, // Border width
+        align: "center" as const, // Align the label to the center of the point
+        anchor: "center" as const, // Position label inside the point
+        font: {
+          size: 11,
+          weight: "bold" as const, // Ensure weight is properly typed
+        },
+        formatter: (value: number) => {
+          return value.toFixed(0); // Formats value as an integer
+        },
       },
     },
     responsive: true,
-    maintainAspectRatio: false, // Allow chart to resize based on container
+    maintainAspectRatio: false,
   };
 
   return (
     <Box
       as="section"
-      padding="10px"
+      padding="25px"
       borderRadius="md"
       w={"full"}
       bg="#26262640"
@@ -224,8 +224,32 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
       justifyContent="center"
       alignItems="center"
     >
+      {/* Heading above the Radar Chart */}
+      <Link
+        className="sidebar-link pb-0"
+        href="/lists/missing-players"
+        title="NBA 2K25 Missing Players"
+        display="flex"
+        alignItems="center"
+        textDecoration="none"
+        _hover={{ textDecoration: "underline" }}
+        mb={4} // Margin bottom for spacing between heading and chart
+      >
+        <Image
+          className="ml-0"
+          src={twoKlogo}
+          height="auto"
+          width="150px"
+          alt="NBA 2K25 Missing Players"
+          title="NBA 2K25 Missing Players"
+        />
+        <Text className="align-middle" ml={2} fontSize="3xl" color="white">
+          ATTRIBUTES
+        </Text>
+      </Link>
+
+      {/* Radar Chart */}
       <div style={{ width: "90%", height: "90%" }}>
-        {/* Radar Chart */}
         <Radar data={data} options={options} />
       </div>
     </Box>
