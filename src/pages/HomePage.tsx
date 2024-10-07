@@ -3,13 +3,13 @@ import { useParams } from "react-router-dom";
 import PlayerGrid from "../components/PlayerGrid";
 
 function Homepage() {
-  const { teamAbv } = useParams<{ teamAbv?: string }>(); // Get teamAbv from URL
+  const { teamAbv } = useParams<{ teamAbv?: string }>();
+  const lowercasedTeamAbv = teamAbv?.toLowerCase(); // Ensure teamAbv is always lowercase
 
   return (
     <GridItem area="main" mt={7}>
-      {/* If there's a team abbreviation in the URL, show the PlayerGrid */}
-      {teamAbv ? (
-        <PlayerGrid /> // selectedTeamId can be handled internally in PlayerGrid
+      {lowercasedTeamAbv ? (
+        <PlayerGrid /> // Pass lowercasedTeamAbv as a prop
       ) : (
         <div>Select a team to see the roster</div>
       )}

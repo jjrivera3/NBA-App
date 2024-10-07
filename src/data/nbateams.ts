@@ -29,7 +29,7 @@ const nbaTeams: Team[] = [
   {
     teamId: "3",
     name: "Brooklyn Nets",
-    light: 0.1,
+    light: 0.03,
     info: {
       abbrev: "BKN",
       colors: ["#E74D53"],

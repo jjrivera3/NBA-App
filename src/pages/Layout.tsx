@@ -11,7 +11,7 @@ const Layout = () => {
 
   const handleTeamSelect = (teamId: string, teamAbv: string) => {
     setSelectedTeamId(teamId); // Update the selected team ID
-    navigate(`/${teamAbv}`); // Navigate to the route with the team's abbreviation
+    navigate(`/${teamAbv.toLowerCase()}`); // Navigate with lowercase team abbreviation
   };
 
   return (

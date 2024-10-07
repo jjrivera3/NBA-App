@@ -13,16 +13,28 @@ import {
   DrawerHeader,
   DrawerBody,
   VStack,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import SearchInput from "./SearchInput";
 import logo from "../assets/logo.svg";
+import TeamList from "../components/TeamList";
+import React from "react";
 
 const NavBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure(); // Chakra UI hook to control the drawer
+  const isMobile = useBreakpointValue({ base: true, md: false }); // Show on mobile (base) only
+  const [selectedTeamId, setSelectedTeamId] = React.useState<string | null>(
+    null
+  ); // Manage selected team state
 
   const onSearch = (value: string) => {
     console.log("Search term:", value);
+  };
+
+  const handleSelectTeam = (teamId: string, teamAbv: string) => {
+    console.log(`Selected team: ${teamId} - ${teamAbv}`);
+    setSelectedTeamId(teamId); // Set the selected team ID
   };
 
   return (
@@ -95,7 +107,12 @@ const NavBar = () => {
             <VStack spacing={4}>
               <Link href="/ATL">Page 1</Link>
               <Link href="/page2">Page 2</Link>
-              <Link href="/page3">Page 3</Link>
+              {isMobile && (
+                <TeamList
+                  onSelectTeam={handleSelectTeam}
+                  selectedTeamId={selectedTeamId}
+                />
+              )}
               {/* Add more links as needed */}
             </VStack>
           </DrawerBody>

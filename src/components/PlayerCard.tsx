@@ -52,7 +52,12 @@ const PlayerCard = ({
     ast: "0",
   };
 
-  const playerProfileUrl = `/${player.team
+  // Change team abbreviation from "GS" to "GSW" if necessary
+  const teamAbbreviation = player.team === "GS" ? "GSW" : player.team;
+
+  console.log(teamAbbreviation);
+
+  const playerProfileUrl = `/${teamAbbreviation
     .toLowerCase()
     .replace(/\s+/g, "-")}/${player?.espnName
     .toLowerCase()

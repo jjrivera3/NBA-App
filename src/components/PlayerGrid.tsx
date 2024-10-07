@@ -68,7 +68,7 @@ const PlayerGrid = () => {
       )}
 
       <SimpleGrid
-        columns={{ sm: 1, md: 2, lg: 3, xl: 5 }}
+        columns={{ sm: 1, md: 2, lg: 3, xl: 4, "2xl": 5 }}
         padding="0px"
         spacing={2}
       >
