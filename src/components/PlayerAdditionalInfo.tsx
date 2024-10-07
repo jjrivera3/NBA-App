@@ -1,6 +1,18 @@
 import { VStack, Text } from "@chakra-ui/react";
 
-const PlayerAdditionalInfo = ({ player }) => {
+interface Player {
+  height: string | number;
+  weight: string | number;
+  bDay: string;
+  college?: string;
+  exp: string | number;
+}
+
+interface Props {
+  player: Player;
+}
+
+const PlayerAdditionalInfo = ({ player }: Props) => {
   return (
     <VStack align="flex-start" spacing={4} w={["100%", "30%"]}>
       <Text color="white" fontSize="15px">

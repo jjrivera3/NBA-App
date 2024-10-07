@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Spinner } from "@chakra-ui/react";
 import { lighten } from "polished";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
@@ -10,6 +10,12 @@ import PlayerStats from "../components/PlayerStats";
 import nbateams from "../data/nbateams";
 import useAvatarSrc from "../hooks/useAvatarSrc";
 import StatsTable from "../components/PlayerStatsTable";
+import usePlayerStats from "../hooks/usePlayerStats";
+
+// Define the playerStats type
+interface PlayerStats {
+  body: any; // Replace `any` with the correct type for body, e.g., `PlayerStat[]`
+}
 
 const PlayerDetailPage = () => {
   const location = useLocation();
@@ -20,8 +26,8 @@ const PlayerDetailPage = () => {
   const teamCity = location.state?.teamCity;
   const teamName = location.state?.teamName;
 
+  const { data: playerStatsData, isLoading } = usePlayerStats(player.bRefID);
   const [avatarSrc] = useAvatarSrc(player);
-
   const foundTeam = nbateams.find((team) => team.teamId === teamID);
   const lightValue = foundTeam?.light || 0.2;
 
@@ -32,8 +38,6 @@ const PlayerDetailPage = () => {
   if (!player) {
     return <div>No player data found</div>;
   }
-
-  console.log(player);
 
   return (
     <>
@@ -49,9 +53,8 @@ const PlayerDetailPage = () => {
         border="1px solid #000"
         mt={5}
       >
-        {/* Flex container with responsive direction */}
         <Flex
-          direction={["column", "row"]} // Stacks on mobile, row on larger screens
+          direction={["column", "row"]}
           justify="space-between"
           align="center"
           w="full"
@@ -72,7 +75,32 @@ const PlayerDetailPage = () => {
           firstColor={firstColor}
           lightValue={lightValue}
         />
-        <StatsTable />
+      </Box>
+
+      {/* Add a new Box specifically for the StatsTable or Spinner */}
+      <Box
+        as="section"
+        padding="20px"
+        borderRadius="md"
+        w={"full"}
+        mt={5}
+        bg="#26262640"
+        boxShadow="lg"
+        rounded="md"
+        border="1px solid #000"
+      >
+        {isLoading ? (
+          <Flex justify="center" align="center" h="100px">
+            <Spinner size="xl" color={firstColor} />
+          </Flex>
+        ) : (
+          playerStatsData?.playerStats.body && (
+            <StatsTable
+              stats={playerStatsData.playerStats.body}
+              nbateams={nbateams}
+            />
+          )
+        )}
       </Box>
 
       <PlayerRadarChart firstColor={firstColor} playerRating={player.rating} />

@@ -20,12 +20,10 @@ export default interface Ratings {
   perimeterDefense: number;
   steal: number;
   block: number;
-  lateralQuickness: number;
   helpDefenseIQ: number;
   passPerception: number;
   defensiveConsistency: number;
   speed: number;
-  acceleration: number;
   strength: number;
   vertical: number;
   stamina: number;
@@ -38,4 +36,5 @@ export default interface Ratings {
   passVision: number;
   offensiveRebound: number;
   defensiveRebound: number;
+  agility: number;
 }

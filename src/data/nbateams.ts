@@ -9,7 +9,7 @@ const nbaTeams: Team[] = [
   {
     teamId: "1",
     name: "Atlanta Hawks",
-    light: 0,
+    light: 0.1,
     info: {
       abbrev: "ATL",
       colors: ["#E03A3E", "#C1D32F", "#26282A"],
@@ -19,7 +19,7 @@ const nbaTeams: Team[] = [
   {
     teamId: "2",
     name: "Boston Celtics",
-    light: 0.2,
+    light: 0.1,
     info: {
       abbrev: "BOS",
       colors: ["#007A33", "#BA9653", "#000000"],
@@ -99,7 +99,7 @@ const nbaTeams: Team[] = [
   {
     teamId: "10",
     name: "Golden State Warriors",
-    light: 0.2,
+    light: 0.3,
     info: {
       abbrev: "GSW",
       colors: ["#1D428A", "#FFD100"],
@@ -109,7 +109,7 @@ const nbaTeams: Team[] = [
   {
     teamId: "11",
     name: "Houston Rockets",
-    light: 0.1,
+    light: 0.2,
     info: {
       abbrev: "HOU",
       colors: ["#CE1141", "#000000", "#A1A1A4"],
@@ -159,7 +159,7 @@ const nbaTeams: Team[] = [
   {
     teamId: "16",
     name: "Miami Heat",
-    light: 0.2,
+    light: 0.1,
     info: {
       abbrev: "MIA",
       colors: ["#98002E", "#000000", "#F9A01B"],
@@ -179,7 +179,7 @@ const nbaTeams: Team[] = [
   {
     teamId: "18",
     name: "Minnesota Timberwolves",
-    light: 0.3,
+    light: 0.2,
     info: {
       abbrev: "MIN",
       colors: ["#236192", "#0C2340", "#78BE20"],
@@ -199,7 +199,7 @@ const nbaTeams: Team[] = [
   {
     teamId: "20",
     name: "New York Knicks",
-    light: 0.3,
+    light: 0.2,
     info: {
       abbrev: "NYK",
       colors: ["#006BB6", "#F58426", "#000000"],
@@ -219,7 +219,7 @@ const nbaTeams: Team[] = [
   {
     teamId: "22",
     name: "Orlando Magic",
-    light: 0.2,
+    light: 0.1,
     info: {
       abbrev: "ORL",
       colors: ["#0077C0", "#C4CED4", "#000000"],
@@ -229,7 +229,7 @@ const nbaTeams: Team[] = [
   {
     teamId: "23",
     name: "Philadelphia 76ers",
-    light: 0.3,
+    light: 0.2,
     info: {
       abbrev: "PHI",
       colors: ["#006BB6", "#ED174C", "#005397"],

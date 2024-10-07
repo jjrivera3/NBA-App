@@ -55,8 +55,6 @@ const PlayerCard = ({
   // Change team abbreviation from "GS" to "GSW" if necessary
   const teamAbbreviation = player.team === "GS" ? "GSW" : player.team;
 
-  console.log(teamAbbreviation);
-
   const playerProfileUrl = `/${teamAbbreviation
     .toLowerCase()
     .replace(/\s+/g, "-")}/${player?.espnName
@@ -128,14 +126,14 @@ const PlayerCard = ({
                 <Stack spacing={0} align={"center"}>
                   <Text fontWeight={600}>{stats.reb}</Text>
                   <Text fontSize={"sm"} color={"gray.400"}>
-                    TRB
+                    RPG
                   </Text>
                 </Stack>
 
                 <Stack spacing={0} align={"center"}>
                   <Text fontWeight={600}>{stats.ast}</Text>
                   <Text fontSize={"sm"} color={"gray.400"}>
-                    AST
+                    APG
                   </Text>
                 </Stack>
               </Stack>

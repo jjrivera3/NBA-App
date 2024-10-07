@@ -69,7 +69,7 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
 
   const athleticismAttributes = [
     playerRating.speed,
-    playerRating.acceleration,
+    playerRating.agility,
     playerRating.strength,
     playerRating.vertical,
     playerRating.stamina,
@@ -102,8 +102,6 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
   const athleticismAverage = calculateAverage(athleticismAttributes);
   const playmakingAverage = calculateAverage(playmakingAttributes);
   const defenseAverage = calculateAverage(defenseAttributes);
-
-  console.log(athleticismAttributes);
 
   const data = {
     labels: [

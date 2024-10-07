@@ -1,9 +1,9 @@
-import APIClient from "../services/api-client";
 import { useQuery } from "@tanstack/react-query";
 import Player from "../entities/Player";
+import FantasyStatsAPIClient from "../services/fantasy-stats-api-client";
 
 const usePlayers = (teamId: string | null) => {
-  const apiClient = new APIClient<Player>("/getNBATeamRoster");
+  const apiClient = new FantasyStatsAPIClient<Player>("/getNBATeamRoster");
 
   return useQuery({
     queryKey: ["roster", teamId],

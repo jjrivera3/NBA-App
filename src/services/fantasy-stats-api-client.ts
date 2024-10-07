@@ -17,7 +17,7 @@ export interface FetchResponse<T> {
   };
 }
 
-const axiosInstance = axios.create({
+const fantasyStatsAxiosInstance = axios.create({
   baseURL: "https://tank01-fantasy-stats.p.rapidapi.com",
   headers: {
     "x-rapidapi-key": "256fd56781msh523522a92b2e3a3p117802jsndb7be0b6b755",
@@ -25,7 +25,7 @@ const axiosInstance = axios.create({
   },
 });
 
-class APIClient<T> {
+class FantasyStatsAPIClient<T> {
   endpoint: string;
 
   constructor(endpoint: string) {
@@ -34,10 +34,10 @@ class APIClient<T> {
 
   // Add config param to accept dynamic params like teamID and others
   getAll = (config?: AxiosRequestConfig) => {
-    return axiosInstance
+    return fantasyStatsAxiosInstance
       .get<FetchResponse<T>>(this.endpoint, config)
       .then((res) => res.data);
   };
 }
 
-export default APIClient;
+export default FantasyStatsAPIClient;

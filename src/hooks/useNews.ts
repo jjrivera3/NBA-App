@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import APIClient from "../services/api-client";
+import APIClient from "../services/fantasy-stats-api-client";
 import NewsResponse from "../entities/NewsResponse";
 
 interface NewsParams {
