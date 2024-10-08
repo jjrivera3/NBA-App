@@ -1,5 +1,6 @@
 import { Flex, HStack, Image, Text, VStack, Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
+import { FaArrowLeft } from "react-icons/fa"; // Import the back arrow icon
 import RatingScore from "./RatingScore";
 
 interface Player {
@@ -16,9 +17,16 @@ interface Props {
   teamCity: string;
   teamName: string;
   espnLogo1: string;
+  firstColor: string;
 }
 
-const PlayerInfo = ({ player, teamCity, teamName, espnLogo1 }: Props) => {
+const PlayerInfo = ({
+  player,
+  teamCity,
+  teamName,
+  espnLogo1,
+  firstColor,
+}: Props) => {
   const navigate = useNavigate(); // Initialize the navigate function
 
   return (
@@ -47,9 +55,11 @@ const PlayerInfo = ({ player, teamCity, teamName, espnLogo1 }: Props) => {
       <Text fontSize={["sm", "md"]} fontWeight="400" color="white">
         #{player.jerseyNum} • {player.pos}
       </Text>
-      {/* Add Back to Team button */}
+      {/* Add Back to Team button with an icon */}
       <Button
-        colorScheme="teal"
+        leftIcon={<FaArrowLeft />}
+        background={firstColor}
+        color="white"
         size="sm"
         mt={4}
         onClick={() => navigate(-1)} // Go back to the previous page

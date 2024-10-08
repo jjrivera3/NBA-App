@@ -67,6 +67,7 @@ const PlayerDetailPage = () => {
             teamCity={teamCity}
             teamName={teamName}
             espnLogo1={espnLogo1}
+            firstColor={firstColor}
           />
           <PlayerAdditionalInfo player={player} />
         </Flex>

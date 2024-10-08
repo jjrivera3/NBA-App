@@ -101,7 +101,7 @@ const TeamHeading = ({
               Record:
             </Text>
             <Text as="span" fontWeight={400}>
-              {wins}-{loss}
+              {""} {wins}-{loss}
             </Text>
           </Text>
         </VStack>
