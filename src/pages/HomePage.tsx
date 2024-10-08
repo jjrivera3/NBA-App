@@ -1,15 +1,21 @@
 import { GridItem } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
-import PlayerGrid from "../components/PlayerGrid";
+import TeamGrid from "../components/TeamGrid";
+import TeamSchedule from "../components/TeamSchedule";
 
 function Homepage() {
-  const { teamAbv } = useParams<{ teamAbv?: string }>();
-  const lowercasedTeamAbv = teamAbv?.toLowerCase(); // Ensure teamAbv is always lowercase
+  const { teamAbv, schedule } = useParams<{
+    teamAbv?: string;
+    schedule?: string;
+  }>();
+  const lowercasedTeamAbv = teamAbv?.toLowerCase();
 
   return (
     <GridItem area="main" mt={7}>
-      {lowercasedTeamAbv ? (
-        <PlayerGrid /> // Pass lowercasedTeamAbv as a prop
+      {schedule ? (
+        <TeamSchedule /> // Render TeamSchedule component
+      ) : lowercasedTeamAbv ? (
+        <TeamGrid teamAbv={lowercasedTeamAbv} /> // Render TeamGrid component for the roster
       ) : (
         <div>Select a team to see the roster</div>
       )}

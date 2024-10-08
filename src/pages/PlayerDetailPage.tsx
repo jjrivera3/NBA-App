@@ -1,4 +1,4 @@
-import { Box, Flex, Spinner } from "@chakra-ui/react";
+import { Box, Flex, Skeleton, SkeletonText } from "@chakra-ui/react";
 import { lighten } from "polished";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
@@ -39,6 +39,8 @@ const PlayerDetailPage = () => {
     return <div>No player data found</div>;
   }
 
+  console.log(player);
+
   return (
     <>
       <Box
@@ -77,7 +79,7 @@ const PlayerDetailPage = () => {
         />
       </Box>
 
-      {/* Add a new Box specifically for the StatsTable or Spinner */}
+      {/* Add a new Box specifically for the StatsTable or Skeleton */}
       <Box
         as="section"
         padding="20px"
@@ -90,9 +92,10 @@ const PlayerDetailPage = () => {
         border="1px solid #000"
       >
         {isLoading ? (
-          <Flex justify="center" align="center" h="100px">
-            <Spinner size="xl" color={firstColor} />
-          </Flex>
+          <Box>
+            <Skeleton height="30px" mb={2} />
+            <SkeletonText noOfLines={10} spacing={4} skeletonHeight="20px" />
+          </Box>
         ) : (
           playerStatsData?.playerStats.body && (
             <StatsTable
