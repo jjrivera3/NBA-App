@@ -59,11 +59,8 @@ const TeamSchedule = () => {
   const opponentId = isHomeTeam ? nextGame?.teamIDAway : nextGame?.teamIDHome;
 
   const opponentDetails = useTeamDetails(opponentId ?? null); // Ensure opponentId is either string or null
-  const {
-    logoImage: opponentLogo,
-    name: opponentName,
-    abbrev: opponentAbbrev,
-  } = opponentDetails || {};
+  const { logoImage: opponentLogo, abbrev: opponentAbbrev } =
+    opponentDetails || {};
   const nextGameDate = nextGame ? formatDate(nextGame.gameDate) : "";
   const nextGameTime = nextGame?.gameTime || "";
 
@@ -86,7 +83,6 @@ const TeamSchedule = () => {
               firstColor={teamColor || defaultColor}
               teamAbv={teamAbv ?? ""}
             />
-
             <UpcomingGame
               isHomeTeam={isHomeTeam}
               teamLogo={espnLogo1}
@@ -95,6 +91,10 @@ const TeamSchedule = () => {
               opponentAbbrev={opponentAbbrev}
               nextGameDate={nextGameDate}
               nextGameTime={nextGameTime}
+              teamColor={teamColor || "#FFFFFF"} // Default to white if teamColor is undefined
+              opponentColor={opponentDetails?.primaryColor || "#FFFFFF"} // Default to white if opponentColor is undefined
+              selectedPrimaryColor={selectedPrimaryColor || "#FFFFFF"} // Pass the primary color of the selected team
+              opponentPrimaryColor={opponentDetails?.primaryColor || "#FFFFFF"} // Pass the primary color of the opponent
             />
             {/* Full Schedule Table */}
             <Box
