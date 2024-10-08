@@ -1,4 +1,5 @@
-import { Flex, HStack, Image, Text, VStack } from "@chakra-ui/react";
+import { Flex, HStack, Image, Text, VStack, Button } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
 import RatingScore from "./RatingScore";
 
 interface Player {
@@ -18,6 +19,8 @@ interface Props {
 }
 
 const PlayerInfo = ({ player, teamCity, teamName, espnLogo1 }: Props) => {
+  const navigate = useNavigate(); // Initialize the navigate function
+
   return (
     <VStack align="flex-start" spacing={2}>
       <Flex align="center">
@@ -44,6 +47,15 @@ const PlayerInfo = ({ player, teamCity, teamName, espnLogo1 }: Props) => {
       <Text fontSize={["sm", "md"]} fontWeight="400" color="white">
         #{player.jerseyNum} • {player.pos}
       </Text>
+      {/* Add Back to Team button */}
+      <Button
+        colorScheme="teal"
+        size="sm"
+        mt={4}
+        onClick={() => navigate(-1)} // Go back to the previous page
+      >
+        Back to Team
+      </Button>
     </VStack>
   );
 };

@@ -148,7 +148,10 @@ const TeamSchedule = () => {
                                   mr={2}
                                 />
                               )}
-                              <Text color={lighten(lightValue, primaryColor)}>
+                              <Text
+                                fontWeight={600}
+                                color={lighten(lightValue, primaryColor)}
+                              >
                                 {opponentAbbrev}
                               </Text>
                             </Flex>
