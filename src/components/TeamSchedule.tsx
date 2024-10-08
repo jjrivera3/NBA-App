@@ -21,6 +21,8 @@ const TeamSchedule = () => {
   //@ts-ignore
   const selectedTeam = teamInfo?.body?.find((team) => team.teamID === teamId);
 
+  console.log(selectedTeam?.teamSchedule);
+
   const espnLogo1 =
     selectedTeam?.teamID === "29" ? Utah_Jazz : selectedTeam?.espnLogo1;
   const defaultColor = "#000000";

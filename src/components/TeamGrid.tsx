@@ -39,7 +39,6 @@ const TeamGrid = ({ teamAbv }: TeamGridProps) => {
     <>
       {isTeamInfoLoading ? (
         <Box mb={5}>
-          {" "}
           {/* Add margin-bottom for spacing */}
           <TeamHeadingSkeleton />
         </Box>

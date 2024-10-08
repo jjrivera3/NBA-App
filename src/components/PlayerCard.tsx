@@ -67,7 +67,7 @@ const PlayerCard = ({
   return (
     <Center py={6}>
       <Box
-        maxW={"350px"}
+        maxW={"550px"}
         w={"full"}
         bg={useColorModeValue("white", "#26262640")}
         boxShadow={"2xl"}

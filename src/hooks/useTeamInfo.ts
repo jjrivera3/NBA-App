@@ -13,7 +13,7 @@ const useTeamInfo = (teamId: string | null) => {
       // Pass the teamId as a query parameter to request only the specific team data
       const data = await apiClient.getAll({
         params: {
-          schedules: "false",
+          schedules: "true",
           rosters: "true",
           topPerformers: "false",
           teamStats: "false",
