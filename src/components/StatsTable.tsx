@@ -9,7 +9,6 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import React from "react";
 
 const StatsTable = () => {
   const playerStats = [
