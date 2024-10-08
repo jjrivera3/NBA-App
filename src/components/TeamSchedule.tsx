@@ -19,6 +19,10 @@ import TeamHeading from "./TeamHeading";
 import Utah_Jazz from "../assets/Utah_Jazz.png";
 import TeamHeadingSkeleton from "./TeamHeadSkeleton";
 import GameSchedule from "../entities/GameSchedule";
+import { formatDate } from "../utils/teamHelper";
+import useTeamDetails from "../hooks/useTeamDetails";
+import useNextGame from "../hooks/useNextGame";
+import UpcomingGame from "./UpcomingGame";
 
 const TeamSchedule = () => {
   const { teamAbv } = useParams<{ teamAbv: string }>();
@@ -39,61 +43,27 @@ const TeamSchedule = () => {
     selectedTeam?.teamID === "29" ? Utah_Jazz : selectedTeam?.espnLogo1;
   const defaultColor = "#000000";
 
-  // Helper function to format the date and adjust by one day
-  const formatDate = (gameDate: string) => {
-    const year = gameDate.slice(0, 4);
-    const month = gameDate.slice(4, 6);
-    const day = gameDate.slice(6, 8);
-    const date = new Date(`${year}-${month}-${day}`);
-
-    // Add one day
-    date.setDate(date.getDate() + 1);
-
-    // Format to "Wed, Oct 23"
-    return date.toLocaleDateString("en-US", {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-  // Function to find the logo, color, name, and light value for a given team ID
-  const getTeamDetails = (teamId: string) => {
-    const team = nbaTeams.find((t) => t.teamId === teamId);
-    if (team) {
-      return {
-        logoImage: team.info.logoImage,
-        primaryColor: team.info.colors[0],
-        lightValue: team.light,
-        name: team.name,
-      };
-    }
-    return {};
-  };
-
+  // Retrieve selected team's color and light value
+  const teamDetails = useTeamDetails(teamId);
   const { primaryColor: selectedPrimaryColor, lightValue: selectedLightValue } =
-    getTeamDetails(teamId ?? ""); // Avoid undefined with an empty string fallback
+    teamDetails || {};
   const headingColor = lighten(
     selectedLightValue ?? 0.1,
     selectedPrimaryColor ?? "white"
   );
 
   // Get the next game from the schedule
-  const nextGame = selectedTeam?.teamSchedule
-    ? Object.values(selectedTeam.teamSchedule as GameSchedule[]).sort((a, b) =>
-        a.gameDate.localeCompare(b.gameDate)
-      )[0]
-    : null;
-
+  const nextGame = useNextGame(selectedTeam?.teamSchedule || null);
   const isHomeTeam =
     selectedTeam && nextGame && selectedTeam.teamID === nextGame?.teamIDHome;
   const opponentId = isHomeTeam ? nextGame?.teamIDAway : nextGame?.teamIDHome;
 
+  const opponentDetails = useTeamDetails(opponentId ?? null); // Ensure opponentId is either string or null
   const {
     logoImage: opponentLogo,
-    primaryColor: opponentPrimaryColor,
     name: opponentName,
-  } = getTeamDetails(opponentId ?? "");
+    abbrev: opponentAbbrev,
+  } = opponentDetails || {};
   const nextGameDate = nextGame ? formatDate(nextGame.gameDate) : "";
   const nextGameTime = nextGame?.gameTime || "";
 
@@ -116,40 +86,16 @@ const TeamSchedule = () => {
               firstColor={teamColor || defaultColor}
               teamAbv={teamAbv ?? ""}
             />
-            {/* Upcoming Game Section */}
-            <Box
-              mt={7}
-              p={5}
-              borderRadius="md"
-              boxShadow="2xl"
-              textAlign="center"
-              background={`linear-gradient(88deg, ${selectedPrimaryColor} 0%, rgba(0, 0, 0, 0.3) 50%, ${opponentPrimaryColor} 100%)`}
-            >
-              <Text fontSize="xl" fontWeight="bold" color={headingColor}>
-                Upcoming Game
-              </Text>
-              <Flex align="center" justify="center" mt={4} mb={2}>
-                <Image
-                  src={espnLogo1}
-                  alt={`${selectedTeam.teamName} logo`}
-                  boxSize="75px"
-                  mr={4}
-                />
-                <Text fontSize="2xl" fontWeight="bold" color="white">
-                  {isHomeTeam ? "vs" : "@"}
-                </Text>
-                <Image
-                  src={opponentLogo}
-                  alt={`${opponentName} logo`}
-                  boxSize="75px"
-                  ml={4}
-                />
-              </Flex>
-              <Text fontSize="lg" color="white" mt={2}>
-                {nextGameDate} • {nextGameTime}
-              </Text>
-            </Box>
 
+            <UpcomingGame
+              isHomeTeam={isHomeTeam}
+              teamLogo={espnLogo1}
+              teamAbbrev={selectedAbv?.info.abbrev}
+              opponentLogo={opponentLogo}
+              opponentAbbrev={opponentAbbrev}
+              nextGameDate={nextGameDate}
+              nextGameTime={nextGameTime}
+            />
             {/* Full Schedule Table */}
             <Box
               mt={7}
@@ -191,12 +137,15 @@ const TeamSchedule = () => {
                         const opponentId = isHomeGame
                           ? game.teamIDAway
                           : game.teamIDHome;
+                        const opponentDetails = useTeamDetails(
+                          opponentId ?? null
+                        );
                         const {
                           logoImage: opponentLogo,
                           primaryColor,
                           lightValue,
                           name: opponentName,
-                        } = getTeamDetails(opponentId);
+                        } = opponentDetails || {};
                         const gameTime = game.gameTime;
                         const formattedDate = formatDate(game.gameDate);
 
