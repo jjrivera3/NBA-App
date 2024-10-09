@@ -11,6 +11,7 @@ export interface FetchResponse<T> {
     arg0: (team: import("../entities/TeamInfo").default) => boolean
   ): unknown;
   body: {
+    forEach(arg0: (team: any) => void): unknown;
     teamId: string;
     seasonId: string;
     roster: T[]; // Roster is the array of players

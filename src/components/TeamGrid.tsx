@@ -25,7 +25,11 @@ const TeamGrid = ({ teamAbv }: TeamGridProps) => {
 
   const teamId = selectedAbv ? selectedAbv.teamId : null;
   const teamColor = useTeamColor(teamId);
-  const { data: teamInfo, isLoading: isTeamInfoLoading } = useTeamInfo(teamId);
+  const { data: teamInfo, isLoading: isTeamInfoLoading } = useTeamInfo(teamId, {
+    rosters: "true",
+    statsToGet: "averages",
+    schedules: "true",
+  });
   const roster = useRoster(teamInfo, teamId);
   const playersWithRatings = usePlayerRatingsMap(roster);
   const sortedPlayers = useSortedPlayers(playersWithRatings);

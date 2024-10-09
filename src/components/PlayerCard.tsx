@@ -73,7 +73,10 @@ const PlayerCard = ({
       <Box
         maxW={"550px"}
         w={"full"}
-        bg={useColorModeValue("white", "#26262640")}
+        bg={useColorModeValue(
+          "white",
+          "linear-gradient(360deg, #212121 30%, #2e2e2e 70%, #353535 100%);"
+        )}
         boxShadow={"2xl"}
         rounded={"md"}
         overflow={"hidden"}
@@ -89,28 +92,15 @@ const PlayerCard = ({
           alt="#"
         />
         <Flex justify={"center"} mt={-12}>
-          <Link
-            to={playerProfileUrl}
-            state={{
-              espnLogo1,
-              player,
-              teamCity,
-              teamName,
-              firstColor,
-              teamID,
+          <Avatar
+            size={"2xl"}
+            src={avatarSrc}
+            onError={() => setAvatarSrc(playerAvatar)} // Fallback to playerAvatar on error
+            css={{
+              border: "2px solid white",
             }}
-          >
-            <Avatar
-              size={"2xl"}
-              src={avatarSrc}
-              onError={() => setAvatarSrc(playerAvatar)} // Fallback to playerAvatar on error
-              css={{
-                border: "2px solid white",
-              }}
-              bg={"#ffffff"}
-              _hover={{ cursor: "pointer" }} // Make it clear that the avatar is clickable
-            />
-          </Link>
+            bg={"#ffffff"}
+          />
         </Flex>
 
         <Box p={6}>

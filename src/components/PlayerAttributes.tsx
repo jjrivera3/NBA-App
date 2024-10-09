@@ -47,7 +47,7 @@ interface CategoryBoxProps {
 }
 
 const CategoryBox: React.FC<CategoryBoxProps> = ({ title, attributes }) => (
-  <Box p={4} borderRadius="md" mb={4} background="#1e1f1f">
+  <Box p={4} borderRadius="md" mb={4} background="#1b1b1b">
     <Heading size="sm" color="gray.100" mb={3}>
       {title}
     </Heading>

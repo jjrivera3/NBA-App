@@ -1,7 +1,6 @@
 import {
   HStack,
   Image,
-  Link,
   Text,
   Box,
   IconButton,
@@ -20,6 +19,7 @@ import SearchInput from "./SearchInput";
 import logo from "../assets/logo.svg";
 import TeamList from "../components/TeamList";
 import React from "react";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
 
 const NavBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure(); // Chakra UI hook to control the drawer
@@ -49,11 +49,12 @@ const NavBar = () => {
     >
       {/* Logo and Text */}
       <Link
-        href="/"
-        display="flex"
-        alignItems="center"
-        textDecoration="none"
-        _hover={{ textDecoration: "none" }}
+        to="/"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          textDecoration: "none",
+        }}
       >
         <Image
           src={logo}
@@ -63,16 +64,16 @@ const NavBar = () => {
           objectFit="contain"
         />
         <Text fontSize="1xl" fontFamily="'Poppins', sans-serif">
-          <Text as="span" fontWeight="700" color="#f37021">
+          <Text as="span" fontWeight="600" color="#f8991d">
             Heat Check
           </Text>{" "}
           <Text
             fontSize="1xl"
             as="span"
-            fontWeight="300"
+            fontWeight="400"
             fontFamily="'Poppins', sans-serif"
           >
-            Stats
+            Analytics
           </Text>
         </Text>
       </Link>
@@ -105,8 +106,8 @@ const NavBar = () => {
           <DrawerHeader>Menu</DrawerHeader>
           <DrawerBody>
             <VStack spacing={4}>
-              <Link href="/ATL">Page 1</Link>
-              <Link href="/page2">Page 2</Link>
+              <Link to="/Page1">Page 1</Link>
+              <Link to="/page2">Page 2</Link>
               {isMobile && (
                 <TeamList
                   onSelectTeam={handleSelectTeam}

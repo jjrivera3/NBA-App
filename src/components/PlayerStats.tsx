@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { background, Box, Flex, Text } from "@chakra-ui/react";
 import { lighten } from "polished";
 
 interface PlayerStatsProps {
@@ -36,7 +36,8 @@ const PlayerStats = ({ player, firstColor, lightValue }: PlayerStatsProps) => {
       align="center"
       position="relative"
       flexDirection={["column", "row"]}
-      borderBottom={`1px solid ${lighten(lightValue, firstColor)}`} // Add border here
+      background="linear-gradient(180deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%);"
+      borderBottom={`1px solid ${lighten(lightValue, firstColor)}`}
     >
       {stats.map((stat, index) => (
         <Box

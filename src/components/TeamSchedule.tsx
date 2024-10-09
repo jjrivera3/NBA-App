@@ -35,7 +35,9 @@ const TeamSchedule = () => {
   const teamId = selectedAbv ? selectedAbv.teamId : null;
 
   const teamColor = useTeamColor(teamId);
-  const { data: teamInfo, isLoading: isTeamInfoLoading } = useTeamInfo(teamId);
+  const { data: teamInfo, isLoading: isTeamInfoLoading } = useTeamInfo(teamId, {
+    schedules: "true",
+  });
 
   //@ts-ignore
   const selectedTeam = teamInfo?.body?.find((team) => team.teamID === teamId);
@@ -46,12 +48,7 @@ const TeamSchedule = () => {
 
   // Retrieve selected team's color and light value
   const teamDetails = useTeamDetails(teamId);
-  const { primaryColor: selectedPrimaryColor, lightValue: selectedLightValue } =
-    teamDetails || {};
-  const headingColor = lighten(
-    selectedLightValue ?? 0.1,
-    selectedPrimaryColor ?? "white"
-  );
+  const { primaryColor: selectedPrimaryColor } = teamDetails || {};
 
   // Get the next game from the schedule
   const nextGame = useNextGame(selectedTeam?.teamSchedule || null);
