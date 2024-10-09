@@ -1,16 +1,16 @@
-import { Box, Link, Image, Text } from "@chakra-ui/react"; // Import Chakra UI components
-import { Radar } from "react-chartjs-2";
+import { Box, Image, Text } from "@chakra-ui/react"; // Import Chakra UI components
 import {
   Chart as ChartJS,
-  RadialLinearScale,
-  PointElement,
-  LineElement,
   Filler,
-  Tooltip,
   Legend,
+  LineElement,
+  PointElement,
+  RadialLinearScale,
+  Tooltip,
 } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels"; // Import the plugin
 import { rgba } from "polished"; // Import rgba from polished
+import { Radar } from "react-chartjs-2";
 import twoKlogo from "../assets/NBA-2K25-dark.svg";
 
 // Register necessary chart components and the plugin
@@ -212,12 +212,9 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
       padding="25px"
       borderRadius="md"
       w={"full"}
-      bg="#26262640"
-      boxShadow={"2xl"}
       rounded={"md"}
       overflow={"hidden"}
-      border="1px solid #000"
-      mt={5}
+      mt={0}
       h={["600px", "700px"]} // Increased height for the chart container
       display="flex"
       flexDirection="column" // To stack the chart and the average value vertically

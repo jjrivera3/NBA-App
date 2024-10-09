@@ -1,4 +1,5 @@
-import { Box, Flex, Skeleton, SkeletonText } from "@chakra-ui/react";
+// src/components/PlayerDetailPage.tsx
+import { Box, Flex, Skeleton, SkeletonText, Grid } from "@chakra-ui/react";
 import { lighten } from "polished";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
@@ -7,15 +8,11 @@ import PlayerImage from "../components/PlayerImage";
 import PlayerInfo from "../components/PlayerInfo";
 import PlayerRadarChart from "../components/PlayerRadarChart";
 import PlayerStats from "../components/PlayerStats";
+import PlayerAttributes from "../components/PlayerAttributes";
 import nbateams from "../data/nbateams";
 import useAvatarSrc from "../hooks/useAvatarSrc";
 import StatsTable from "../components/PlayerStatsTable";
 import usePlayerStats from "../hooks/usePlayerStats";
-
-// Define the playerStats type
-interface PlayerStats {
-  body: any; // Replace `any` with the correct type for body, e.g., `PlayerStat[]`
-}
 
 const PlayerDetailPage = () => {
   const location = useLocation();
@@ -31,6 +28,8 @@ const PlayerDetailPage = () => {
   const foundTeam = nbateams.find((team) => team.teamId === teamID);
   const lightValue = foundTeam?.light || 0.2;
 
+  console.log(player.rating);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -38,8 +37,6 @@ const PlayerDetailPage = () => {
   if (!player) {
     return <div>No player data found</div>;
   }
-
-  console.log(player);
 
   return (
     <>
@@ -80,7 +77,7 @@ const PlayerDetailPage = () => {
         />
       </Box>
 
-      {/* Add a new Box specifically for the StatsTable or Skeleton */}
+      {/* Stats Table Section */}
       <Box
         as="section"
         padding="20px"
@@ -107,7 +104,28 @@ const PlayerDetailPage = () => {
         )}
       </Box>
 
-      <PlayerRadarChart firstColor={firstColor} playerRating={player.rating} />
+      {/* Radar Chart and Attributes Section */}
+      <Box
+        as="section"
+        padding="20px"
+        borderRadius="md"
+        w={"full"}
+        mt={5}
+        bg="#26262640"
+        boxShadow="lg"
+        rounded="md"
+        border="1px solid #000"
+      >
+        <PlayerRadarChart
+          firstColor={firstColor}
+          playerRating={player.rating}
+        />
+
+        {/* Attributes Grid Under Radar Chart */}
+        <Box mt={5}>
+          <PlayerAttributes playerRating={player.rating} />
+        </Box>
+      </Box>
     </>
   );
 };

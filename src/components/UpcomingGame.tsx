@@ -51,7 +51,7 @@ const UpcomingGame: React.FC<UpcomingGameProps> = ({
         borderRight: `6px solid ${isHomeTeam ? teamColor : opponentColor}`,
       }}
     >
-      <Text fontSize="xl" fontWeight="bold">
+      <Text fontSize="xl" fontWeight={600} color="gray.300">
         Upcoming Game
       </Text>
       <Box mt={4} mb={2}>

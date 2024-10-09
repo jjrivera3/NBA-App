@@ -9,8 +9,8 @@ import PlayerCard from "./PlayerCard";
 import PlayerCardContainer from "./PlayerCardContainer";
 import TeamHeading from "./TeamHeading";
 import Utah_Jazz from "../assets/Utah_Jazz.png";
-import PlayerCardSkeleton from "./PlayerCardSkeleton";
-import TeamHeadingSkeleton from "./TeamHeadSkeleton";
+import PlayerCardSkeleton from "./skeletons/PlayerCardSkeleton";
+import TeamHeadingSkeleton from "./skeletons/TeamHeadSkeleton";
 
 interface TeamGridProps {
   teamAbv: string;

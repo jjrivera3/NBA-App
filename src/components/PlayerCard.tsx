@@ -52,6 +52,10 @@ const PlayerCard = ({
     ast: "0",
   };
 
+  // Determine if the button should be disabled
+  const isButtonDisabled =
+    stats.pts === "0" && stats.reb === "0" && stats.ast === "0";
+
   // Change team abbreviation from "GS" to "GSW" if necessary
   const teamAbbreviation = player.team === "GS" ? "GSW" : player.team;
 
@@ -85,15 +89,28 @@ const PlayerCard = ({
           alt="#"
         />
         <Flex justify={"center"} mt={-12}>
-          <Avatar
-            size={"2xl"}
-            src={avatarSrc}
-            onError={() => setAvatarSrc(playerAvatar)} // Fallback to playerAvatar on error
-            css={{
-              border: "2px solid white",
+          <Link
+            to={playerProfileUrl}
+            state={{
+              espnLogo1,
+              player,
+              teamCity,
+              teamName,
+              firstColor,
+              teamID,
             }}
-            bg={"#ffffff"}
-          />
+          >
+            <Avatar
+              size={"2xl"}
+              src={avatarSrc}
+              onError={() => setAvatarSrc(playerAvatar)} // Fallback to playerAvatar on error
+              css={{
+                border: "2px solid white",
+              }}
+              bg={"#ffffff"}
+              _hover={{ cursor: "pointer" }} // Make it clear that the avatar is clickable
+            />
+          </Link>
         </Flex>
 
         <Box p={6}>
@@ -158,6 +175,7 @@ const PlayerCard = ({
               rounded={"md"}
               fontSize={13}
               fontWeight={600}
+              isDisabled={isButtonDisabled}
               _hover={{
                 transform: "translateY(-2px)",
                 boxShadow: "lg",

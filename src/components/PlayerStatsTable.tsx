@@ -58,10 +58,10 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
     <Box overflowX="auto" background="#26262640" padding="5px">
       <Text
         fontSize="2xl"
-        fontWeight="bold"
+        fontWeight={500}
         mb="2"
-        color="white"
         textAlign="left"
+        color="gray.200"
       >
         Career Stats
       </Text>

@@ -17,12 +17,13 @@ import useTeamColor from "../hooks/useTeamColor";
 import useTeamInfo from "../hooks/useTeamInfo";
 import TeamHeading from "./TeamHeading";
 import Utah_Jazz from "../assets/Utah_Jazz.png";
-import TeamHeadingSkeleton from "./TeamHeadSkeleton";
+import TeamHeadingSkeleton from "./skeletons/TeamHeadSkeleton";
 import GameSchedule from "../entities/GameSchedule";
 import { formatDate } from "../utils/teamHelper";
 import useTeamDetails from "../hooks/useTeamDetails";
 import useNextGame from "../hooks/useNextGame";
 import UpcomingGame from "./UpcomingGame";
+import UpcomingGameSkeleton from "./skeletons/UpcomingGameSkeleton";
 
 const TeamSchedule = () => {
   const { teamAbv } = useParams<{ teamAbv: string }>();
@@ -69,6 +70,7 @@ const TeamSchedule = () => {
       {isTeamInfoLoading ? (
         <Box mt={7} mb={5}>
           <TeamHeadingSkeleton />
+          <UpcomingGameSkeleton />
         </Box>
       ) : (
         selectedTeam && (
@@ -110,13 +112,13 @@ const TeamSchedule = () => {
               paddingX="25px"
             >
               <Text
-                fontSize="2xl"
-                fontWeight="bold"
+                fontSize="xl"
+                fontWeight={500}
                 mb="2"
                 textAlign="left"
-                color={headingColor}
+                color="gray.300"
               >
-                2024-2025 Schedule
+                2024-2025 Season Schedule
               </Text>
               <Table variant="simple">
                 <Thead>
@@ -171,11 +173,8 @@ const TeamSchedule = () => {
                                 )}
                                 <Text
                                   fontWeight={500}
-                                  fontSize="15px"
-                                  color={lighten(
-                                    lightValue ?? 0.1,
-                                    primaryColor ?? "white"
-                                  )}
+                                  fontSize="14px"
+                                  color="white"
                                 >
                                   {opponentName}
                                 </Text>
