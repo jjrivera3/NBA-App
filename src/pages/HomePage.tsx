@@ -122,7 +122,7 @@ function Homepage() {
               left={0}
               right={0}
               bottom={0}
-              bg="linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.6) 100%)"
+              bg="linear-gradient(180deg, rgb(0 0 0 / 99%) 0%, rgb(67 42 42 / 50%) 100%)"
               borderRadius="md"
               zIndex={1}
             />
@@ -132,14 +132,14 @@ function Homepage() {
                 fontSize="3xl"
                 fontWeight={600}
                 color="#f8991d"
-                textShadow="2px 2px 8px rgba(0, 0, 0, 0.8)"
+                textShadow="2px 2px 8px rgba(0, 0, 0, 0.99)"
               >
-                Welcome to Heat Check Stats
+                Welcome to Heat Check Analytics
               </Text>
               <Text
                 fontSize="lg"
                 maxW="1000px"
-                textShadow="1px 1px 6px rgba(0, 0, 0, 0.7)"
+                textShadow="2px 2px 8px rgba(0, 0, 0, 0.99)"
               >
                 Your go-to source for current NBA player stats, 2K ratings,
                 schedules, player news, and more! Dive into detailed stats, get

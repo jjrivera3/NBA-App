@@ -64,7 +64,7 @@ const NavBar = () => {
           objectFit="contain"
         />
         <Text fontSize="1xl" fontFamily="'Poppins', sans-serif">
-          <Text as="span" fontWeight="600" color="#f8991d">
+          <Text as="span" fontWeight="600" color="#f37021">
             Heat Check
           </Text>{" "}
           <Text
