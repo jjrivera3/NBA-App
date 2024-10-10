@@ -6,6 +6,7 @@ import useTopPlayerStats from "../hooks/useTopPlayerStats";
 
 import HeroSection from "../components/HeroSection";
 import TopPlayers from "../components/TopPlayers";
+import TeamStandings from "../components/TeamStandings"; // Import the new component
 
 function Homepage() {
   const { teamAbv, schedule } = useParams<{
@@ -32,6 +33,7 @@ function Homepage() {
       ) : (
         <>
           <HeroSection />
+          <TeamStandings />
           <TopPlayers
             top10Pts={top10Pts}
             top10Reb={top10Reb}

@@ -42,9 +42,9 @@ const TeamList = ({ onSelectTeam, selectedTeamId }: NbaTeamListProps) => {
             paddingY="7px"
             paddingX="5px"
             borderRadius="md"
-            cursor="pointer"
             bg={team.teamId === selectedTeamId ? "#121212" : "transparent"} // Highlight if selected
             onClick={() => handleTeamClick(team.teamId)}
+            _hover={{ bg: "#1a1a1a" }} // Optional hover background
           >
             <HStack spacing={2}>
               <Image
