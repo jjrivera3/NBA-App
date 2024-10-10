@@ -73,7 +73,7 @@ const NavBar = () => {
             fontWeight="400"
             fontFamily="'Poppins', sans-serif"
           >
-            Analytics
+            Central
           </Text>
         </Text>
       </Link>
