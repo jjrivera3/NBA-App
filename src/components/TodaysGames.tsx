@@ -1,10 +1,8 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
 import { Box, Flex, Image, Text, VStack } from "@chakra-ui/react";
 import Slider from "react-slick";
 
-// Sample game data for 10 games
 const games = [
   {
     homeTeam: "Lakers",
@@ -80,7 +78,7 @@ const games = [
 
 const TodaysGames = () => {
   const settings = {
-    dots: true,
+    dots: false,
     infinite: false,
     speed: 500,
     slidesToShow: 6,
@@ -114,30 +112,38 @@ const TodaysGames = () => {
       </Text>
       <Slider {...settings}>
         {games.map((game, index) => (
-          <Box key={index} p={3} bg="gray.700" borderRadius="md" color="white">
-            <VStack spacing={2}>
-              <Flex justifyContent="center" alignItems="center" gap={2}>
-                <Image
-                  src={game.awayLogo}
-                  alt={`${game.awayTeam} logo`}
-                  boxSize="50px"
-                />
-                <Text fontSize="lg" fontWeight="bold">
-                  {game.awayTeam}
-                </Text>
-              </Flex>
+          <Box
+            key={index}
+            p={3}
+            bg="#3a3b3d"
+            borderRadius="md"
+            color="white"
+            transition="transform 0.3s"
+            _hover={{ transform: "scale(1.05)", boxShadow: "lg" }}
+          >
+            <VStack spacing={2} align="start">
               <Text fontSize="sm" color="gray.300">
                 {game.time}
               </Text>
-              <Flex justifyContent="center" alignItems="center" gap={2}>
-                <Text fontSize="lg" fontWeight="bold">
-                  {game.homeTeam}
+              <Flex justifyContent="flex-start" alignItems="center" gap={3}>
+                <Image
+                  src={game.awayLogo}
+                  alt={`${game.awayTeam} logo`}
+                  boxSize="40px"
+                />
+                <Text fontSize="md" fontWeight="bold">
+                  {game.awayTeam}
                 </Text>
+              </Flex>
+              <Flex justifyContent="flex-start" alignItems="center" gap={3}>
                 <Image
                   src={game.homeLogo}
                   alt={`${game.homeTeam} logo`}
-                  boxSize="50px"
+                  boxSize="40px"
                 />
+                <Text fontSize="md" fontWeight="bold">
+                  {game.homeTeam}
+                </Text>
               </Flex>
             </VStack>
           </Box>
