@@ -12,6 +12,7 @@ import { useState } from "react";
 import useTeamInfo from "../hooks/useTeamInfo";
 import eastLogo from "../assets/eastern_conference.webp";
 import westLogo from "../assets/western_conference.webp";
+import TeamStandingsSkeleton from "./skeletons/TeamStandingsSkeleton";
 
 // Define the expected team structure
 interface Team {
@@ -37,7 +38,7 @@ const TeamStandings = () => {
     "West"
   );
 
-  if (isLoading) return <Text>Loading...</Text>;
+  if (isLoading) return <TeamStandingsSkeleton />; // Use the skeleton during loading
   if (isError) return <Text>Error loading team standings.</Text>;
 
   const teams: Team[] = Array.isArray(allTeamsData?.body)

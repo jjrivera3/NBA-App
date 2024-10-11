@@ -1,11 +1,4 @@
-import {
-  Box,
-  Flex,
-  GridItem,
-  Skeleton,
-  SkeletonText,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Flex, GridItem, Text } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import HeroSection from "../components/HeroSection";
 import News from "../components/News";
@@ -23,22 +16,6 @@ function Homepage() {
   }>();
   const { top10Pts, top10Reb, top10Ast, isLoading, isError } =
     useTopPlayerStats();
-
-  if (isLoading) {
-    return (
-      <GridItem area="main" mt={7}>
-        {/* Hero Section Skeleton */}
-      </GridItem>
-    );
-  }
-
-  if (isError) {
-    return (
-      <Box>
-        <Text color="red.500">Error loading data</Text>
-      </Box>
-    );
-  }
 
   return (
     <GridItem area="main" mt={7}>
@@ -87,6 +64,8 @@ function Homepage() {
               top10Pts={top10Pts}
               top10Reb={top10Reb}
               top10Ast={top10Ast}
+              isLoading={isLoading}
+              isError={isError}
             />
           </Box>
         </>

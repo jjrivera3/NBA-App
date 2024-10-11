@@ -5,19 +5,25 @@ import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import useGameData from "../hooks/useGameData";
 import "/src/TodaysGame.css";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import GameSkeleton from "./skeletons/GameSkeleton";
 
 const TodaysGames = () => {
   const { games, isLoading, error } = useGameData();
   const sliderRef = useRef<any>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const totalSlides = games.length;
+  const slidesToShow = 6; // Adjust this to match your settings
 
   const settings = {
     dots: false,
     infinite: false,
     speed: 500,
-    slidesToShow: 6,
+    slidesToShow,
     slidesToScroll: 1,
+    arrows: false, // Disable default arrows
+    afterChange: (index: number) => setCurrentSlide(index), // Track the current slide index
     responsive: [
       { breakpoint: 1024, settings: { slidesToShow: 4 } },
       { breakpoint: 768, settings: { slidesToShow: 2 } },
@@ -26,11 +32,19 @@ const TodaysGames = () => {
   };
 
   const handlePrevious = () => {
-    sliderRef.current?.slickPrev();
+    if (currentSlide === 0) {
+      sliderRef.current?.slickGoTo(totalSlides - slidesToShow); // Go to the last set of slides
+    } else {
+      sliderRef.current?.slickPrev();
+    }
   };
 
   const handleNext = () => {
-    sliderRef.current?.slickNext();
+    if (currentSlide >= totalSlides - slidesToShow) {
+      sliderRef.current?.slickGoTo(0); // Return to the first slide
+    } else {
+      sliderRef.current?.slickNext();
+    }
   };
 
   if (isLoading) {
@@ -44,7 +58,7 @@ const TodaysGames = () => {
       >
         <Flex alignItems="center" mb={5}>
           <Text fontSize="2xl" fontWeight="bold" color="white" mr={4}>
-            Todays Games
+            Today's Games
           </Text>
           <IconButton
             aria-label="Previous"
@@ -98,7 +112,7 @@ const TodaysGames = () => {
     >
       <Flex alignItems="center" mb={5}>
         <Text fontSize="2xl" fontWeight="bold" color="white" mr={4}>
-          Todays Games
+          Today's Games
         </Text>
         <IconButton
           aria-label="Previous"

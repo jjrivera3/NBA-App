@@ -1,4 +1,3 @@
-// hooks/useTopPlayerStats.ts
 import { useEffect, useState } from "react";
 import useTeamInfo from "../hooks/useTeamInfo";
 
@@ -28,16 +27,22 @@ function useTopPlayerStats() {
   const [top10Ast, setTop10Ast] = useState<Player[]>([]);
 
   useEffect(() => {
-    if (!allTeamsData?.body) {
-      console.log("Data not yet available");
+    if (isLoading) {
+      console.log("Top player stats are loading...");
+      setTop10Pts([]); // Clear data while loading
+      setTop10Reb([]);
+      setTop10Ast([]);
       return;
     }
 
-    console.log("Raw team data:", allTeamsData);
+    if (isError || !allTeamsData?.body) {
+      console.log("Error or missing data.");
+      return;
+    }
 
     const players: Player[] = [];
     allTeamsData.body.forEach((team) => {
-      if (team.Roster) {
+      if (team && team.Roster) {
         Object.values(team.Roster).forEach((player) => {
           players.push(player as Player);
         });
@@ -47,24 +52,22 @@ function useTopPlayerStats() {
     console.log("Extracted players:", players);
 
     const getTop10ByStat = (stat: StatsKeys) => {
-      return players
-        .filter((player) => player.stats && player.stats[stat] !== undefined)
-        .sort(
-          (a, b) =>
-            parseFloat(b.stats![stat] || "0") -
-            parseFloat(a.stats![stat] || "0")
-        )
-        .slice(0, 5);
+      const filteredPlayers = players.filter(
+        (player) => player.stats && player.stats[stat] !== undefined
+      );
+
+      const sortedPlayers = filteredPlayers.sort(
+        (a, b) =>
+          parseFloat(b.stats![stat] || "0") - parseFloat(a.stats![stat] || "0")
+      );
+
+      return sortedPlayers.slice(0, 10); // Get top 10 players
     };
 
     setTop10Pts(getTop10ByStat("pts"));
     setTop10Reb(getTop10ByStat("reb"));
     setTop10Ast(getTop10ByStat("ast"));
-
-    console.log("Top 10 Points:", getTop10ByStat("pts"));
-    console.log("Top 10 Rebounds:", getTop10ByStat("reb"));
-    console.log("Top 10 Assists:", getTop10ByStat("ast"));
-  }, [allTeamsData]);
+  }, [allTeamsData, isLoading, isError]);
 
   return { top10Pts, top10Reb, top10Ast, isLoading, isError };
 }

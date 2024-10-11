@@ -13,6 +13,8 @@ const useTeamInfo = (teamId: string | null = null, params = {}) => {
         params: {
           teamId: teamId || undefined,
           ...params, // Spread any additional params here
+          rosters: "true",
+          statsToGet: "averages",
         },
       });
 

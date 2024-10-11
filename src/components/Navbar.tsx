@@ -105,9 +105,11 @@ const NavBar = () => {
           <DrawerCloseButton />
           <DrawerHeader>Menu</DrawerHeader>
           <DrawerBody>
-            <VStack spacing={4}>
-              <Link to="/Page1">Page 1</Link>
-              <Link to="/page2">Page 2</Link>
+            <VStack spacing={4} align="left" paddingLeft={5}>
+              <Link to="/Page1">Home</Link>
+              <Link to="/Page2">Scoreboard</Link>
+              <Link to="/page3">Standings</Link>
+              <Link to="/page4">News</Link>
               {isMobile && (
                 <TeamList
                   onSelectTeam={handleSelectTeam}

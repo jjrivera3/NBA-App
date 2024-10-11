@@ -1,12 +1,13 @@
 import {
+  Spinner,
   Box,
-  Text,
   VStack,
+  Text,
+  SimpleGrid,
   HStack,
   Image,
-  Divider,
   Flex,
-  SimpleGrid,
+  Divider,
 } from "@chakra-ui/react";
 
 interface Player {
@@ -26,9 +27,64 @@ interface PlayerStatsProps {
   top10Pts: Player[];
   top10Reb: Player[];
   top10Ast: Player[];
+  isLoading: boolean;
+  isError: boolean;
 }
 
-function TopPlayers({ top10Pts, top10Reb, top10Ast }: PlayerStatsProps) {
+function TopPlayers({
+  top10Pts,
+  top10Reb,
+  top10Ast,
+  isLoading,
+  isError,
+}: PlayerStatsProps) {
+  console.log("TopPlayers received data:", {
+    top10Pts,
+    top10Reb,
+    top10Ast,
+    isLoading,
+    isError,
+  });
+
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="200px"
+      >
+        <Spinner size="xl" color="#f8991d" />
+      </Box>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="200px"
+      >
+        <Text color="red.500">Error loading top player data</Text>
+      </Box>
+    );
+  }
+
+  if (!top10Pts.length && !top10Reb.length && !top10Ast.length) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="200px"
+      >
+        <Text color="gray.500">No top player data available.</Text>
+      </Box>
+    );
+  }
+
   const statsData = [
     {
       title: "Points Per Game",
