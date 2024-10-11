@@ -8,7 +8,10 @@ interface TodaysGameParams {
   limit: string;
 }
 
-const useTodaysGame = (params: TodaysGameParams) => {
+const useTodaysGame = (
+  params: TodaysGameParams,
+  p0: { refetchOnWindowFocus: boolean; staleTime: number }
+) => {
   const apiClient = new APIClient("/nbascoreboard");
 
   return useQuery({

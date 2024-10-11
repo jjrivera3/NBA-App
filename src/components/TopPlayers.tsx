@@ -38,14 +38,6 @@ function TopPlayers({
   isLoading,
   isError,
 }: PlayerStatsProps) {
-  console.log("TopPlayers received data:", {
-    top10Pts,
-    top10Reb,
-    top10Ast,
-    isLoading,
-    isError,
-  });
-
   if (isLoading) {
     return (
       <Box

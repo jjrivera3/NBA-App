@@ -147,7 +147,7 @@ const TeamStandings = () => {
         border="1px solid"
         borderColor="#2a2b2f"
       >
-        <Text fontSize="2xl" fontWeight="bold" color="white" mb={5}>
+        <Text fontSize="2xl" fontWeight={500} color="white" mb={5}>
           Standings
         </Text>
         <ButtonGroup isAttached borderRadius="full" mb={5} width="100%">

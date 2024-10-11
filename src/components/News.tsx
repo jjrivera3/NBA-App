@@ -37,7 +37,7 @@ const News = () => {
     <>
       <Text
         fontSize="2xl"
-        fontWeight="bold"
+        fontWeight={500}
         color="white"
         paddingTop={5}
         paddingLeft={5}

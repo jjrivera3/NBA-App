@@ -1,12 +1,10 @@
-import { useEffect } from "react";
 import useTodaysGame from "./useTodaysGame";
 import GameData from "../entities/GameData";
 
-// Define the Team type here if it's not available elsewhere
 type Team = {
   abbreviation: string;
   logo: string;
-  color?: string; // Optional property to avoid errors if color is missing
+  color?: string;
 };
 
 const useGameData = () => {
@@ -16,36 +14,39 @@ const useGameData = () => {
     day: date.getDate().toString().padStart(2, "0"),
   });
 
-  // Get today's and yesterday's dates
   const today = new Date();
   const yesterday = new Date(today);
   yesterday.setDate(today.getDate() - 1);
 
-  // Format dates for fetching
   const todayDate = formatDate(today);
   const yesterdayDate = formatDate(yesterday);
 
-  // Fetch games data
   const {
     data: todayData,
     isLoading: todayLoading,
     error: todayError,
-  } = useTodaysGame({
-    ...todayDate,
-    limit: "0",
-  });
-  const { data: yestData, error: yestError } = useTodaysGame({
-    ...yesterdayDate,
-    limit: "0",
-  });
+  } = useTodaysGame(
+    {
+      ...todayDate,
+      limit: "0",
+    },
+    {
+      refetchOnWindowFocus: false,
+      staleTime: 5 * 60 * 1000,
+    }
+  );
 
-  useEffect(() => {
-    if (todayError) console.error("Error fetching today's games:", todayError);
-    if (yestError)
-      console.error("Error fetching yesterday's games:", yestError);
-  }, [todayError, yestError]);
+  const { data: yestData, error: yestError } = useTodaysGame(
+    {
+      ...yesterdayDate,
+      limit: "0",
+    },
+    {
+      refetchOnWindowFocus: false,
+      staleTime: 5 * 60 * 1000,
+    }
+  );
 
-  // Process and format game data
   const games = [
     ...((todayData as GameData)?.events || []),
     ...((yestData as GameData)?.events || []),
@@ -53,10 +54,10 @@ const useGameData = () => {
     const competition = game.competitions?.[0];
     const homeTeam = competition?.competitors.find(
       (comp) => comp.homeAway === "home"
-    )?.team as Team; // Use Team type
+    )?.team as Team;
     const awayTeam = competition?.competitors.find(
       (comp) => comp.homeAway === "away"
-    )?.team as Team; // Use Team type
+    )?.team as Team;
     const homeScore = competition?.competitors.find(
       (comp) => comp.homeAway === "home"
     )?.score;
@@ -69,6 +70,20 @@ const useGameData = () => {
       gameDate.getMonth() + 1
     }/${gameDate.getDate()}`;
 
+    // Check if odds should be shown (only if game is not final)
+    const oddsDetails =
+      statusType !== "STATUS_FINAL"
+        ? (competition as any)?.odds?.[0]?.details ||
+          (game as any)?.odds?.[0]?.details ||
+          ""
+        : "";
+    const overUnder =
+      statusType !== "STATUS_FINAL"
+        ? (competition as any)?.odds?.[0]?.overUnder ||
+          (game as any)?.odds?.[0]?.overUnder ||
+          ""
+        : "";
+
     return {
       homeTeam: homeTeam?.abbreviation || "",
       awayTeam: awayTeam?.abbreviation || "",
@@ -78,12 +93,16 @@ const useGameData = () => {
       }),
       homeLogo: homeTeam?.logo || "",
       awayLogo: awayTeam?.logo || "",
-      homeTeamColor: homeTeam?.color ? `#${homeTeam.color}` : "#000000", // Ensure color exists or default to black
-      awayTeamColor: awayTeam?.color ? `#${awayTeam.color}` : "#000000", // Ensure color exists or default to black
+      homeTeamColor: homeTeam?.color ? `#${homeTeam.color}` : "#000000",
+      awayTeamColor: awayTeam?.color ? `#${awayTeam.color}` : "#000000",
       statusType,
       homeScore: statusType === "STATUS_FINAL" ? homeScore : null,
       awayScore: statusType === "STATUS_FINAL" ? awayScore : null,
       gameDateFormatted,
+      odds:
+        statusType !== "STATUS_FINAL"
+          ? { details: oddsDetails, overUnder: overUnder }
+          : null,
     };
   });
 

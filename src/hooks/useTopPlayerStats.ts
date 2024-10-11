@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query"; // Ensure you're importing from the correct package
 import useTeamInfo from "../hooks/useTeamInfo";
 
 interface Player {
@@ -22,54 +22,58 @@ function useTopPlayerStats() {
     isLoading,
     isError,
   } = useTeamInfo(null, { rosters: "true", statsToGet: "averages" });
-  const [top10Pts, setTop10Pts] = useState<Player[]>([]);
-  const [top10Reb, setTop10Reb] = useState<Player[]>([]);
-  const [top10Ast, setTop10Ast] = useState<Player[]>([]);
 
-  useEffect(() => {
-    if (isLoading) {
-      console.log("Top player stats are loading...");
-      setTop10Pts([]); // Clear data while loading
-      setTop10Reb([]);
-      setTop10Ast([]);
-      return;
-    }
-
-    if (isError || !allTeamsData?.body) {
-      console.log("Error or missing data.");
-      return;
-    }
-
-    const players: Player[] = [];
-    allTeamsData.body.forEach((team) => {
-      if (team && team.Roster) {
-        Object.values(team.Roster).forEach((player) => {
-          players.push(player as Player);
-        });
+  const {
+    data: topPlayersData,
+    isLoading: isTopPlayersLoading,
+    isError: isTopPlayersError,
+  } = useQuery({
+    queryKey: ["topPlayerStats", allTeamsData],
+    queryFn: () => {
+      const players: Player[] = [];
+      if (!allTeamsData?.body) {
+        throw new Error("Missing team data");
       }
-    });
 
-    console.log("Extracted players:", players);
+      allTeamsData.body.forEach((team) => {
+        if (team && team.Roster) {
+          Object.values(team.Roster).forEach((player) => {
+            players.push(player as Player);
+          });
+        }
+      });
 
-    const getTop10ByStat = (stat: StatsKeys) => {
-      const filteredPlayers = players.filter(
-        (player) => player.stats && player.stats[stat] !== undefined
-      );
+      const getTop10ByStat = (stat: StatsKeys) => {
+        const filteredPlayers = players.filter(
+          (player) => player.stats && player.stats[stat] !== undefined
+        );
 
-      const sortedPlayers = filteredPlayers.sort(
-        (a, b) =>
-          parseFloat(b.stats![stat] || "0") - parseFloat(a.stats![stat] || "0")
-      );
+        const sortedPlayers = filteredPlayers.sort(
+          (a, b) =>
+            parseFloat(b.stats![stat] || "0") -
+            parseFloat(a.stats![stat] || "0")
+        );
 
-      return sortedPlayers.slice(0, 10); // Get top 10 players
-    };
+        return sortedPlayers.slice(0, 10); // Get top 10 players
+      };
 
-    setTop10Pts(getTop10ByStat("pts"));
-    setTop10Reb(getTop10ByStat("reb"));
-    setTop10Ast(getTop10ByStat("ast"));
-  }, [allTeamsData, isLoading, isError]);
+      return {
+        top10Pts: getTop10ByStat("pts"),
+        top10Reb: getTop10ByStat("reb"),
+        top10Ast: getTop10ByStat("ast"),
+      };
+    },
+    enabled: !!allTeamsData, // Only run the query if allTeamsData is available
+    retry: false, // Adjust retry options as needed
+  });
 
-  return { top10Pts, top10Reb, top10Ast, isLoading, isError };
+  return {
+    top10Pts: topPlayersData?.top10Pts || [],
+    top10Reb: topPlayersData?.top10Reb || [],
+    top10Ast: topPlayersData?.top10Ast || [],
+    isLoading: isLoading || isTopPlayersLoading,
+    isError: isError || isTopPlayersError,
+  };
 }
 
 export default useTopPlayerStats;
