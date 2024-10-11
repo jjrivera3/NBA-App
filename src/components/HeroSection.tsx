@@ -26,7 +26,7 @@ function HeroSection() {
             bgPosition="center"
             color="white"
             p={10}
-            mb={10}
+            mb={5}
             borderRadius="md"
             boxShadow="xl"
             textAlign="center"

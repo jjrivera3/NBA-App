@@ -3,16 +3,14 @@ import {
   Box,
   Text,
   VStack,
-  Spinner,
-  Image,
   Link,
   Flex,
   Divider,
   Button,
 } from "@chakra-ui/react";
 import useNews from "../hooks/useNews";
+import NewsSkeleton from "./skeletons/NewsSkeleton";
 
-// Define the NewsArticle interface
 interface NewsArticle {
   link: string;
   image: string;
@@ -23,10 +21,6 @@ interface NewsArticle {
 const News = () => {
   const { data, isLoading, isError } = useNews({});
 
-  if (isLoading) {
-    return <Spinner size="lg" />;
-  }
-
   if (isError) {
     return <Text color="red.500">Error loading news</Text>;
   }
@@ -34,6 +28,10 @@ const News = () => {
   const newsArticles: NewsArticle[] = Array.isArray(data?.body)
     ? data.body.slice(0, 8)
     : [];
+
+  if (isLoading) {
+    return <NewsSkeleton />; // Use NewsSkeleton when loading
+  }
 
   return (
     <>

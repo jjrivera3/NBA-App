@@ -1,13 +1,20 @@
-import { GridItem, Spinner, Flex, Box } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  GridItem,
+  Skeleton,
+  SkeletonText,
+  Text,
+} from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
+import HeroSection from "../components/HeroSection";
+import News from "../components/News";
 import TeamGrid from "../components/TeamGrid";
 import TeamSchedule from "../components/TeamSchedule";
-import useTopPlayerStats from "../hooks/useTopPlayerStats";
-import HeroSection from "../components/HeroSection";
-import TopPlayers from "../components/TopPlayers";
 import TeamStandings from "../components/TeamStandings";
-import News from "../components/News";
 import TodaysGames from "../components/TodaysGames";
+import TopPlayers from "../components/TopPlayers";
+import useTopPlayerStats from "../hooks/useTopPlayerStats";
 
 function Homepage() {
   const { teamAbv, schedule } = useParams<{
@@ -18,11 +25,19 @@ function Homepage() {
     useTopPlayerStats();
 
   if (isLoading) {
-    return <Spinner size="xl" />;
+    return (
+      <GridItem area="main" mt={7}>
+        {/* Hero Section Skeleton */}
+      </GridItem>
+    );
   }
 
   if (isError) {
-    return <div>Error loading data</div>;
+    return (
+      <Box>
+        <Text color="red.500">Error loading data</Text>
+      </Box>
+    );
   }
 
   return (

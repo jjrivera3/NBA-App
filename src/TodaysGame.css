@@ -1,0 +1,9 @@
+/* TodaysGames.css */
+.slick-slide.slick-active {
+    padding-left: 0px;
+    padding-right: 7px;
+  }
+
+  button.slick-arrow {
+    display: none !important;
+}

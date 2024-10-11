@@ -28,7 +28,12 @@ function useTopPlayerStats() {
   const [top10Ast, setTop10Ast] = useState<Player[]>([]);
 
   useEffect(() => {
-    if (!allTeamsData?.body) return;
+    if (!allTeamsData?.body) {
+      console.log("Data not yet available");
+      return;
+    }
+
+    console.log("Raw team data:", allTeamsData);
 
     const players: Player[] = [];
     allTeamsData.body.forEach((team) => {
@@ -38,6 +43,8 @@ function useTopPlayerStats() {
         });
       }
     });
+
+    console.log("Extracted players:", players);
 
     const getTop10ByStat = (stat: StatsKeys) => {
       return players
@@ -53,6 +60,10 @@ function useTopPlayerStats() {
     setTop10Pts(getTop10ByStat("pts"));
     setTop10Reb(getTop10ByStat("reb"));
     setTop10Ast(getTop10ByStat("ast"));
+
+    console.log("Top 10 Points:", getTop10ByStat("pts"));
+    console.log("Top 10 Rebounds:", getTop10ByStat("reb"));
+    console.log("Top 10 Assists:", getTop10ByStat("ast"));
   }, [allTeamsData]);
 
   return { top10Pts, top10Reb, top10Ast, isLoading, isError };
