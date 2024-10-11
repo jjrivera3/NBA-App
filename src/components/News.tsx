@@ -32,12 +32,18 @@ const News = () => {
   }
 
   const newsArticles: NewsArticle[] = Array.isArray(data?.body)
-    ? data.body.slice(0, 7)
+    ? data.body.slice(0, 8)
     : [];
 
   return (
     <>
-      <Text fontSize="2xl" fontWeight="bold" color="white" p={5}>
+      <Text
+        fontSize="2xl"
+        fontWeight="bold"
+        color="white"
+        paddingTop={5}
+        paddingLeft={5}
+      >
         Top Headlines
       </Text>
       <VStack align="stretch" spacing={0} borderRadius="md" p={3}>
@@ -48,17 +54,9 @@ const News = () => {
               gap={5}
               alignItems="center"
             >
-              <Image
-                src={article.image}
-                alt={article.title}
-                boxSize="75px"
-                borderRadius="md"
-                objectFit="cover"
-                loading="lazy"
-              />
               <VStack align="start" spacing={2} flex="1">
                 <Link href={article.link} isExternal>
-                  <Text fontWeight={600} fontSize="13px" color="white">
+                  <Text fontWeight={600} fontSize="12px" color="white">
                     {article.title}
                   </Text>
                 </Link>

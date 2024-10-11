@@ -2,6 +2,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Box, Flex, Image, Text, VStack } from "@chakra-ui/react";
 import Slider from "react-slick";
+import APIClient from "../services/fantasy-stats-api-client";
 
 const games = [
   {
@@ -77,11 +78,13 @@ const games = [
 ];
 
 const TodaysGames = () => {
+  const apiClient = new APIClient("/games");
+
   const settings = {
     dots: false,
     infinite: false,
     speed: 500,
-    slidesToShow: 6,
+    slidesToShow: 5,
     slidesToScroll: 1,
     responsive: [
       {
@@ -106,7 +109,12 @@ const TodaysGames = () => {
   };
 
   return (
-    <Box bg="#292a2d" p={5} borderRadius="md" overflow="hidden">
+    <Box
+      background="linear-gradient(180deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%);"
+      p={5}
+      borderRadius="md"
+      overflow="hidden"
+    >
       <Text fontSize="2xl" fontWeight="bold" color="white" mb={5}>
         Today’s Games
       </Text>
@@ -115,7 +123,6 @@ const TodaysGames = () => {
           <Box
             key={index}
             p={3}
-            bg="#3a3b3d"
             borderRadius="md"
             color="white"
             transition="transform 0.3s"

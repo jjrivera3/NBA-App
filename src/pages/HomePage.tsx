@@ -41,31 +41,28 @@ function Homepage() {
             mt={6}
             align="stretch"
           >
-            {/* News Component */}
             <Box
               width={{ base: "100%", lg: "65%" }}
               display="flex"
               flexDirection="column"
-              flex="1"
               minHeight="600px"
-              background="linear-gradient(180deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%);"
-              border="1px solid #282828"
+              border="1px solid #00"
               borderRadius="md"
+              background="linear-gradient(337deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%);"
             >
-              <News />
+              <TeamStandings />
             </Box>
-
-            {/* Team Standings Component */}
             <Box
               width={{ base: "100%", lg: "35%" }}
               display="flex"
               flexDirection="column"
+              flex="1"
               minHeight="600px"
+              background="linear-gradient(337deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%);"
               border="1px solid #282828"
               borderRadius="md"
-              background="linear-gradient(180deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%);"
             >
-              <TeamStandings />
+              <News />
             </Box>
           </Flex>
 
