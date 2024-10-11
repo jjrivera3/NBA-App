@@ -34,7 +34,7 @@ const TeamStandings = () => {
   });
 
   const [selectedConference, setSelectedConference] = useState<"East" | "West">(
-    "East"
+    "West"
   );
 
   if (isLoading) return <Text>Loading...</Text>;
@@ -141,8 +141,10 @@ const TeamStandings = () => {
       <Box
         p={5}
         borderRadius="md"
+        background="linear-gradient(337deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%)"
         width={{ base: "100%", lg: "100%" }}
-        borderColor="#2a2b2f" // A dark gray color for a subtle effect
+        border="1px solid"
+        borderColor="#2a2b2f"
       >
         <Text fontSize="2xl" fontWeight="bold" color="white" mb={5}>
           Standings
@@ -151,13 +153,25 @@ const TeamStandings = () => {
           <Button
             flex="1"
             leftIcon={<Image src={westLogo} boxSize="20px" />}
-            bg={selectedConference === "West" ? "gray.500" : "gray.700"}
+            bg={
+              selectedConference === "West"
+                ? "linear-gradient(135deg, #44464b, #6b6b6b)"
+                : "gray.700"
+            }
             color="white"
             borderRadius="full"
             _hover={{
-              bg: selectedConference === "West" ? "gray.400" : "gray.600",
+              bg:
+                selectedConference === "West"
+                  ? "linear-gradient(135deg, #44464b, #6b6b6b)"
+                  : "gray.600",
             }}
-            _active={{ bg: "gray.600" }}
+            _active={{
+              bg:
+                selectedConference === "West"
+                  ? "linear-gradient(135deg, #44464b, #6b6b6b)"
+                  : "gray.600",
+            }}
             onClick={() => setSelectedConference("West")}
           >
             Western
@@ -165,22 +179,34 @@ const TeamStandings = () => {
           <Button
             flex="1"
             leftIcon={<Image src={eastLogo} boxSize="20px" />}
-            bg={selectedConference === "East" ? "gray.500" : "gray.700"}
+            bg={
+              selectedConference === "East"
+                ? "linear-gradient(135deg, #44464b, #6b6b6b)"
+                : "gray.700"
+            }
             color="white"
             borderRadius="full"
             _hover={{
-              bg: selectedConference === "East" ? "gray.400" : "gray.600",
+              bg:
+                selectedConference === "East"
+                  ? "linear-gradient(135deg, #44464b, #6b6b6b)"
+                  : "gray.600",
             }}
-            _active={{ bg: "gray.600" }}
+            _active={{
+              bg:
+                selectedConference === "East"
+                  ? "linear-gradient(135deg, #44464b, #6b6b6b)"
+                  : "gray.600",
+            }}
             onClick={() => setSelectedConference("East")}
           >
             Eastern
           </Button>
         </ButtonGroup>
         <Divider mb={4} />
-        {selectedConference === "East"
-          ? renderStandings(eastTeams)
-          : renderStandings(westTeams)}
+        {selectedConference === "West"
+          ? renderStandings(westTeams)
+          : renderStandings(eastTeams)}
       </Box>
     </Flex>
   );
