@@ -1,13 +1,14 @@
-// components/TeamStandings.tsx
 import {
   Box,
-  SimpleGrid,
   VStack,
   Text,
   Flex,
   Image,
   Divider,
+  ButtonGroup,
+  Button,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import useTeamInfo from "../hooks/useTeamInfo";
 import eastLogo from "../assets/eastern_conference.webp";
 import westLogo from "../assets/western_conference.webp";
@@ -28,12 +29,17 @@ const TeamStandings = () => {
     data: allTeamsData,
     isLoading,
     isError,
-  } = useTeamInfo(null, { teamStats: "true" });
+  } = useTeamInfo(null, {
+    teamStats: "true",
+  });
+
+  const [selectedConference, setSelectedConference] = useState<"East" | "West">(
+    "East"
+  );
 
   if (isLoading) return <Text>Loading...</Text>;
   if (isError) return <Text>Error loading team standings.</Text>;
 
-  // Ensure allTeamsData.body is an array and cast it to Team[]
   const teams: Team[] = Array.isArray(allTeamsData?.body)
     ? allTeamsData.body
     : [];
@@ -63,31 +69,9 @@ const TeamStandings = () => {
     return gamesBack % 1 === 0 ? gamesBack.toFixed(0) : gamesBack.toFixed(1);
   };
 
-  const renderStandings = (
-    teams: Team[],
-    conferenceName: string,
-    conferenceLogo: string
-  ) => (
-    <Box
-      p={5}
-      borderRadius="md"
-      background="linear-gradient(360deg, #1a1a1d 0%, #2e2e2e 80%, #353535 100%)"
-      mb={5}
-    >
-      <Flex alignItems="center" mb={3}>
-        <Image
-          src={conferenceLogo}
-          alt={`${conferenceName} logo`}
-          boxSize="40px"
-          mr={2}
-        />
-        <Text fontSize="xl" fontWeight="bold">
-          {conferenceName} Conference
-        </Text>
-      </Flex>
-      <Divider mb={4} />
-      {/* Headers */}
-      <Flex align="center" justify="space-between" mb={2}>
+  const renderStandings = (teams: Team[]) => (
+    <VStack align="start" spacing={3}>
+      <Flex align="center" justify="space-between" mb={2} w="100%">
         <Text color="#f8991d" fontSize="sm" fontWeight={600} w="50%">
           Team
         </Text>
@@ -95,7 +79,7 @@ const TeamStandings = () => {
           color="#f8991d"
           fontSize="sm"
           fontWeight={600}
-          w="20%"
+          w="15%"
           textAlign="center"
         >
           Wins
@@ -104,7 +88,7 @@ const TeamStandings = () => {
           color="#f8991d"
           fontSize="sm"
           fontWeight={600}
-          w="20%"
+          w="15%"
           textAlign="center"
         >
           Losses
@@ -113,52 +97,92 @@ const TeamStandings = () => {
           color="#f8991d"
           fontSize="sm"
           fontWeight={600}
-          w="10%"
+          w="20%"
           textAlign="right"
         >
           GB
         </Text>
       </Flex>
-      {/* Team Rows */}
-      <VStack align="start" spacing={3}>
-        {teams.map((team, index) => (
-          <Box key={team.teamAbv} w="full" p={2} borderRadius="md">
-            <Flex alignItems="center" justifyContent="space-between">
-              <Flex alignItems="center" w="50%">
-                <Text fontWeight="normal" fontSize="sm" mr={2}>
-                  {index + 1}
-                </Text>
-                <Image
-                  src={team.espnLogo1}
-                  alt={`${team.teamName} logo`}
-                  boxSize="24px"
-                  mr={2}
-                />
-                <Text fontSize="sm" fontWeight={500}>
-                  {team.teamCity} {team.teamName}
-                </Text>
-              </Flex>
-              <Text w="20%" textAlign="center" fontSize="sm" fontWeight={600}>
-                {team.wins}
+      {teams.map((team, index) => (
+        <Box key={team.teamAbv} w="full" p={2} borderRadius="md">
+          <Flex alignItems="center" justifyContent="space-between">
+            <Flex alignItems="center" w="50%">
+              <Text fontWeight="normal" fontSize="sm" mr={2}>
+                {index + 1}
               </Text>
-              <Text w="20%" textAlign="center" fontSize="sm" fontWeight={600}>
-                {team.loss}
-              </Text>
-              <Text w="10%" textAlign="right" fontSize="sm" fontWeight={600}>
-                {index === 0 ? "-" : calculateGamesBack(teams[0], team)}
+              <Image
+                src={team.espnLogo1}
+                alt={`${team.teamName} logo`}
+                boxSize="24px"
+                mr={2}
+              />
+              <Text fontSize="sm" fontWeight={500}>
+                {team.teamCity} {team.teamName}
               </Text>
             </Flex>
-          </Box>
-        ))}
-      </VStack>
-    </Box>
+            <Text w="15%" textAlign="center" fontSize="sm" fontWeight={600}>
+              {team.wins}
+            </Text>
+            <Text w="15%" textAlign="center" fontSize="sm" fontWeight={600}>
+              {team.loss}
+            </Text>
+            <Text w="20%" textAlign="right" fontSize="sm" fontWeight={600}>
+              {index === 0 ? "-" : calculateGamesBack(teams[0], team)}
+            </Text>
+          </Flex>
+        </Box>
+      ))}
+    </VStack>
   );
 
   return (
-    <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} mt={5}>
-      {renderStandings(westTeams, "Western", westLogo)}
-      {renderStandings(eastTeams, "Eastern", eastLogo)}
-    </SimpleGrid>
+    <Flex direction={{ base: "column", lg: "row" }} gap={10} mt={0}>
+      {/* Standings Box */}
+      <Box
+        p={5}
+        borderRadius="md"
+        width={{ base: "100%", lg: "100%" }}
+        borderColor="#2a2b2f" // A dark gray color for a subtle effect
+      >
+        <Text fontSize="2xl" fontWeight="bold" color="white" mb={5}>
+          Standings
+        </Text>
+        <ButtonGroup isAttached borderRadius="full" mb={5} width="100%">
+          <Button
+            flex="1"
+            leftIcon={<Image src={westLogo} boxSize="20px" />}
+            bg={selectedConference === "West" ? "gray.500" : "gray.700"}
+            color="white"
+            borderRadius="full"
+            _hover={{
+              bg: selectedConference === "West" ? "gray.400" : "gray.600",
+            }}
+            _active={{ bg: "gray.600" }}
+            onClick={() => setSelectedConference("West")}
+          >
+            Western
+          </Button>
+          <Button
+            flex="1"
+            leftIcon={<Image src={eastLogo} boxSize="20px" />}
+            bg={selectedConference === "East" ? "gray.500" : "gray.700"}
+            color="white"
+            borderRadius="full"
+            _hover={{
+              bg: selectedConference === "East" ? "gray.400" : "gray.600",
+            }}
+            _active={{ bg: "gray.600" }}
+            onClick={() => setSelectedConference("East")}
+          >
+            Eastern
+          </Button>
+        </ButtonGroup>
+        <Divider mb={4} />
+        {selectedConference === "East"
+          ? renderStandings(eastTeams)
+          : renderStandings(westTeams)}
+      </Box>
+    </Flex>
   );
 };
 

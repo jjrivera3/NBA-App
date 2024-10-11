@@ -1,7 +1,9 @@
+// Layout.tsx
 import { Box, Grid, GridItem } from "@chakra-ui/react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import NavBar from "../components/Navbar";
 import TeamList from "../components/TeamList";
+import Footer from "../components/Footer"; // Import the Footer component
 import { useState, useEffect } from "react";
 
 const Layout = () => {
@@ -56,6 +58,7 @@ const Layout = () => {
           </GridItem>
         </Grid>
       </Box>
+      <Footer /> {/* Add Footer here so it's displayed at the bottom */}
     </>
   );
 };

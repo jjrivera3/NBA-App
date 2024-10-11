@@ -1,13 +1,12 @@
-// components/PlayerStats.tsx
 import {
   Box,
-  SimpleGrid,
   Text,
   VStack,
   HStack,
   Image,
   Divider,
   Flex,
+  SimpleGrid,
 } from "@chakra-ui/react";
 
 interface Player {
@@ -52,15 +51,16 @@ function TopPlayers({ top10Pts, top10Reb, top10Ast }: PlayerStatsProps) {
   ];
 
   return (
-    <SimpleGrid columns={[1, null, 3]} spacing={5} p={0}>
+    <SimpleGrid columns={{ base: 1, lg: 3 }} spacing={5} mt={5}>
       {statsData.map(({ title, data, statKey, statLabel }, idx) => (
         <Box
           key={idx}
           borderRadius="md"
           p={5}
-          bg="linear-gradient(360deg, #1a1a1d 0%, #2e2e2e 80%, #353535 100%)"
+          background="linear-gradient(180deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%);"
           color="white"
           boxShadow="xl"
+          border="1px solid #282828"
         >
           <Flex justify="space-between" mb={4}>
             <Text color="#f8991d" fontSize="sm" fontWeight={600}>

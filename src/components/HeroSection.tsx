@@ -1,36 +1,14 @@
-import hero_bg from "../assets/hero_bg.jpeg";
-import {
-  GridItem,
-  Box,
-  SimpleGrid,
-  Text,
-  VStack,
-  HStack,
-  Image,
-  Spinner,
-  Divider,
-  Flex,
-} from "@chakra-ui/react";
+import { Box, GridItem, Text, VStack } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
+import hero_bg from "../assets/hero_bg.jpeg";
 import TeamGrid from "./TeamGrid";
 import TeamSchedule from "./TeamSchedule";
-import useTopPlayerStats from "../hooks/useTopPlayerStats";
 
-function Homepage() {
+function HeroSection() {
   const { teamAbv, schedule } = useParams<{
     teamAbv?: string;
     schedule?: string;
   }>();
-  const { top10Pts, top10Reb, top10Ast, isLoading, isError } =
-    useTopPlayerStats();
-
-  if (isLoading) {
-    return <Spinner size="xl" />;
-  }
-
-  if (isError) {
-    return <div>Error loading data</div>;
-  }
 
   return (
     <GridItem area="main" mt={7}>
@@ -67,7 +45,6 @@ function Homepage() {
               bg="linear-gradient(100deg, rgb(0 0 0 / 100%) 10%, rgb(67 42 42 / 50%) 120%);"
               borderRadius="md"
               zIndex={1}
-              border="1px solid #f8991d"
             />
             {/* Text Content */}
             <VStack spacing={4} zIndex={2}>
@@ -97,4 +74,4 @@ function Homepage() {
   );
 }
 
-export default Homepage;
+export default HeroSection;
