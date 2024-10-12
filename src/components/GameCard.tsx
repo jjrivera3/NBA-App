@@ -136,7 +136,7 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
             <Image
               src={game.awayLogo}
               alt={`${game.awayTeam} logo`}
-              boxSize="30px"
+              boxSize={{ base: "40px", md: "30px" }} // Larger size on mobile
               mt="10px"
             />
             <Text fontSize="13px" fontWeight={600} mt={1}>
@@ -192,7 +192,7 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
             <Image
               src={game.homeLogo}
               alt={`${game.homeTeam} logo`}
-              boxSize="30px"
+              boxSize={{ base: "40px", md: "30px" }} // Larger size on mobile
               mt="10px"
             />
             <Text fontSize="13px" fontWeight={600} mt={1}>

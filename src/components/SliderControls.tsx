@@ -14,34 +14,32 @@ const SliderControls: React.FC<SliderControlsProps> = ({
     <Flex alignItems="center">
       <IconButton
         aria-label="Previous"
-        icon={<ChevronLeftIcon boxSize={{ base: 5, md: 7 }} />} // Smaller icon size on mobile
+        icon={<ChevronLeftIcon boxSize={{ base: 6, md: 5 }} />} // Smaller icon size on desktop
         onClick={handlePrevious}
         color="#f8991d"
         variant="ghost"
-        size={{ base: "sm", md: "lg" }} // Smaller button size on mobile
+        size={{ base: "sm", md: "md" }} // Smaller button size on desktop
         mr={2}
         borderRadius="10px"
         background="linear-gradient(135deg, #44464b, #6b6b6b)"
         _hover={{ backgroundColor: "rgba(80, 80, 80, 0.7)" }}
-        // Adjust padding and dimensions for mobile
-        p={{ base: 3, md: 4 }} // Smaller padding on mobile
-        h={{ base: "28px", md: "30px" }} // Smaller height on mobile
-        w={{ base: "28px", md: "30px" }} // Smaller width on mobile
+        p={{ base: 4, md: 3 }} // Adjusted padding on desktop
+        h={{ base: "35px", md: "30px" }} // Smaller height on desktop
+        w={{ base: "35px", md: "30px" }} // Smaller width on desktop
       />
       <IconButton
         aria-label="Next"
-        icon={<ChevronRightIcon boxSize={{ base: 5, md: 7 }} />} // Smaller icon size on mobile
+        icon={<ChevronRightIcon boxSize={{ base: 6, md: 5 }} />} // Smaller icon size on desktop
         onClick={handleNext}
         color="#f8991d"
         variant="ghost"
-        size={{ base: "sm", md: "lg" }} // Smaller button size on mobile
+        size={{ base: "sm", md: "md" }} // Smaller button size on desktop
         borderRadius="10px"
         background="linear-gradient(135deg, #44464b, #6b6b6b)"
         _hover={{ backgroundColor: "rgba(80, 80, 80, 0.7)" }}
-        // Adjust padding and dimensions for mobile
-        p={{ base: 3, md: 4 }} // Smaller padding on mobile
-        h={{ base: "28px", md: "30px" }} // Smaller height on mobile
-        w={{ base: "28px", md: "10px" }} // Smaller width on mobile
+        p={{ base: 4, md: 3 }} // Adjusted padding on desktop
+        h={{ base: "35px", md: "30px" }} // Smaller height on desktop
+        w={{ base: "35px", md: "30px" }} // Smaller width on desktop
       />
     </Flex>
   );

@@ -13,6 +13,7 @@ import {
   DrawerBody,
   VStack,
   useBreakpointValue,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import SearchInput from "./SearchInput";
@@ -21,23 +22,23 @@ import TeamList from "../components/TeamList";
 import React from "react";
 import { Link } from "react-router-dom";
 
-const NavBar = () => {
+interface NavBarProps {
+  onTeamSelect: (teamId: string, teamAbv: string) => void;
+  selectedTeamId: string | null;
+}
+
+const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobile = useBreakpointValue({ base: true, md: false });
   const logoSize = useBreakpointValue({ base: "28px", md: "34px" });
   const logoTextSize = useBreakpointValue({ base: "16px", md: "17px" });
-
-  const [selectedTeamId, setSelectedTeamId] = React.useState<string | null>(
-    null
-  );
 
   const onSearch = (value: string) => {
     console.log("Search term:", value);
   };
 
   const handleSelectTeam = (teamId: string, teamAbv: string) => {
-    console.log(`Selected team: ${teamId} - ${teamAbv}`);
-    setSelectedTeamId(teamId);
+    onTeamSelect(teamId, teamAbv);
     onClose(); // Close the drawer on team selection
   };
 
@@ -104,24 +105,76 @@ const NavBar = () => {
         }}
       />
 
-      {/* Drawer for Menu */}
+      {/* Drawer for Navigation Links and TeamList on Mobile */}
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent
+          bgGradient="linear(to-br, #1a1a1d, #353535)"
+          color="white"
+        >
           <DrawerCloseButton />
-          <DrawerHeader>Menu</DrawerHeader>
-          <DrawerBody>
-            <VStack spacing={4} align="left" paddingLeft={5}>
-              <Link to="/Page1">Home</Link>
-              <Link to="/Page2">Scoreboard</Link>
-              <Link to="/page3">Standings</Link>
-              <Link to="/page4">News</Link>
-              <Box width="100%" mt={4}>
-                <TeamList
-                  onSelectTeam={handleSelectTeam}
-                  selectedTeamId={selectedTeamId}
-                />
-              </Box>
+          <DrawerHeader borderBottomWidth="1px" paddingLeft={4}>
+            <Box display="flex" alignItems="center">
+              <Image src={logo} height="30px" width="auto" marginRight={2} />
+              <Text fontSize="lg" fontFamily="'Poppins', sans-serif">
+                <Text as="span" fontWeight="600" color="#f37021">
+                  Heat Check
+                </Text>{" "}
+                <Text as="span" fontWeight="400" color="white">
+                  Hub
+                </Text>
+              </Text>
+            </Box>
+          </DrawerHeader>
+          <DrawerBody paddingX={4} paddingTop={6}>
+            <VStack spacing={6} align="left">
+              {/* Navigation Links - Always Show */}
+              <ChakraLink
+                as={Link}
+                to="/Page1"
+                fontSize="lg"
+                _hover={{ color: "#f37021" }}
+                onClick={onClose}
+              >
+                Home
+              </ChakraLink>
+              <ChakraLink
+                as={Link}
+                to="/Page2"
+                fontSize="lg"
+                _hover={{ color: "#f37021" }}
+                onClick={onClose}
+              >
+                Scoreboard
+              </ChakraLink>
+              <ChakraLink
+                as={Link}
+                to="/Page3"
+                fontSize="lg"
+                _hover={{ color: "#f37021" }}
+                onClick={onClose}
+              >
+                Standings
+              </ChakraLink>
+              <ChakraLink
+                as={Link}
+                to="/Page4"
+                fontSize="lg"
+                _hover={{ color: "#f37021" }}
+                onClick={onClose}
+              >
+                News
+              </ChakraLink>
+
+              {/* TeamList - Show Only on Mobile */}
+              {isMobile && (
+                <Box width="100%" mt={4}>
+                  <TeamList
+                    onSelectTeam={handleSelectTeam}
+                    selectedTeamId={selectedTeamId}
+                  />
+                </Box>
+              )}
             </VStack>
           </DrawerBody>
         </DrawerContent>

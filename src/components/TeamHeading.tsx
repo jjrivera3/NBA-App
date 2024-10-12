@@ -44,7 +44,8 @@ const TeamHeading = ({
         align={{ base: "center", md: "center" }}
         justify="space-between"
         mb={0}
-        direction={{ base: "column", md: "row" }} // Stack vertically on mobile, horizontally on desktop
+        direction={{ base: "column", md: "row" }}
+        mt={{ base: 6, md: 0 }} // Added margin-top on mobile
       >
         <Flex
           direction="column"
@@ -52,19 +53,19 @@ const TeamHeading = ({
           mb={{ base: 4, md: 0 }}
         >
           <Flex
-            direction={{ base: "row", md: "row" }} // Stack logo next to team name on mobile
+            direction={{ base: "row", md: "row" }}
             align="center"
             mb={{ base: 2, md: 0 }}
           >
             <Image
-              boxSize={{ base: "30px", md: "40px" }} // Adjust size on mobile
+              boxSize={{ base: "30px", md: "40px" }}
               src={espnLogo1}
               mr={{ base: 2, md: 0 }}
             />
             <Heading
               paddingLeft={{ base: 0, md: "12px" }}
               textAlign={{ base: "center", md: "left" }}
-              fontSize={{ base: "18px", md: "3xl" }}
+              fontSize={{ base: "24px", md: "3xl" }}
             >
               <Text as="span" fontWeight={200} color="rgba(255, 255, 255, 0.9)">
                 {teamCity}
@@ -74,13 +75,12 @@ const TeamHeading = ({
               </Text>
             </Heading>
           </Flex>
-          {/* Conference and Record below with added top margin on mobile */}
           <VStack
             align="center"
-            display={{ base: "flex", md: "none" }} // Show only on mobile
+            display={{ base: "flex", md: "none" }}
             spacing={0}
             mb={{ base: 2, md: 0 }}
-            mt={{ base: 3, md: 0 }} // Add margin on top for mobile
+            mt={{ base: 3, md: 0 }}
           >
             <Text fontWeight={600} color="rgba(255, 255, 255, 0.9)">
               {conference}
@@ -95,40 +95,33 @@ const TeamHeading = ({
               </Text>
             </Text>
           </VStack>
-          {/* Navigation items in a horizontal scrollable row for mobile */}
           <Flex
-            mt={2}
+            mt={4}
             align="center"
-            direction="row"
-            wrap={{ base: "nowrap", md: "nowrap" }}
-            justify="flex-start"
-            overflowX={{ base: "auto", md: "visible" }}
-            maxWidth="100%"
-            px={2} // Padding on both sides to keep items fully visible
-            css={{
-              "&::-webkit-scrollbar": { display: "none" }, // Hide scrollbar on mobile
-              scrollSnapType: "x mandatory",
-              "-webkit-overflow-scrolling": "touch",
-            }}
+            direction={{ base: "column", md: "row" }}
+            wrap={{ base: "wrap", md: "nowrap" }}
+            justify={{ base: "center", md: "flex-start" }}
+            width={{ base: "100%", md: "auto" }}
           >
             {NAV_ITEMS.map((item) => {
               const isActive = location.pathname === item.to;
               return (
-                <RouterLink
-                  to={item.to}
-                  key={item.label}
-                  style={{ flexShrink: 0 }}
-                >
+                <RouterLink to={item.to} key={item.label}>
                   <Text
                     fontSize="14px"
                     color={isActive ? "white" : "gray.300"}
-                    fontWeight={isActive ? "600" : "400"}
+                    fontWeight={isActive ? "500" : "400"}
                     textAlign="center"
-                    p={3}
+                    px={3}
+                    py={1} // Reduced padding for a slimmer appearance
                     mb={{ base: 2, md: 0 }}
-                    borderRadius="md"
-                    bg={isActive ? "gray.700" : "transparent"}
-                    _hover={{ backgroundColor: "gray.600", color: "white" }}
+                    borderRadius="4px" // Slightly rounded corners for a slim look
+                    bg={isActive ? `${firstColor}` : "transparent"}
+                    _hover={{
+                      textDecoration: "underline",
+                      color: "white",
+                    }}
+                    width={{ base: "100%", md: "auto" }}
                   >
                     {item.label}
                   </Text>
@@ -137,11 +130,7 @@ const TeamHeading = ({
             })}
           </Flex>
         </Flex>
-        {/* Conference and Record on the right side for Desktop */}
-        <VStack
-          align="flex-end"
-          display={{ base: "none", md: "flex" }} // Show only on desktop
-        >
+        <VStack align="flex-end" display={{ base: "none", md: "flex" }}>
           <Text fontWeight={600} color="rgba(255, 255, 255, 0.9)">
             {conference}
           </Text>

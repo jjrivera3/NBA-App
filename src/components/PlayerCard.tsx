@@ -69,7 +69,7 @@ const PlayerCard = ({
   const playerRating = player?.rating?.overallAttribute || 0;
 
   return (
-    <Center py={6}>
+    <Center mt={5} py={{ base: 1, md: 2 }}>
       <Box
         maxW={"550px"}
         w={"full"}

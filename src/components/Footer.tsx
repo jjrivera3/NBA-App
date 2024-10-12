@@ -1,14 +1,5 @@
 // components/Footer.tsx
-import {
-  Box,
-  Text,
-  HStack,
-  Link,
-  Icon,
-  Divider,
-  VStack,
-} from "@chakra-ui/react";
-import { FaTwitter, FaFacebook, FaInstagram } from "react-icons/fa";
+import { Box, Divider, HStack, Link, Text, VStack } from "@chakra-ui/react";
 
 const Footer = () => {
   return (
@@ -23,18 +14,6 @@ const Footer = () => {
       mt={10}
     >
       <VStack spacing={4}>
-        <HStack spacing={4}>
-          <Link href="https://twitter.com" isExternal>
-            <Icon as={FaTwitter} w={6} h={6} _hover={{ color: "gray.400" }} />
-          </Link>
-          <Link href="https://facebook.com" isExternal>
-            <Icon as={FaFacebook} w={6} h={6} _hover={{ color: "gray.400" }} />
-          </Link>
-          <Link href="https://instagram.com" isExternal>
-            <Icon as={FaInstagram} w={6} h={6} _hover={{ color: "gray.400" }} />
-          </Link>
-        </HStack>
-        <Divider borderColor="gray.600" />
         <HStack spacing={4} fontSize="sm">
           <Link
             href="/about"
@@ -55,6 +34,8 @@ const Footer = () => {
             Privacy Policy
           </Link>
         </HStack>
+        <Divider borderColor="gray.600" />
+
         <Text fontSize="xs" color="gray.500">
           © {new Date().getFullYear()} Heat Check Hub. All rights reserved.
         </Text>

@@ -9,6 +9,7 @@ import {
   Th,
   Thead,
   Tr,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import Utah_Jazz from "../assets/Utah_Jazz.png";
@@ -28,6 +29,8 @@ const TeamSchedule = () => {
   const { teamAbv } = useParams<{ teamAbv: string }>();
   const lowercasedTeamAbv = teamAbv?.toLowerCase();
 
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
   const selectedAbv = nbaTeams.find(
     (team) => team.info.abbrev.toLowerCase() === lowercasedTeamAbv
   );
@@ -38,24 +41,19 @@ const TeamSchedule = () => {
     schedules: "true",
   });
 
-  //@ts-ignore
+  // @ts-ignore
   const selectedTeam = teamInfo?.body?.find((team) => team.teamID === teamId);
 
   const espnLogo1 =
     selectedTeam?.teamID === "29" ? Utah_Jazz : selectedTeam?.espnLogo1;
   const defaultColor = "#000000";
 
-  // Retrieve selected team's color and light value
-  const teamDetails = useTeamDetails(teamId);
-  const { primaryColor: selectedPrimaryColor } = teamDetails || {};
-
-  // Get the next game from the schedule
   const nextGame = useNextGame(selectedTeam?.teamSchedule || null);
   const isHomeTeam =
     selectedTeam && nextGame && selectedTeam.teamID === nextGame?.teamIDHome;
   const opponentId = isHomeTeam ? nextGame?.teamIDAway : nextGame?.teamIDHome;
 
-  const opponentDetails = useTeamDetails(opponentId ?? null); // Ensure opponentId is either string or null
+  const opponentDetails = useTeamDetails(opponentId ?? null);
   const { logoImage: opponentLogo, abbrev: opponentAbbrev } =
     opponentDetails || {};
   const nextGameDate = nextGame ? formatDate(nextGame.gameDate) : "";
@@ -89,12 +87,9 @@ const TeamSchedule = () => {
               opponentAbbrev={opponentAbbrev}
               nextGameDate={nextGameDate}
               nextGameTime={nextGameTime}
-              teamColor={teamColor || "#FFFFFF"} // Default to white if teamColor is undefined
-              opponentColor={opponentDetails?.primaryColor || "#FFFFFF"} // Default to white if opponentColor is undefined
-              selectedPrimaryColor={selectedPrimaryColor || "#FFFFFF"} // Pass the primary color of the selected team
-              opponentPrimaryColor={opponentDetails?.primaryColor || "#FFFFFF"} // Pass the primary color of the opponent
+              teamColor={teamColor || "#FFFFFF"}
+              opponentColor={opponentDetails?.primaryColor || "#FFFFFF"}
             />
-            {/* Full Schedule Table */}
             <Box
               mt={7}
               borderRadius="md"
@@ -111,25 +106,17 @@ const TeamSchedule = () => {
                 fontSize="xl"
                 fontWeight={500}
                 mb="2"
-                textAlign="left"
+                textAlign="center"
                 color="gray.300"
               >
                 2024-2025 Season Schedule
               </Text>
-              <Table variant="simple">
-                <Thead>
-                  <Tr>
-                    <Th>Date</Th>
-                    <Th>Opponent</Th>
-                    <Th>Game Time</Th>
-                    <Th>Result</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
+              {isMobile ? (
+                <Box>
                   {selectedTeam?.teamSchedule &&
                     Object.values(selectedTeam.teamSchedule as GameSchedule[])
                       .sort((a, b) => a.gameDate.localeCompare(b.gameDate))
-                      .map((game, index) => {
+                      .map((game) => {
                         const isHomeGame =
                           selectedTeam.teamID === game.teamIDHome;
                         const opponentId = isHomeGame
@@ -144,43 +131,122 @@ const TeamSchedule = () => {
                         const formattedDate = formatDate(game.gameDate);
 
                         return (
-                          <Tr
+                          <Box
                             key={game.gameID}
-                            borderBottom="1px solid #2d2d2d"
-                            bg={index % 2 === 0 ? "#232323" : "#2A2A2A"}
+                            mb={4}
+                            p={4}
+                            bg="#2A2A2A"
+                            borderRadius="md"
+                            textAlign="center"
                           >
-                            <Td fontSize="14px" fontWeight={500}>
+                            <Text
+                              fontSize="lg"
+                              fontWeight={600}
+                              mb={2}
+                              color="white"
+                            >
                               {formattedDate}
-                            </Td>
-                            <Td fontSize="14px">
-                              <Flex align="center">
-                                <Text mr={1}>{isHomeGame ? "vs" : "@"}</Text>
-                                {opponentLogo && (
-                                  <Image
-                                    src={opponentLogo}
-                                    alt={`${opponentName} logo`}
-                                    boxSize="25px"
-                                    mr={2}
-                                  />
-                                )}
-                                <Text
-                                  fontWeight={500}
-                                  fontSize="14px"
-                                  color="white"
-                                >
-                                  {opponentName}
-                                </Text>
-                              </Flex>
-                            </Td>
-                            <Td fontSize="15px" fontWeight={500}>
-                              {gameTime}
-                            </Td>
-                            <Td fontSize="15px">—</Td>
-                          </Tr>
+                            </Text>
+                            <Flex direction="column" align="center" mb={2}>
+                              <Text
+                                fontSize="lg"
+                                fontWeight={600}
+                                color="white"
+                              >
+                                {isHomeGame ? "vs" : "@"} {opponentName}
+                              </Text>
+                              {opponentLogo && (
+                                <Image
+                                  src={opponentLogo}
+                                  alt={`${opponentName} logo`}
+                                  boxSize="35px"
+                                  my={2}
+                                />
+                              )}
+                              <Text
+                                fontSize="lg"
+                                fontWeight={600}
+                                color="white"
+                              >
+                                {gameTime}
+                              </Text>
+                            </Flex>
+                            <Text fontSize="lg" fontWeight={600} color="white">
+                              —
+                            </Text>
+                          </Box>
                         );
                       })}
-                </Tbody>
-              </Table>
+                </Box>
+              ) : (
+                <Table variant="simple">
+                  <Thead>
+                    <Tr>
+                      <Th>Date</Th>
+                      <Th>Opponent</Th>
+                      <Th>Game Time</Th>
+                      <Th>Result</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {selectedTeam?.teamSchedule &&
+                      Object.values(selectedTeam.teamSchedule as GameSchedule[])
+                        .sort((a, b) => a.gameDate.localeCompare(b.gameDate))
+                        .map((game, index) => {
+                          const isHomeGame =
+                            selectedTeam.teamID === game.teamIDHome;
+                          const opponentId = isHomeGame
+                            ? game.teamIDAway
+                            : game.teamIDHome;
+                          const opponentDetails = useTeamDetails(
+                            opponentId ?? null
+                          );
+                          const {
+                            logoImage: opponentLogo,
+                            name: opponentName,
+                          } = opponentDetails || {};
+                          const gameTime = game.gameTime;
+                          const formattedDate = formatDate(game.gameDate);
+
+                          return (
+                            <Tr
+                              key={game.gameID}
+                              borderBottom="1px solid #2d2d2d"
+                              bg={index % 2 === 0 ? "#232323" : "#2A2A2A"}
+                            >
+                              <Td fontSize="14px" fontWeight={500}>
+                                {formattedDate}
+                              </Td>
+                              <Td fontSize="14px">
+                                <Flex align="center">
+                                  <Text mr={1}>{isHomeGame ? "vs" : "@"}</Text>
+                                  {opponentLogo && (
+                                    <Image
+                                      src={opponentLogo}
+                                      alt={`${opponentName} logo`}
+                                      boxSize="25px"
+                                      mr={2}
+                                    />
+                                  )}
+                                  <Text
+                                    fontWeight={500}
+                                    fontSize="14px"
+                                    color="white"
+                                  >
+                                    {opponentName}
+                                  </Text>
+                                </Flex>
+                              </Td>
+                              <Td fontSize="15px" fontWeight={500}>
+                                {gameTime}
+                              </Td>
+                              <Td fontSize="15px">—</Td>
+                            </Tr>
+                          );
+                        })}
+                  </Tbody>
+                </Table>
+              )}
             </Box>
           </Box>
         )
