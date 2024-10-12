@@ -11,7 +11,7 @@ const SliderControls: React.FC<SliderControlsProps> = ({
   handleNext,
 }) => {
   return (
-    <Flex alignItems="center" mb={5}>
+    <Flex alignItems="center">
       <IconButton
         aria-label="Previous"
         icon={<ChevronLeftIcon boxSize={{ base: 7, md: 7 }} />} // Icon size adjusted for mobile
@@ -23,6 +23,10 @@ const SliderControls: React.FC<SliderControlsProps> = ({
         borderRadius="10px"
         background="linear-gradient(135deg, #44464b, #6b6b6b)"
         _hover={{ backgroundColor: "rgba(80, 80, 80, 0.7)" }}
+        // Adjust padding and height for mobile
+        p={{ base: 4, md: 2 }} // Padding larger on mobile
+        h={{ base: "50px", md: "35px" }} // Height larger on mobile
+        w={{ base: "50px", md: "35px" }} // Width larger on mobile
       />
       <IconButton
         aria-label="Next"
@@ -34,6 +38,10 @@ const SliderControls: React.FC<SliderControlsProps> = ({
         borderRadius="10px"
         background="linear-gradient(135deg, #44464b, #6b6b6b)"
         _hover={{ backgroundColor: "rgba(80, 80, 80, 0.7)" }}
+        // Adjust padding and height for mobile
+        p={{ base: 4, md: 2 }} // Padding larger on mobile
+        h={{ base: "50px", md: "35px" }} // Height larger on mobile
+        w={{ base: "50px", md: "35px" }} // Width larger on mobile
       />
     </Flex>
   );

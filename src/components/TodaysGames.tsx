@@ -51,7 +51,7 @@ const TodaysGames = () => {
   return (
     <Box
       background="linear-gradient(180deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%);"
-      p={5}
+      p={4}
       borderRadius="md"
       overflow="hidden"
       border="1px solid #282828"
@@ -63,7 +63,7 @@ const TodaysGames = () => {
         mb={4}
       >
         <Text fontSize="2xl" fontWeight={500} color="white">
-          Today's Games
+          Scoreboard
         </Text>
         {/* Slider Controls for Desktop */}
         <Flex display={{ base: "none", md: "flex" }}>

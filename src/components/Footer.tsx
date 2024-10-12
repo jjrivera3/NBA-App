@@ -56,7 +56,7 @@ const Footer = () => {
           </Link>
         </HStack>
         <Text fontSize="xs" color="gray.500">
-          © {new Date().getFullYear()} Your Company. All rights reserved.
+          © {new Date().getFullYear()} Heat Check Hub. All rights reserved.
         </Text>
       </VStack>
     </Box>

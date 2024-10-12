@@ -82,6 +82,7 @@ const TeamStandings = () => {
           fontWeight={600}
           w="15%"
           textAlign="center"
+          display={{ base: "none", md: "inline" }}
         >
           Wins
         </Text>
@@ -91,8 +92,29 @@ const TeamStandings = () => {
           fontWeight={600}
           w="15%"
           textAlign="center"
+          display={{ base: "inline", md: "none" }}
+        >
+          W
+        </Text>
+        <Text
+          color="#f8991d"
+          fontSize="sm"
+          fontWeight={600}
+          w="15%"
+          textAlign="center"
+          display={{ base: "none", md: "inline" }}
         >
           Losses
+        </Text>
+        <Text
+          color="#f8991d"
+          fontSize="sm"
+          fontWeight={600}
+          w="15%"
+          textAlign="center"
+          display={{ base: "inline", md: "none" }}
+        >
+          L
         </Text>
         <Text
           color="#f8991d"
@@ -113,12 +135,23 @@ const TeamStandings = () => {
               </Text>
               <Image
                 src={team.espnLogo1}
-                alt={`${team.teamName} logo`}
+                alt={`${team.teamAbv} logo`}
                 boxSize="24px"
                 mr={2}
               />
-              <Text fontSize="sm" fontWeight={500}>
+              <Text
+                fontSize="sm"
+                fontWeight={500}
+                display={{ base: "none", md: "inline" }}
+              >
                 {team.teamCity} {team.teamName}
+              </Text>
+              <Text
+                fontSize="sm"
+                fontWeight={500}
+                display={{ base: "inline", md: "none" }}
+              >
+                {team.teamAbv}
               </Text>
             </Flex>
             <Text w="15%" textAlign="center" fontSize="sm" fontWeight={600}>

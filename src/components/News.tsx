@@ -54,7 +54,7 @@ const News = () => {
             >
               <VStack align="start" spacing={2} flex="1">
                 <Link href={article.link} isExternal>
-                  <Text fontWeight={600} fontSize="12px" color="white">
+                  <Text fontWeight={500} fontSize="12px" color="white">
                     {article.title}
                   </Text>
                 </Link>

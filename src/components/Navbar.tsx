@@ -73,7 +73,7 @@ const NavBar = () => {
             fontWeight="400"
             fontFamily="'Poppins', sans-serif"
           >
-            Central
+            Hub
           </Text>
         </Text>
       </Link>

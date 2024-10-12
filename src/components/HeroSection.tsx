@@ -25,12 +25,12 @@ function HeroSection() {
             bgSize="cover"
             bgPosition="center"
             color="white"
-            p={[5, 10]} // Reduced padding for mobile
+            p={[3, 10]} // Reduced padding for mobile
             mb={5}
             borderRadius="md"
             boxShadow="xl"
             textAlign="center"
-            h={["200px", "300px"]} // Smaller height for mobile
+            h={["300px", "300px"]} // Smaller height for mobile
             display="flex"
             alignItems="center"
             justifyContent="center"
