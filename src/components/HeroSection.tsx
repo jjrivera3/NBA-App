@@ -25,12 +25,12 @@ function HeroSection() {
             bgSize="cover"
             bgPosition="center"
             color="white"
-            p={10}
+            p={[5, 10]} // Reduced padding for mobile
             mb={5}
             borderRadius="md"
             boxShadow="xl"
             textAlign="center"
-            h="300px"
+            h={["200px", "300px"]} // Smaller height for mobile
             display="flex"
             alignItems="center"
             justifyContent="center"
@@ -49,7 +49,7 @@ function HeroSection() {
             {/* Text Content */}
             <VStack spacing={4} zIndex={2}>
               <Text
-                fontSize="3xl"
+                fontSize={["xl", "3xl"]} // Adjust font size for mobile
                 fontWeight={600}
                 color="#f8991d"
                 textShadow="2px 2px 8px rgba(0, 0, 0, 0.99)"
@@ -57,9 +57,10 @@ function HeroSection() {
                 Welcome to Heat Check Central
               </Text>
               <Text
-                fontSize="lg"
+                fontSize={["sm", "lg"]} // Adjust font size for mobile
                 maxW="1000px"
                 textShadow="2px 2px 8px rgba(0, 0, 0, 0.99)"
+                px={[2, 0]} // Add padding for better readability on mobile
               >
                 Your go-to source for the latest NBA player stats, 2K ratings,
                 schedules, and player news. Dive deep into detailed statistics,

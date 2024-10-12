@@ -1,4 +1,4 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, Flex } from "@chakra-ui/react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
@@ -48,36 +48,6 @@ const TodaysGames = () => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <Box
-        background="linear-gradient(180deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%);"
-        p={5}
-        borderRadius="md"
-        overflow="hidden"
-        border="1px solid #282828"
-      >
-        <SliderControls
-          handlePrevious={handlePrevious}
-          handleNext={handleNext}
-        />
-        <Slider {...settings}>
-          {Array(6)
-            .fill("")
-            .map((_, index) => (
-              <GameSkeleton key={index} />
-            ))}
-        </Slider>
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Text color="red.500">Error loading games. Please try again later.</Text>
-    );
-  }
-
   return (
     <Box
       background="linear-gradient(180deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%);"
@@ -86,14 +56,58 @@ const TodaysGames = () => {
       overflow="hidden"
       border="1px solid #282828"
     >
-      <SliderControls handlePrevious={handlePrevious} handleNext={handleNext} />
-      <Slider ref={sliderRef} {...settings}>
-        {games
-          .filter((game) => game.statusType !== "STATUS_CANCELED")
-          .map((game, index) => (
-            <GameCard key={index} game={game} />
-          ))}
-      </Slider>
+      {/* Display the heading and controls */}
+      <Flex
+        justifyContent={{ base: "center", md: "space-between" }}
+        alignItems="center"
+        mb={4}
+      >
+        <Text fontSize="2xl" fontWeight={500} color="white">
+          Today's Games
+        </Text>
+        {/* Slider Controls for Desktop */}
+        <Flex display={{ base: "none", md: "flex" }}>
+          <SliderControls
+            handlePrevious={handlePrevious}
+            handleNext={handleNext}
+          />
+        </Flex>
+      </Flex>
+
+      {/* Conditional Rendering for Game Content */}
+      {isLoading ? (
+        <Slider {...settings}>
+          {Array(6)
+            .fill("")
+            .map((_, index) => (
+              <GameSkeleton key={index} />
+            ))}
+        </Slider>
+      ) : error ? (
+        <Text color="red.500">
+          Error loading games. Please try again later.
+        </Text>
+      ) : (
+        <Slider ref={sliderRef} {...settings}>
+          {games
+            .filter((game) => game.statusType !== "STATUS_CANCELED")
+            .map((game, index) => (
+              <GameCard key={index} game={game} />
+            ))}
+        </Slider>
+      )}
+
+      {/* Slider Controls for Mobile */}
+      <Flex
+        justifyContent="center"
+        mt={4}
+        display={{ base: "flex", md: "none" }}
+      >
+        <SliderControls
+          handlePrevious={handlePrevious}
+          handleNext={handleNext}
+        />
+      </Flex>
     </Box>
   );
 };

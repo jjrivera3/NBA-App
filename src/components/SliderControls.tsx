@@ -12,16 +12,13 @@ const SliderControls: React.FC<SliderControlsProps> = ({
 }) => {
   return (
     <Flex alignItems="center" mb={5}>
-      <Text fontSize="2xl" fontWeight={500} color="white" mr={4}>
-        Today's Games
-      </Text>
       <IconButton
         aria-label="Previous"
-        icon={<ChevronLeftIcon boxSize={5} />}
+        icon={<ChevronLeftIcon boxSize={{ base: 7, md: 7 }} />} // Icon size adjusted for mobile
         onClick={handlePrevious}
         color="#f8991d"
         variant="ghost"
-        size="sm"
+        size={{ base: "lg", md: "sm" }} // Button size adjusted for mobile
         mr={2}
         borderRadius="10px"
         background="linear-gradient(135deg, #44464b, #6b6b6b)"
@@ -29,11 +26,11 @@ const SliderControls: React.FC<SliderControlsProps> = ({
       />
       <IconButton
         aria-label="Next"
-        icon={<ChevronRightIcon boxSize={5} />}
+        icon={<ChevronRightIcon boxSize={{ base: 7, md: 7 }} />} // Icon size adjusted for mobile
         onClick={handleNext}
         color="#f8991d"
         variant="ghost"
-        size="sm"
+        size={{ base: "lg", md: "sm" }} // Button size adjusted for mobile
         borderRadius="10px"
         background="linear-gradient(135deg, #44464b, #6b6b6b)"
         _hover={{ backgroundColor: "rgba(80, 80, 80, 0.7)" }}
