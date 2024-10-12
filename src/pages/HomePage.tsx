@@ -1,4 +1,4 @@
-import { Box, Flex, GridItem, Text } from "@chakra-ui/react";
+import { Box, Flex, GridItem } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import HeroSection from "../components/HeroSection";
 import News from "../components/News";

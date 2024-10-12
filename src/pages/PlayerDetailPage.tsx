@@ -1,17 +1,17 @@
 // src/components/PlayerDetailPage.tsx
-import { Box, Flex, Skeleton, SkeletonText, Grid } from "@chakra-ui/react";
+import { Box, Flex, Skeleton, SkeletonText } from "@chakra-ui/react";
 import { lighten } from "polished";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import PlayerAdditionalInfo from "../components/PlayerAdditionalInfo";
+import PlayerAttributes from "../components/PlayerAttributes";
 import PlayerImage from "../components/PlayerImage";
 import PlayerInfo from "../components/PlayerInfo";
 import PlayerRadarChart from "../components/PlayerRadarChart";
 import PlayerStats from "../components/PlayerStats";
-import PlayerAttributes from "../components/PlayerAttributes";
+import StatsTable from "../components/PlayerStatsTable";
 import nbateams from "../data/nbateams";
 import useAvatarSrc from "../hooks/useAvatarSrc";
-import StatsTable from "../components/PlayerStatsTable";
 import usePlayerStats from "../hooks/usePlayerStats";
 
 const PlayerDetailPage = () => {

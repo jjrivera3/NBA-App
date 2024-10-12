@@ -1,28 +1,27 @@
 import {
   Box,
   Flex,
-  Text,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
   Image,
+  Table,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
 } from "@chakra-ui/react";
-import { lighten } from "polished";
 import { useParams } from "react-router-dom";
-import nbaTeams from "../data/nbateams";
-import useTeamColor from "../hooks/useTeamColor";
-import useTeamInfo from "../hooks/useTeamInfo";
-import TeamHeading from "./TeamHeading";
 import Utah_Jazz from "../assets/Utah_Jazz.png";
-import TeamHeadingSkeleton from "./skeletons/TeamHeadSkeleton";
+import nbaTeams from "../data/nbateams";
 import GameSchedule from "../entities/GameSchedule";
-import { formatDate } from "../utils/teamHelper";
-import useTeamDetails from "../hooks/useTeamDetails";
 import useNextGame from "../hooks/useNextGame";
+import useTeamColor from "../hooks/useTeamColor";
+import useTeamDetails from "../hooks/useTeamDetails";
+import useTeamInfo from "../hooks/useTeamInfo";
+import { formatDate } from "../utils/teamHelper";
+import TeamHeading from "./TeamHeading";
 import UpcomingGame from "./UpcomingGame";
+import TeamHeadingSkeleton from "./skeletons/TeamHeadSkeleton";
 import UpcomingGameSkeleton from "./skeletons/UpcomingGameSkeleton";
 
 const TeamSchedule = () => {
@@ -139,12 +138,8 @@ const TeamSchedule = () => {
                         const opponentDetails = useTeamDetails(
                           opponentId ?? null
                         );
-                        const {
-                          logoImage: opponentLogo,
-                          primaryColor,
-                          lightValue,
-                          name: opponentName,
-                        } = opponentDetails || {};
+                        const { logoImage: opponentLogo, name: opponentName } =
+                          opponentDetails || {};
                         const gameTime = game.gameTime;
                         const formattedDate = formatDate(game.gameDate);
 

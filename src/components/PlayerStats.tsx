@@ -1,4 +1,4 @@
-import { background, Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { lighten } from "polished";
 
 interface PlayerStatsProps {

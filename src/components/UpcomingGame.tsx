@@ -25,17 +25,12 @@ const UpcomingGame: React.FC<UpcomingGameProps> = ({
   nextGameTime,
   teamColor,
   opponentColor,
-  selectedPrimaryColor,
-  opponentPrimaryColor,
 }) => {
   // Determine which team is "home" and which is "away" based on the selected team
   const awayLogo = isHomeTeam ? opponentLogo : teamLogo;
   const awayAbbrev = isHomeTeam ? opponentAbbrev : teamAbbrev;
   const homeLogo = isHomeTeam ? teamLogo : opponentLogo;
   const homeAbbrev = isHomeTeam ? teamAbbrev : opponentAbbrev;
-
-  const awayColor = isHomeTeam ? opponentPrimaryColor : selectedPrimaryColor;
-  const homeColor = isHomeTeam ? selectedPrimaryColor : opponentPrimaryColor;
 
   return (
     <Box
