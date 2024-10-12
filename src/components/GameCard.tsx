@@ -87,9 +87,14 @@ const GameCard: React.FC<GameProps> = ({ game }) => (
       </Flex>
       <Box position="absolute" top="15px" left="5px">
         <Text fontSize="11px" color="white" fontWeight={500}>
-          {game.statusType === "STATUS_FINAL"
-            ? `Final ${game.gameDateFormatted}`
-            : game.time}
+          {game.statusType === "STATUS_HALFTIME" ||
+          game.statusType === "STATUS_IN_PROGRESS" ? (
+            <Text color="green.400">In Progress</Text>
+          ) : game.statusType === "STATUS_FINAL" ? (
+            `Final ${game.gameDateFormatted}`
+          ) : (
+            game.time
+          )}
         </Text>
       </Box>
       {game.odds ? (

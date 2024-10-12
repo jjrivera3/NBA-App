@@ -47,6 +47,8 @@ const useGameData = () => {
     }
   );
 
+  console.log(todayData);
+
   const games = [
     ...((todayData as GameData)?.events || []),
     ...((yestData as GameData)?.events || []),
