@@ -1,5 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-;
+@font-face {
+  font-family: 'UnitedSansReg-Black';
+  src: url('./fonts/UnitedSansReg-Black.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'UnitedSansReg-Heavy';
+  src: url('./fonts/UnitedSansReg-Heavy.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'UnitedSansRgBd';
+  src: url('./fonts/UnitedSansRgBd.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
 
 form {
   width: 100%;

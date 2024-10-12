@@ -24,6 +24,9 @@ import { Link } from "react-router-dom"; // Import Link from react-router-dom
 const NavBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure(); // Chakra UI hook to control the drawer
   const isMobile = useBreakpointValue({ base: true, md: false }); // Show on mobile (base) only
+  const logoSize = useBreakpointValue({ base: "28px", md: "34px" });
+  const logoTextSize = useBreakpointValue({ base: "16px", md: "17px" });
+
   const [selectedTeamId, setSelectedTeamId] = React.useState<string | null>(
     null
   ); // Manage selected team state
@@ -58,17 +61,17 @@ const NavBar = () => {
       >
         <Image
           src={logo}
-          height="42px"
+          height={logoSize}
           width="auto"
           marginRight={2}
           objectFit="contain"
         />
-        <Text fontSize="1xl" fontFamily="'Poppins', sans-serif">
+        <Text fontSize={logoTextSize} fontFamily="'Poppins', sans-serif">
           <Text as="span" fontWeight="600" color="#f37021">
             Heat Check
           </Text>{" "}
           <Text
-            fontSize="1xl"
+            fontSize={logoTextSize}
             as="span"
             fontWeight="400"
             fontFamily="'Poppins', sans-serif"
@@ -78,10 +81,12 @@ const NavBar = () => {
         </Text>
       </Link>
 
-      {/* Search Input */}
-      <Box flex="1" marginX={4}>
-        <SearchInput onSearch={onSearch} />
-      </Box>
+      {/* Conditionally render Search Input only on non-mobile screens */}
+      {!isMobile && (
+        <Box flex="1" marginX={4}>
+          <SearchInput onSearch={onSearch} />
+        </Box>
+      )}
 
       {/* Hamburger Menu Button */}
       <IconButton

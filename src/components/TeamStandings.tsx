@@ -7,12 +7,15 @@ import {
   Divider,
   ButtonGroup,
   Button,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import useTeamInfo from "../hooks/useTeamInfo";
 import eastLogo from "../assets/eastern_conference.webp";
 import westLogo from "../assets/western_conference.webp";
 import TeamStandingsSkeleton from "./skeletons/TeamStandingsSkeleton";
+import type { ResponsiveValue } from "@chakra-ui/react";
+import type { Property } from "csstype";
 
 // Define the expected team structure
 interface Team {
@@ -26,6 +29,7 @@ interface Team {
 }
 
 const TeamStandings = () => {
+  // Move all hook calls to the top
   const {
     data: allTeamsData,
     isLoading,
@@ -38,7 +42,13 @@ const TeamStandings = () => {
     "West"
   );
 
-  if (isLoading) return <TeamStandingsSkeleton />; // Use the skeleton during loading
+  const standingsTextSize = useBreakpointValue({ base: "18px", md: "2xl" });
+  const standingsTextAlign = useBreakpointValue<
+    ResponsiveValue<Property.TextAlign>
+  >({ base: "center", md: "left" });
+
+  // Ensure that `isLoading` and `isError` checks don't conditionally alter hook calls
+  if (isLoading) return <TeamStandingsSkeleton />;
   if (isError) return <Text>Error loading team standings.</Text>;
 
   const teams: Team[] = Array.isArray(allTeamsData?.body)
@@ -180,7 +190,13 @@ const TeamStandings = () => {
         border="1px solid"
         borderColor="#2a2b2f"
       >
-        <Text fontSize="2xl" fontWeight={500} color="white" mb={5}>
+        <Text
+          fontSize={standingsTextSize}
+          fontWeight={500}
+          color="white"
+          mb={5}
+          textAlign={standingsTextAlign}
+        >
           Standings
         </Text>
         <ButtonGroup isAttached borderRadius="full" mb={5} width="100%">
@@ -196,12 +212,6 @@ const TeamStandings = () => {
             }
             color="white"
             borderRadius="full"
-            _hover={{
-              bg:
-                selectedConference === "West"
-                  ? "linear-gradient(135deg, #44464b, #6b6b6b)"
-                  : "gray.600",
-            }}
             _active={{
               bg:
                 selectedConference === "West"
@@ -224,12 +234,6 @@ const TeamStandings = () => {
             }
             color="white"
             borderRadius="full"
-            _hover={{
-              bg:
-                selectedConference === "East"
-                  ? "linear-gradient(135deg, #44464b, #6b6b6b)"
-                  : "gray.600",
-            }}
             _active={{
               bg:
                 selectedConference === "East"

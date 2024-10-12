@@ -1,14 +1,27 @@
-import { Box, GridItem, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  GridItem,
+  Text,
+  VStack,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import hero_bg from "../assets/hero_bg.jpeg";
 import TeamGrid from "./TeamGrid";
 import TeamSchedule from "./TeamSchedule";
+import type { ResponsiveValue } from "@chakra-ui/react";
+import type { Property } from "csstype";
 
 function HeroSection() {
   const { teamAbv, schedule } = useParams<{
     teamAbv?: string;
     schedule?: string;
   }>();
+
+  const textAlign = useBreakpointValue<ResponsiveValue<Property.TextAlign>>({
+    base: "justify",
+    md: "center",
+  });
 
   return (
     <GridItem area="main" mt={7}>
@@ -54,13 +67,14 @@ function HeroSection() {
                 color="#f8991d"
                 textShadow="2px 2px 8px rgba(0, 0, 0, 0.99)"
               >
-                Welcome to Heat Check Central
+                Welcome to the Heat Check Hub
               </Text>
               <Text
                 fontSize={["sm", "lg"]} // Adjust font size for mobile
                 maxW="1000px"
                 textShadow="2px 2px 8px rgba(0, 0, 0, 0.99)"
                 px={[2, 0]} // Add padding for better readability on mobile
+                textAlign={textAlign}
               >
                 Your go-to source for the latest NBA player stats, 2K ratings,
                 schedules, and player news. Dive deep into detailed statistics,

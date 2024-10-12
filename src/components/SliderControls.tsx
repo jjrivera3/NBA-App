@@ -14,34 +14,34 @@ const SliderControls: React.FC<SliderControlsProps> = ({
     <Flex alignItems="center">
       <IconButton
         aria-label="Previous"
-        icon={<ChevronLeftIcon boxSize={{ base: 7, md: 7 }} />} // Icon size adjusted for mobile
+        icon={<ChevronLeftIcon boxSize={{ base: 5, md: 7 }} />} // Smaller icon size on mobile
         onClick={handlePrevious}
         color="#f8991d"
         variant="ghost"
-        size={{ base: "lg", md: "sm" }} // Button size adjusted for mobile
+        size={{ base: "sm", md: "lg" }} // Smaller button size on mobile
         mr={2}
         borderRadius="10px"
         background="linear-gradient(135deg, #44464b, #6b6b6b)"
         _hover={{ backgroundColor: "rgba(80, 80, 80, 0.7)" }}
-        // Adjust padding and height for mobile
-        p={{ base: 4, md: 2 }} // Padding larger on mobile
-        h={{ base: "50px", md: "35px" }} // Height larger on mobile
-        w={{ base: "50px", md: "35px" }} // Width larger on mobile
+        // Adjust padding and dimensions for mobile
+        p={{ base: 3, md: 4 }} // Smaller padding on mobile
+        h={{ base: "28px", md: "35px" }} // Smaller height on mobile
+        w={{ base: "28px", md: "35px" }} // Smaller width on mobile
       />
       <IconButton
         aria-label="Next"
-        icon={<ChevronRightIcon boxSize={{ base: 7, md: 7 }} />} // Icon size adjusted for mobile
+        icon={<ChevronRightIcon boxSize={{ base: 5, md: 7 }} />} // Smaller icon size on mobile
         onClick={handleNext}
         color="#f8991d"
         variant="ghost"
-        size={{ base: "lg", md: "sm" }} // Button size adjusted for mobile
+        size={{ base: "sm", md: "lg" }} // Smaller button size on mobile
         borderRadius="10px"
         background="linear-gradient(135deg, #44464b, #6b6b6b)"
         _hover={{ backgroundColor: "rgba(80, 80, 80, 0.7)" }}
-        // Adjust padding and height for mobile
-        p={{ base: 4, md: 2 }} // Padding larger on mobile
-        h={{ base: "50px", md: "35px" }} // Height larger on mobile
-        w={{ base: "50px", md: "35px" }} // Width larger on mobile
+        // Adjust padding and dimensions for mobile
+        p={{ base: 3, md: 4 }} // Smaller padding on mobile
+        h={{ base: "28px", md: "35px" }} // Smaller height on mobile
+        w={{ base: "28px", md: "35px" }} // Smaller width on mobile
       />
     </Flex>
   );
