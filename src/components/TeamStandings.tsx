@@ -154,6 +154,8 @@ const TeamStandings = () => {
           <Button
             flex="1"
             leftIcon={<Image src={westLogo} boxSize="20px" />}
+            fontWeight={500}
+            fontSize="14px"
             bg={
               selectedConference === "West"
                 ? "linear-gradient(135deg, #44464b, #6b6b6b)"
@@ -180,6 +182,8 @@ const TeamStandings = () => {
           <Button
             flex="1"
             leftIcon={<Image src={eastLogo} boxSize="20px" />}
+            fontWeight={500}
+            fontSize="14px"
             bg={
               selectedConference === "East"
                 ? "linear-gradient(135deg, #44464b, #6b6b6b)"
