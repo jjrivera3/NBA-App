@@ -1,20 +1,19 @@
+import { HamburgerIcon } from "@chakra-ui/icons";
 import {
   Box,
   Grid,
   GridItem,
+  IconButton,
   Menu,
   MenuButton,
   MenuList,
-  MenuItem,
-  IconButton,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { HamburgerIcon } from "@chakra-ui/icons";
+import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 import NavBar from "../components/Navbar";
 import TeamList from "../components/TeamList";
-import Footer from "../components/Footer";
-import { useState, useEffect } from "react";
 
 const Layout = () => {
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);

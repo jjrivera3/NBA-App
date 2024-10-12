@@ -1,12 +1,4 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  Image,
-  Text,
-  VStack,
-  Divider,
-} from "@chakra-ui/react";
+import { Box, Flex, Heading, Image, Text, VStack } from "@chakra-ui/react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
 interface Props {
@@ -119,7 +111,7 @@ const TeamHeading = ({
               "-webkit-overflow-scrolling": "touch",
             }}
           >
-            {NAV_ITEMS.map((item, index) => {
+            {NAV_ITEMS.map((item) => {
               const isActive = location.pathname === item.to;
               return (
                 <RouterLink
