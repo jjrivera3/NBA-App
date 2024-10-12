@@ -13,6 +13,7 @@ export default interface GameData {
     }[];
     status: {
       type: {
+        shortDetail: any;
         name: string;
       };
     };

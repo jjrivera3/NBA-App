@@ -26,9 +26,10 @@ const useTodaysGame = (
 
       return data;
     },
-    staleTime: 24 * 60 * 60 * 1000, // Cache the data for 24 hours
-    refetchOnWindowFocus: false, // Disable refetch on window focus
+    staleTime: p0.staleTime, // Use the provided staleTime parameter
+    refetchOnWindowFocus: p0.refetchOnWindowFocus, // Use the provided refetchOnWindowFocus parameter
     refetchOnReconnect: false, // Disable refetch on reconnect
+    // refetchInterval: 15000, // Refetch every 15 seconds
   });
 };
 

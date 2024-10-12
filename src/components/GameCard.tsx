@@ -1,4 +1,12 @@
-import { Box, Flex, VStack, Text, Image } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  VStack,
+  Text,
+  Image,
+  Button,
+  keyframes,
+} from "@chakra-ui/react";
 
 interface GameProps {
   game: {
@@ -11,6 +19,7 @@ interface GameProps {
     awayScore?: string | null;
     homeScore?: string | null;
     statusType: string;
+    shortDetail: string;
     gameDateFormatted: string;
     time: string;
     odds?: {
@@ -20,6 +29,12 @@ interface GameProps {
   };
 }
 
+// Define the keyframes for the moving line animation
+const lineAnimation = keyframes`
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+`;
+
 const GameCard: React.FC<GameProps> = ({ game }) => (
   <Box
     borderRadius="md"
@@ -27,6 +42,7 @@ const GameCard: React.FC<GameProps> = ({ game }) => (
     border="1px solid #444444"
     position="relative"
     background="#292929"
+    overflow="hidden"
   >
     <Flex
       height="6px"
@@ -51,6 +67,64 @@ const GameCard: React.FC<GameProps> = ({ game }) => (
       <Box flex="1" backgroundColor={game.homeTeamColor}></Box>
     </Flex>
 
+    {/* Container for In Progress and shortDetail at the top corners */}
+    <Flex
+      justifyContent="space-between"
+      alignItems="flex-start" // Align items at the top
+      p={2}
+      position="absolute"
+      top="8px"
+      left="0"
+      right="0"
+    >
+      {game.statusType === "STATUS_IN_PROGRESS" ||
+      game.statusType === "STATUS_HALFTIME" ||
+      game.statusType === "STATUS_END_PERIOD" ? (
+        // Live game layout: In Progress on left, shortDetail on right
+        <>
+          <Text fontSize="11px" fontWeight={500} color="#20da77">
+            In Progress
+          </Text>
+          <Box textAlign="right" maxW="80%">
+            <Text fontSize="11px" color="#20da77" fontWeight={500}>
+              {game.shortDetail}
+            </Text>
+            <Box
+              width="100%"
+              height="2px"
+              overflow="hidden"
+              mt="1px"
+              position="relative"
+            >
+              <Box
+                width="150%"
+                height="2px"
+                backgroundColor="#20da77"
+                position="absolute"
+                animation={`${lineAnimation} 1.7s infinite alternate cubic-bezier(0.21, 0.85, 0.34, 0.98)`}
+              />
+            </Box>
+          </Box>
+        </>
+      ) : game.statusType === "STATUS_FINAL" ? (
+        // Final game layout: show Final on the left
+        <>
+          <Text fontSize="11px" color="white" fontWeight={500}>
+            Final {game.gameDateFormatted}
+          </Text>
+          <Box />
+        </>
+      ) : (
+        // Pre-game layout: show time on the left
+        <>
+          <Text fontSize="11px" color="white" fontWeight={500}>
+            {game.time}
+          </Text>
+          <Box />
+        </>
+      )}
+    </Flex>
+
     <Box p={3} mt={3} background="#292929">
       <Flex alignItems="center" justifyContent="space-between">
         <VStack spacing={1} align="center" mt="4px">
@@ -64,7 +138,10 @@ const GameCard: React.FC<GameProps> = ({ game }) => (
             {game.awayTeam}
           </Text>
         </VStack>
-        {game.statusType === "STATUS_FINAL" ? (
+        {game.statusType === "STATUS_FINAL" ||
+        game.statusType === "STATUS_IN_PROGRESS" ||
+        game.statusType === "STATUS_HALFTIME" ||
+        game.statusType === "STATUS_END_PERIOD" ? (
           <Text fontSize="md" fontWeight={500} color="gray.300">
             {game.awayScore} - {game.homeScore}
           </Text>
@@ -85,18 +162,7 @@ const GameCard: React.FC<GameProps> = ({ game }) => (
           </Text>
         </VStack>
       </Flex>
-      <Box position="absolute" top="15px" left="5px">
-        <Text fontSize="11px" color="white" fontWeight={500}>
-          {game.statusType === "STATUS_HALFTIME" ||
-          game.statusType === "STATUS_IN_PROGRESS" ? (
-            <Text color="green.400">In Progress</Text>
-          ) : game.statusType === "STATUS_FINAL" ? (
-            `Final ${game.gameDateFormatted}`
-          ) : (
-            game.time
-          )}
-        </Text>
-      </Box>
+
       {game.odds ? (
         <Box
           textAlign="center"
@@ -122,16 +188,24 @@ const GameCard: React.FC<GameProps> = ({ game }) => (
       ) : (
         <Box
           mt={2}
-          height="25px"
           display="flex"
           alignItems="center"
           justifyContent="center"
           borderRadius="md"
           backgroundColor="#333333"
+          boxShadow="md"
+          border="1px solid #3a3a3a"
         >
-          <Text fontSize="12px" fontWeight={500} color="gray.400">
-            Game Over
-          </Text>
+          <Button
+            size="xs"
+            color="#cccccc"
+            fontSize="12px"
+            fontWeight={500}
+            variant="unstyled"
+            _hover={{ color: "#f8991d" }}
+          >
+            Box Score
+          </Button>
         </Box>
       )}
     </Box>

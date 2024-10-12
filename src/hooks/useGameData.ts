@@ -36,6 +36,8 @@ const useGameData = () => {
     }
   );
 
+  console.log(todayData);
+
   const { data: yestData, error: yestError } = useTodaysGame(
     {
       ...yesterdayDate,
@@ -46,8 +48,6 @@ const useGameData = () => {
       staleTime: 5 * 60 * 1000,
     }
   );
-
-  console.log(todayData);
 
   const games = [
     ...((todayData as GameData)?.events || []),
@@ -67,20 +67,27 @@ const useGameData = () => {
       (comp) => comp.homeAway === "away"
     )?.score;
     const statusType = game.status.type.name;
+    const shortDetail = game.status.type.shortDetail || "";
     const gameDate = competition ? new Date(competition.date) : new Date();
     const gameDateFormatted = `${
       gameDate.getMonth() + 1
     }/${gameDate.getDate()}`;
 
-    // Check if odds should be shown (only if game is not final)
+    // Show odds only if the game is not in progress, halftime, final, or end of period
     const oddsDetails =
-      statusType !== "STATUS_FINAL"
+      statusType !== "STATUS_FINAL" &&
+      statusType !== "STATUS_IN_PROGRESS" &&
+      statusType !== "STATUS_HALFTIME" &&
+      statusType !== "STATUS_END_PERIOD"
         ? (competition as any)?.odds?.[0]?.details ||
           (game as any)?.odds?.[0]?.details ||
           ""
         : "";
     const overUnder =
-      statusType !== "STATUS_FINAL"
+      statusType !== "STATUS_FINAL" &&
+      statusType !== "STATUS_IN_PROGRESS" &&
+      statusType !== "STATUS_HALFTIME" &&
+      statusType !== "STATUS_END_PERIOD"
         ? (competition as any)?.odds?.[0]?.overUnder ||
           (game as any)?.odds?.[0]?.overUnder ||
           ""
@@ -98,11 +105,32 @@ const useGameData = () => {
       homeTeamColor: homeTeam?.color ? `#${homeTeam.color}` : "#000000",
       awayTeamColor: awayTeam?.color ? `#${awayTeam.color}` : "#000000",
       statusType,
-      homeScore: statusType === "STATUS_FINAL" ? homeScore : null,
-      awayScore: statusType === "STATUS_FINAL" ? awayScore : null,
+      shortDetail:
+        statusType === "STATUS_IN_PROGRESS" ||
+        statusType === "STATUS_HALFTIME" ||
+        statusType === "STATUS_END_PERIOD"
+          ? shortDetail
+          : "",
+      homeScore:
+        statusType === "STATUS_FINAL" ||
+        statusType === "STATUS_IN_PROGRESS" ||
+        statusType === "STATUS_HALFTIME" ||
+        statusType === "STATUS_END_PERIOD"
+          ? homeScore
+          : null,
+      awayScore:
+        statusType === "STATUS_FINAL" ||
+        statusType === "STATUS_IN_PROGRESS" ||
+        statusType === "STATUS_HALFTIME" ||
+        statusType === "STATUS_END_PERIOD"
+          ? awayScore
+          : null,
       gameDateFormatted,
       odds:
-        statusType !== "STATUS_FINAL"
+        statusType !== "STATUS_FINAL" &&
+        statusType !== "STATUS_IN_PROGRESS" &&
+        statusType !== "STATUS_HALFTIME" &&
+        statusType !== "STATUS_END_PERIOD"
           ? { details: oddsDetails, overUnder: overUnder }
           : null,
     };
