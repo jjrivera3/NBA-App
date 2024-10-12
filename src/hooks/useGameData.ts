@@ -8,18 +8,27 @@ type Team = {
 };
 
 const useGameData = () => {
-  const formatDate = (date: Date) => ({
-    year: date.getFullYear().toString(),
-    month: (date.getMonth() + 1).toString().padStart(2, "0"),
-    day: date.getDate().toString().padStart(2, "0"),
-  });
+  // Function to format date as "Oct 11"
+  const formatGameDate = (date: Date) => {
+    const options = { month: "short", day: "numeric" };
+    return date.toLocaleDateString("en-US", options).replace(",", "");
+  };
 
   const today = new Date();
   const yesterday = new Date(today);
   yesterday.setDate(today.getDate() - 1);
 
-  const todayDate = formatDate(today);
-  const yesterdayDate = formatDate(yesterday);
+  const todayDate = {
+    year: today.getFullYear().toString(),
+    month: (today.getMonth() + 1).toString().padStart(2, "0"),
+    day: today.getDate().toString().padStart(2, "0"),
+  };
+
+  const yesterdayDate = {
+    year: yesterday.getFullYear().toString(),
+    month: (yesterday.getMonth() + 1).toString().padStart(2, "0"),
+    day: yesterday.getDate().toString().padStart(2, "0"),
+  };
 
   const {
     data: todayData,
@@ -35,8 +44,6 @@ const useGameData = () => {
       staleTime: 5 * 60 * 1000,
     }
   );
-
-  console.log(todayData);
 
   const { data: yestData, error: yestError } = useTodaysGame(
     {
@@ -69,9 +76,7 @@ const useGameData = () => {
     const statusType = game.status.type.name;
     const shortDetail = game.status.type.shortDetail || "";
     const gameDate = competition ? new Date(competition.date) : new Date();
-    const gameDateFormatted = `${
-      gameDate.getMonth() + 1
-    }/${gameDate.getDate()}`;
+    const gameDateFormatted = formatGameDate(gameDate); // Use the formatted date
 
     // Show odds only if the game is not in progress, halftime, final, or end of period
     const oddsDetails =
@@ -125,7 +130,7 @@ const useGameData = () => {
         statusType === "STATUS_END_PERIOD"
           ? awayScore
           : null,
-      gameDateFormatted,
+      gameDateFormatted, // Using the new date format here
       odds:
         statusType !== "STATUS_FINAL" &&
         statusType !== "STATUS_IN_PROGRESS" &&

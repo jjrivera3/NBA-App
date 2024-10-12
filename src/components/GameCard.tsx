@@ -110,7 +110,7 @@ const GameCard: React.FC<GameProps> = ({ game }) => (
         // Final game layout: show Final on the left
         <>
           <Text fontSize="11px" color="white" fontWeight={500}>
-            Final {game.gameDateFormatted}
+            Final - {game.gameDateFormatted}
           </Text>
           <Box />
         </>

@@ -23,11 +23,6 @@ const TodaysGames = () => {
     slidesToShow,
     slidesToScroll: 1,
     arrows: false,
-    afterChange: (index: number) => {
-      if (index === totalSlides - 1) {
-        setTimeout(() => sliderRef.current?.slickGoTo(0), 300);
-      }
-    },
     responsive: [
       { breakpoint: 1500, settings: { slidesToShow: 5 } },
       { breakpoint: 768, settings: { slidesToShow: 2 } },
@@ -40,12 +35,7 @@ const TodaysGames = () => {
   };
 
   const handleNext = () => {
-    const currentIndex = sliderRef.current.innerSlider.state.currentSlide;
-    if (currentIndex >= totalSlides - slidesToShow) {
-      sliderRef.current?.slickGoTo(0);
-    } else {
-      sliderRef.current?.slickNext();
-    }
+    sliderRef.current?.slickNext();
   };
 
   return (
