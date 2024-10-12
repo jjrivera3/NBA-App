@@ -10,7 +10,10 @@ type Team = {
 const useGameData = () => {
   // Function to format date as "Oct 11"
   const formatGameDate = (date: Date) => {
-    const options = { month: "short", day: "numeric" };
+    const options: Intl.DateTimeFormatOptions = {
+      month: "short",
+      day: "numeric",
+    };
     return date.toLocaleDateString("en-US", options).replace(",", "");
   };
 

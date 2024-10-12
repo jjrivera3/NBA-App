@@ -14,7 +14,6 @@ const TodaysGames = () => {
   const sliderRef = useRef<any>(null);
 
   const slidesToShow = 6;
-  const totalSlides = games.length;
 
   const settings = {
     dots: false,
