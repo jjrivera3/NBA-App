@@ -19,17 +19,17 @@ import SearchInput from "./SearchInput";
 import logo from "../assets/logo.svg";
 import TeamList from "../components/TeamList";
 import React from "react";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure(); // Chakra UI hook to control the drawer
-  const isMobile = useBreakpointValue({ base: true, md: false }); // Show on mobile (base) only
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const isMobile = useBreakpointValue({ base: true, md: false });
   const logoSize = useBreakpointValue({ base: "28px", md: "34px" });
   const logoTextSize = useBreakpointValue({ base: "16px", md: "17px" });
 
   const [selectedTeamId, setSelectedTeamId] = React.useState<string | null>(
     null
-  ); // Manage selected team state
+  );
 
   const onSearch = (value: string) => {
     console.log("Search term:", value);
@@ -37,7 +37,8 @@ const NavBar = () => {
 
   const handleSelectTeam = (teamId: string, teamAbv: string) => {
     console.log(`Selected team: ${teamId} - ${teamAbv}`);
-    setSelectedTeamId(teamId); // Set the selected team ID
+    setSelectedTeamId(teamId);
+    onClose(); // Close the drawer on team selection
   };
 
   return (
@@ -94,12 +95,12 @@ const NavBar = () => {
         icon={<HamburgerIcon />}
         variant="outline"
         onClick={onOpen}
-        color="#f8991d" // Set the icon color
-        borderColor="#f8991d" // Set the border color
+        color="#f8991d"
+        borderColor="#f8991d"
         _hover={{
-          backgroundColor: "#f8991d", // Set the background color on hover
-          color: "#1f2024", // Keep the icon color the same
-          borderColor: "#f8991d", // Change the border color on hover
+          backgroundColor: "#f8991d",
+          color: "#1f2024",
+          borderColor: "#f8991d",
         }}
       />
 
@@ -115,13 +116,12 @@ const NavBar = () => {
               <Link to="/Page2">Scoreboard</Link>
               <Link to="/page3">Standings</Link>
               <Link to="/page4">News</Link>
-              {isMobile && (
+              <Box width="100%" mt={4}>
                 <TeamList
                   onSelectTeam={handleSelectTeam}
                   selectedTeamId={selectedTeamId}
                 />
-              )}
-              {/* Add more links as needed */}
+              </Box>
             </VStack>
           </DrawerBody>
         </DrawerContent>

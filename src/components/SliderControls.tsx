@@ -25,8 +25,8 @@ const SliderControls: React.FC<SliderControlsProps> = ({
         _hover={{ backgroundColor: "rgba(80, 80, 80, 0.7)" }}
         // Adjust padding and dimensions for mobile
         p={{ base: 3, md: 4 }} // Smaller padding on mobile
-        h={{ base: "28px", md: "35px" }} // Smaller height on mobile
-        w={{ base: "28px", md: "35px" }} // Smaller width on mobile
+        h={{ base: "28px", md: "30px" }} // Smaller height on mobile
+        w={{ base: "28px", md: "30px" }} // Smaller width on mobile
       />
       <IconButton
         aria-label="Next"
@@ -40,8 +40,8 @@ const SliderControls: React.FC<SliderControlsProps> = ({
         _hover={{ backgroundColor: "rgba(80, 80, 80, 0.7)" }}
         // Adjust padding and dimensions for mobile
         p={{ base: 3, md: 4 }} // Smaller padding on mobile
-        h={{ base: "28px", md: "35px" }} // Smaller height on mobile
-        w={{ base: "28px", md: "35px" }} // Smaller width on mobile
+        h={{ base: "28px", md: "30px" }} // Smaller height on mobile
+        w={{ base: "28px", md: "10px" }} // Smaller width on mobile
       />
     </Flex>
   );

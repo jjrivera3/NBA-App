@@ -1,22 +1,32 @@
-// Layout.tsx
-import { Box, Grid, GridItem } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  GridItem,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  IconButton,
+  useBreakpointValue,
+} from "@chakra-ui/react";
+import { HamburgerIcon } from "@chakra-ui/icons";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import NavBar from "../components/Navbar";
 import TeamList from "../components/TeamList";
-import Footer from "../components/Footer"; // Import the Footer component
+import Footer from "../components/Footer";
 import { useState, useEffect } from "react";
 
 const Layout = () => {
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const isMobile = useBreakpointValue({ base: true, lg: false }); // Define mobile breakpoint
 
   const handleTeamSelect = (teamId: string, teamAbv: string) => {
     setSelectedTeamId(teamId);
     navigate(`/${teamAbv.toLowerCase()}`);
   };
 
-  // Reset selected team when navigating to the homepage
   useEffect(() => {
     if (location.pathname === "/") {
       setSelectedTeamId(null);
@@ -39,6 +49,28 @@ const Layout = () => {
           maxW="100vw"
           overflowX="hidden"
         >
+          {/* Mobile Dropdown Menu */}
+          {isMobile && (
+            <Menu>
+              <MenuButton
+                as={IconButton}
+                icon={<HamburgerIcon />}
+                aria-label="Teams Menu"
+                mb={4}
+              >
+                Select Team
+              </MenuButton>
+              <MenuList>
+                {/* Render TeamList inside MenuList for mobile */}
+                <TeamList
+                  onSelectTeam={handleTeamSelect}
+                  selectedTeamId={selectedTeamId}
+                />
+              </MenuList>
+            </Menu>
+          )}
+
+          {/* Desktop Sidebar */}
           <GridItem
             area="aside"
             paddingLeft={0}
@@ -58,7 +90,7 @@ const Layout = () => {
           </GridItem>
         </Grid>
       </Box>
-      <Footer /> {/* Add Footer here so it's displayed at the bottom */}
+      <Footer />
     </>
   );
 };
