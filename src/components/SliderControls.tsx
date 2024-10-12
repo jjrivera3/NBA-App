@@ -1,5 +1,5 @@
-import { Flex, IconButton, Text } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import { Flex, IconButton } from "@chakra-ui/react";
 
 interface SliderControlsProps {
   handlePrevious: () => void;
