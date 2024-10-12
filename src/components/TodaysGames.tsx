@@ -29,7 +29,7 @@ const TodaysGames = () => {
       }
     },
     responsive: [
-      { breakpoint: 1500, settings: { slidesToShow: 4 } },
+      { breakpoint: 1500, settings: { slidesToShow: 5 } },
       { breakpoint: 768, settings: { slidesToShow: 2 } },
       { breakpoint: 480, settings: { slidesToShow: 1 } },
     ],
