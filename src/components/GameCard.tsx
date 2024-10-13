@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   Flex,
@@ -93,11 +94,11 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
         game.statusType === "STATUS_HALFTIME" ||
         game.statusType === "STATUS_END_PERIOD" ? (
           <>
-            <Text fontSize="11px" fontWeight={500} color="#20da77">
+            <Text fontSize="12px" fontWeight={500} color="#20da77">
               In Progress
             </Text>
             <Box textAlign="right" maxW="80%">
-              <Text fontSize="11px" color="#20da77" fontWeight={500}>
+              <Text fontSize="12px" color="#20da77" fontWeight={500}>
                 {game.shortDetail}
               </Text>
               <Box
@@ -124,18 +125,20 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
             <Box />
           </>
         ) : (
-          <>
+          <Flex justifyContent="space-between" width="100%">
+            <Text fontSize="12px" color="white" fontWeight={500}>
+              Today
+            </Text>
             <Text fontSize="12px" color="white" fontWeight={500}>
               {game.time}
             </Text>
-            <Box />
-          </>
+          </Flex>
         )}
       </Flex>
 
       <Box p={3} mt={3}>
-        <Flex alignItems="center" justifyContent="space-between" mb={3}>
-          <VStack spacing={1} align="center" mt="8px">
+        <Flex alignItems="center" justifyContent="space-between" mt={2} mb={3}>
+          <VStack spacing={1} align="center">
             <Image
               src={game.awayLogo}
               alt={`${game.awayTeam} logo`}
@@ -182,7 +185,7 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
           ) : game.statusType === "STATUS_IN_PROGRESS" ||
             game.statusType === "STATUS_HALFTIME" ||
             game.statusType === "STATUS_END_PERIOD" ? (
-            <Text fontSize="18px" fontWeight={500} color="gray.300">
+            <Text fontSize="22px" fontWeight={500} color="gray.100">
               {game.awayScore} - {game.homeScore}
             </Text>
           ) : (

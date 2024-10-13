@@ -8,14 +8,14 @@ interface TodaysGameParams {
   limit: string;
 }
 
-const useTodaysGame = (
+const useYesterdaysTodaysGame = (
   params: TodaysGameParams,
-  p0: { refetchOnWindowFocus: boolean }
+  p0: { refetchOnWindowFocus: boolean; staleTime: number }
 ) => {
   const apiClient = new APIClient("/nbascoreboard");
 
   return useQuery({
-    queryKey: ["todaysGame", params], // Include params in queryKey for uniqueness
+    queryKey: ["yesterdaysGame", params], // Include params in queryKey for uniqueness
     queryFn: async () => {
       const queryParams = {
         ...params,
@@ -26,11 +26,10 @@ const useTodaysGame = (
 
       return data;
     },
-
+    staleTime: p0.staleTime, // Use the provided staleTime parameter
     refetchOnWindowFocus: p0.refetchOnWindowFocus, // Use the provided refetchOnWindowFocus parameter
     refetchOnReconnect: false, // Disable refetch on reconnect
-    // refetchInterval: 30000, // Refetch every 30 seconds
   });
 };
 
-export default useTodaysGame;
+export default useYesterdaysTodaysGame;
