@@ -1,15 +1,15 @@
+import { useEffect, useState } from "react";
 import useTodaysGame from "./useTodaysGame";
 import GameData from "../entities/GameData";
 import useYesterdaysTodaysGame from "./useYesterdaysGame";
-
-type Team = {
-  abbreviation: string;
-  logo: string;
-  color?: string;
-};
+import Team from "../entities/Team";
 
 const useGameData = () => {
-  // Function to format date as "Oct 11"
+  const [refetchInterval, setRefetchInterval] = useState<number | false>(false);
+  const [staleTime, setStaleTime] = useState<number | undefined>(
+    10 * 60 * 1000
+  ); // Default staleTime for non-live games
+
   const formatGameDate = (date: Date) => {
     const options: Intl.DateTimeFormatOptions = {
       month: "short",
@@ -45,6 +45,8 @@ const useGameData = () => {
     },
     {
       refetchOnWindowFocus: false,
+      refetchInterval,
+      staleTime,
     }
   );
 
@@ -59,6 +61,23 @@ const useGameData = () => {
     }
   );
 
+  useEffect(() => {
+    if (todayData?.events) {
+      const liveGameStatus = [
+        "STATUS_IN_PROGRESS",
+        "STATUS_HALFTIME",
+        "STATUS_END_PERIOD",
+      ];
+      const hasLiveGames = todayData.events.some((game) => {
+        const statusType = game.status.type.name;
+        return liveGameStatus.includes(statusType);
+      });
+
+      setRefetchInterval(hasLiveGames ? 30000 : false); // 30 seconds or disable
+      setStaleTime(hasLiveGames ? 0 : 10 * 60 * 1000); // No staleTime for live games, staleTime for non-live
+    }
+  }, [todayData]);
+
   const games = [
     ...((todayData as GameData)?.events || []),
     ...((yestData as GameData)?.events || []),
@@ -67,10 +86,10 @@ const useGameData = () => {
       const competition = game.competitions?.[0];
       const homeTeam = competition?.competitors.find(
         (comp) => comp.homeAway === "home"
-      )?.team as Team;
+      )?.team as unknown as Team;
       const awayTeam = competition?.competitors.find(
         (comp) => comp.homeAway === "away"
-      )?.team as Team;
+      )?.team as unknown as Team;
       const homeScore = competition?.competitors.find(
         (comp) => comp.homeAway === "home"
       )?.score;
@@ -78,11 +97,10 @@ const useGameData = () => {
         (comp) => comp.homeAway === "away"
       )?.score;
       const statusType = game.status.type.name;
-      const shortDetail = game.status.type.shortDetail || ""; // Extract shortDetail
+      const shortDetail = game.status.type.shortDetail || "";
       const gameDate = competition ? new Date(competition.date) : new Date();
-      const gameDateFormatted = formatGameDate(gameDate); // Use the formatted date
+      const gameDateFormatted = formatGameDate(gameDate);
 
-      // Show odds only if the game is not in progress, halftime, final, or end of period
       const oddsDetails =
         statusType !== "STATUS_FINAL" &&
         statusType !== "STATUS_IN_PROGRESS" &&
@@ -115,26 +133,25 @@ const useGameData = () => {
         awayTeamColor: awayTeam?.color ? `#${awayTeam.color}` : "#000000",
         statusType,
         shortDetail,
-        homeScore:
-          statusType === "STATUS_FINAL" ||
-          statusType === "STATUS_IN_PROGRESS" ||
-          statusType === "STATUS_HALFTIME" ||
-          statusType === "STATUS_END_PERIOD"
-            ? homeScore
-            : null,
-        awayScore:
-          statusType === "STATUS_FINAL" ||
-          statusType === "STATUS_IN_PROGRESS" ||
-          statusType === "STATUS_HALFTIME" ||
-          statusType === "STATUS_END_PERIOD"
-            ? awayScore
-            : null,
-        gameDateFormatted, // Using the new date format here
+        homeScore: [
+          "STATUS_FINAL",
+          "STATUS_IN_PROGRESS",
+          "STATUS_HALFTIME",
+          "STATUS_END_PERIOD",
+        ].includes(statusType)
+          ? homeScore
+          : null,
+        awayScore: [
+          "STATUS_FINAL",
+          "STATUS_IN_PROGRESS",
+          "STATUS_HALFTIME",
+          "STATUS_END_PERIOD",
+        ].includes(statusType)
+          ? awayScore
+          : null,
+        gameDateFormatted,
         odds:
-          statusType !== "STATUS_FINAL" &&
-          statusType !== "STATUS_IN_PROGRESS" &&
-          statusType !== "STATUS_HALFTIME" &&
-          statusType !== "STATUS_END_PERIOD"
+          oddsDetails || overUnder
             ? { details: oddsDetails, overUnder: overUnder }
             : null,
         isToday: formatGameDate(gameDate) === formatGameDate(today),
@@ -142,29 +159,24 @@ const useGameData = () => {
       };
     })
     .sort((a, b) => {
-      // Order based on the desired status order
       const statusOrder: { [key: string]: number } = {
         STATUS_IN_PROGRESS: 1,
-        STATUS_SCHEDULED: 2,
-        STATUS_END_PERIOD: 3,
-        STATUS_HALFTIME: 4,
+        STATUS_END_PERIOD: 2,
+        STATUS_HALFTIME: 3,
+        STATUS_SCHEDULED: 4,
         STATUS_FINAL: 5,
       };
 
       const aOrder = statusOrder[a.statusType as keyof typeof statusOrder] || 6;
       const bOrder = statusOrder[b.statusType as keyof typeof statusOrder] || 6;
 
-      if (aOrder !== bOrder) {
-        return aOrder - bOrder;
-      }
-
-      // For "STATUS_FINAL", prioritize today’s games before yesterday’s
+      if (aOrder !== bOrder) return aOrder - bOrder;
       if (a.statusType === "STATUS_FINAL" && b.statusType === "STATUS_FINAL") {
         if (a.isToday && !b.isToday) return -1;
         if (!a.isToday && b.isToday) return 1;
       }
 
-      return 0; // Keep other games in their current order
+      return 0;
     });
 
   return { games, isLoading: todayLoading, error: todayError || yestError };
