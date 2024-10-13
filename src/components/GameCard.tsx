@@ -50,6 +50,8 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
       position="relative"
       overflow="hidden"
       background="linear-gradient(360deg, #1a1a1d 0%, #2d2d30 50%, #333333 100%)"
+      pt={3}
+      pb={3}
       boxShadow="lg"
       border="1px solid #2a2a2a"
     >
@@ -58,6 +60,7 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
         borderTopRadius="md"
         overflow="hidden"
         position="relative"
+        marginTop="-12px"
       >
         <Box
           flex="1"
@@ -136,7 +139,7 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
             <Image
               src={game.awayLogo}
               alt={`${game.awayTeam} logo`}
-              boxSize={{ base: "40px", md: "30px" }} // Larger size on mobile
+              boxSize={{ base: "50px", md: "30px" }} // Larger size on mobile
               mt="10px"
             />
             <Text fontSize="13px" fontWeight={600} mt={1}>
@@ -147,7 +150,7 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
           {game.statusType === "STATUS_FINAL" ? (
             <Flex
               alignItems="center"
-              fontSize="20px"
+              fontSize="22px"
               fontWeight={500}
               color="gray.300"
             >
@@ -159,7 +162,7 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
                 {game.awayScore}
               </Text>
               <Box
-                mx={3}
+                mx={2}
                 color="white"
                 style={{
                   marginLeft: isAwayWinner ? "0px" : undefined,
@@ -192,7 +195,7 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
             <Image
               src={game.homeLogo}
               alt={`${game.homeTeam} logo`}
-              boxSize={{ base: "40px", md: "30px" }} // Larger size on mobile
+              boxSize={{ base: "50px", md: "30px" }} // Larger size on mobile
               mt="10px"
             />
             <Text fontSize="13px" fontWeight={600} mt={1}>

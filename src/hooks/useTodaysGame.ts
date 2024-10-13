@@ -29,7 +29,7 @@ const useTodaysGame = (
     staleTime: p0.staleTime, // Use the provided staleTime parameter
     refetchOnWindowFocus: p0.refetchOnWindowFocus, // Use the provided refetchOnWindowFocus parameter
     refetchOnReconnect: false, // Disable refetch on reconnect
-    // refetchInterval: 15000, // Refetch every 15 seconds
+    // refetchInterval: 30000, // Refetch every 15 seconds
   });
 };
 
