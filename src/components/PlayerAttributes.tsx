@@ -47,12 +47,7 @@ interface CategoryBoxProps {
 }
 
 const CategoryBox: React.FC<CategoryBoxProps> = ({ title, attributes }) => (
-  <Box
-    p={4}
-    borderRadius="md"
-    mb={4}
-    background="linear-gradient(88deg, #1a1a1d 0%, #2d2d30 50%, #333333 100%)"
-  >
+  <Box p={4} borderRadius="md" mb={4} background="#2a2a2a">
     <Heading size="sm" color="gray.100" mb={3}>
       {title}
     </Heading>
@@ -75,7 +70,7 @@ const PlayerAttributes: React.FC<PlayerAttributesProps> = ({
         base: "1fr",
         sm: "repeat(2, 1fr)",
         md: "repeat(3, 1fr)",
-        lg: "repeat(4, 1fr)",
+        lg: "repeat(3, 1fr)",
       }}
       gap={4}
       w="full"

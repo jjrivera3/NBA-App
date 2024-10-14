@@ -21,11 +21,11 @@ const SliderControls: React.FC<SliderControlsProps> = ({
         size={{ base: "sm", md: "md" }} // Smaller button size on desktop
         mr={2}
         borderRadius="10px"
-        background="linear-gradient(135deg, #44464b, #6b6b6b)"
-        _hover={{ backgroundColor: "rgba(80, 80, 80, 0.7)" }}
+        border="1px solid #f8991d"
+        _hover={{ backgroundColor: "#f8991d", color: "#2a2a2a" }}
         p={{ base: 4, md: 3 }} // Adjusted padding on desktop
-        h={{ base: "35px", md: "30px" }} // Smaller height on desktop
-        w={{ base: "35px", md: "30px" }} // Smaller width on desktop
+        h={{ base: "50px", md: "35px" }} // Smaller height on desktop
+        w={{ base: "50px", md: "35px" }} // Smaller width on desktop
       />
       <IconButton
         aria-label="Next"
@@ -35,11 +35,11 @@ const SliderControls: React.FC<SliderControlsProps> = ({
         variant="ghost"
         size={{ base: "sm", md: "md" }} // Smaller button size on desktop
         borderRadius="10px"
-        background="linear-gradient(135deg, #44464b, #6b6b6b)"
-        _hover={{ backgroundColor: "rgba(80, 80, 80, 0.7)" }}
+        border="1px solid #f8991d"
+        _hover={{ backgroundColor: "#f8991d", color: "#2a2a2a" }}
         p={{ base: 4, md: 3 }} // Adjusted padding on desktop
-        h={{ base: "35px", md: "30px" }} // Smaller height on desktop
-        w={{ base: "35px", md: "30px" }} // Smaller width on desktop
+        h={{ base: "50px", md: "35px" }} // Smaller height on desktop
+        w={{ base: "50px", md: "35px" }} // Smaller width on desktop
       />
     </Flex>
   );

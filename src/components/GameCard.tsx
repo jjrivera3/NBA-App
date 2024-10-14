@@ -50,11 +50,11 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
       color="white"
       position="relative"
       overflow="hidden"
-      background="linear-gradient(360deg, #1a1a1d 0%, #2d2d30 50%, #333333 100%)"
+      background="radial-gradient(circle, rgb(48 48 48) 0%, rgb(51 51 51) 70%, rgb(49 49 49) 120%)"
       pt={3}
-      pb={3}
-      boxShadow="lg"
-      border="1px solid #2a2a2a"
+      pb={1}
+      boxShadow="md"
+      border="1px solid #2b2b2b"
     >
       <Flex
         height="6px"
@@ -153,7 +153,7 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
           {game.statusType === "STATUS_FINAL" ? (
             <Flex
               alignItems="center"
-              fontSize="22px"
+              fontSize={{ base: "24px", md: "24px", lg: "22px" }}
               fontWeight={500}
               color="gray.300"
             >
@@ -168,8 +168,8 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
                 mx={2}
                 color="white"
                 style={{
-                  marginLeft: isAwayWinner ? "0px" : undefined,
-                  marginRight: isHomeWinner ? "0px" : undefined,
+                  marginLeft: isAwayWinner ? "-3px" : undefined,
+                  marginRight: isHomeWinner ? "-3px" : undefined,
                 }}
               >
                 {isAwayWinner ? <FaCaretLeft /> : <FaCaretRight />}
@@ -235,7 +235,7 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
             alignItems="center"
             justifyContent="center"
             borderRadius="md"
-            backgroundColor="#333333"
+            backgroundColor="#403f3f"
             boxShadow="md"
             border="1px solid #3a3a3a"
           >

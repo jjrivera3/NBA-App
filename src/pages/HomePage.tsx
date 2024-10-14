@@ -40,7 +40,7 @@ function Homepage() {
               minHeight="600px"
               border="1px solid #00"
               borderRadius="md"
-              background="linear-gradient(337deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%);"
+              background="#2a2a2a"
             >
               <TeamStandings />
             </Box>
@@ -50,7 +50,7 @@ function Homepage() {
               flexDirection="column"
               flex="1"
               minHeight="600px"
-              background="linear-gradient(337deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%);"
+              background="#2a2a2a"
               border="1px solid #282828"
               borderRadius="md"
             >

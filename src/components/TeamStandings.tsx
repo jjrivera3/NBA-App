@@ -185,7 +185,7 @@ const TeamStandings = () => {
       <Box
         p={5}
         borderRadius="md"
-        background="linear-gradient(337deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%)"
+        background="#2a2a2a"
         width={{ base: "100%", lg: "100%" }}
         border="1px solid"
         borderColor="#2a2b2f"

@@ -30,7 +30,7 @@ Props) => {
   // const navigate = useNavigate(); // Initialize the navigate function
 
   // Define the responsive font size as a constant
-  const responsiveFontSize = { base: 18, sm: 24, md: 22, xl: 32 };
+  const responsiveFontSize = { base: 22, sm: 24, md: 22, xl: 32 };
 
   // Apply the font size, using the same value conditionally
   const fontSize =

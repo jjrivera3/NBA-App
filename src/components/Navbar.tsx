@@ -36,7 +36,7 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
     lg: false,
   });
   const logoSize = useBreakpointValue({ base: "28px", md: "34px" });
-  const logoTextSize = useBreakpointValue({ base: "16px", md: "17px" });
+  const logoTextSize = useBreakpointValue({ base: "18px", md: "17px" });
 
   const onSearch = (value: string) => {
     console.log("Search term:", value);

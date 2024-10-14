@@ -125,10 +125,8 @@ const PlayerDetailPage = () => {
         borderRadius="md"
         w="full"
         mt={5}
-        bg="#26262640"
         boxShadow="lg"
         rounded="md"
-        border="1px solid #000"
       >
         <PlayerRadarChart
           firstColor={firstColor}

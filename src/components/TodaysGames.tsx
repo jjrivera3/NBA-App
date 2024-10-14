@@ -24,6 +24,7 @@ const TodaysGames = () => {
     arrows: false,
     responsive: [
       { breakpoint: 1500, settings: { slidesToShow: 4 } },
+      { breakpoint: 1100, settings: { slidesToShow: 3 } },
       { breakpoint: 768, settings: { slidesToShow: 2 } },
       { breakpoint: 480, settings: { slidesToShow: 1 } },
     ],
@@ -39,7 +40,7 @@ const TodaysGames = () => {
 
   return (
     <Box
-      background="linear-gradient(180deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%);"
+      background="#2a2a2a"
       p={4}
       borderRadius="md"
       overflow="hidden"
@@ -51,7 +52,11 @@ const TodaysGames = () => {
         alignItems="center"
         mb={4}
       >
-        <Text fontSize="2xl" fontWeight={500} color="white">
+        <Text
+          fontSize={{ base: "18px", md: "2xl" }}
+          fontWeight={500}
+          color="white"
+        >
           Scoreboard
         </Text>
         {/* Slider Controls for Desktop */}

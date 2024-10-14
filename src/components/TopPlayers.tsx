@@ -105,7 +105,7 @@ function TopPlayers({
           key={idx}
           borderRadius="md"
           p={5}
-          background="linear-gradient(180deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%);"
+          background="#2a2a2a"
           color="white"
           boxShadow="xl"
           border="1px solid #282828"
@@ -118,7 +118,7 @@ function TopPlayers({
               {statLabel}
             </Text>
           </Flex>
-          <Divider mb={4} />
+          <Divider borderColor="#6c6c6c" mb={4} />
           <VStack align="start" spacing={3}>
             {data.map((player, index) => (
               <HStack key={index} justify="space-between" w="full">
