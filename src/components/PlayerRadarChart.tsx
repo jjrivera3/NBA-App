@@ -249,7 +249,7 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
       </Box>
 
       {/* Radar Chart */}
-      <div style={{ width: "90%", height: "90%" }}>
+      <div style={{ width: "100%", height: "100%" }}>
         <Radar data={data} options={options} />
       </div>
     </Box>

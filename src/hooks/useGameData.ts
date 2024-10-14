@@ -73,6 +73,8 @@ const useGameData = () => {
         return liveGameStatus.includes(statusType);
       });
 
+      console.log("Resetinterval is:", refetchInterval);
+
       setRefetchInterval(hasLiveGames ? 30000 : false); // 30 seconds or disable
       setStaleTime(hasLiveGames ? 0 : 10 * 60 * 1000); // No staleTime for live games, staleTime for non-live
     }

@@ -59,7 +59,7 @@ const TeamGrid = ({ teamAbv }: TeamGridProps) => {
       )}
 
       <SimpleGrid
-        columns={{ sm: 1, md: 2, lg: 3, xl: 4, "2xl": 5 }}
+        columns={{ sm: 1, md: 3, lg: 3, xl: 4, "2xl": 5 }}
         spacing={2}
       >
         {isTeamInfoLoading

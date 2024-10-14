@@ -24,7 +24,13 @@ const RatingScore = ({ rating }: Props) => {
   }
 
   return (
-    <Badge colorScheme={color} fontSize="14px" paddingX={2} borderRadius="4px">
+    <Badge
+      mt={{ base: 5, md: 0 }}
+      colorScheme={color}
+      fontSize="14px"
+      paddingX={2}
+      borderRadius="4px"
+    >
       {displayText}
     </Badge>
   );

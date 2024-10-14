@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
 import { lighten } from "polished";
 
 interface PlayerStatsProps {
@@ -9,6 +9,7 @@ interface PlayerStatsProps {
       ast: number | null;
       fgp: number | null;
       tptfgp: number | null;
+      ftp: number | null;
     };
   };
   firstColor: string;
@@ -28,16 +29,48 @@ const PlayerStats = ({ player, firstColor, lightValue }: PlayerStatsProps) => {
       label: "3PT%",
       value: player.stats.tptfgp !== null ? `${player.stats.tptfgp}%` : "-",
     },
+    {
+      label: "FTP%",
+      value: player.stats.ftp !== null ? `${player.stats.ftp}%` : "-",
+    },
   ];
 
-  return (
+  // Check if the layout should be grid or flex based on screen size
+  const isMobileLayout = useBreakpointValue({ base: true, md: false });
+
+  return isMobileLayout ? (
+    <Grid templateColumns="repeat(2, 1fr)" gap={4} padding={4} mt={{ base: 5 }}>
+      {stats.map((stat, index) => (
+        <Box
+          key={index}
+          textAlign="center"
+          padding="15px"
+          borderRadius="md"
+          border={`1px solid ${lighten(lightValue, firstColor)}`} // Not this one
+        >
+          <Text
+            fontSize="16px"
+            fontWeight="500"
+            color={lighten(lightValue, firstColor)}
+          >
+            {stat.label}
+          </Text>
+          <Text
+            fontWeight="500"
+            fontSize={{ base: "1xl", sm: "lg", md: "lg", lg: "lg", xl: "2xl" }}
+            color="white"
+          >
+            {stat.value}
+          </Text>
+        </Box>
+      ))}
+    </Grid>
+  ) : (
     <Flex
       justify="space-between"
       align="center"
-      position="relative"
-      flexDirection={["column", "row"]}
-      background="linear-gradient(180deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%);"
-      borderBottom={`1px solid ${lighten(lightValue, firstColor)}`}
+      background="linear-gradient(180deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%)"
+      borderBottom={`1px solid ${lighten(lightValue, firstColor)}`} // Not this
     >
       {stats.map((stat, index) => (
         <Box
@@ -46,6 +79,7 @@ const PlayerStats = ({ player, firstColor, lightValue }: PlayerStatsProps) => {
           textAlign="center"
           padding="15px"
           position="relative"
+          borderRadius="md"
           _after={{
             content: '""',
             position: "absolute",
@@ -65,10 +99,18 @@ const PlayerStats = ({ player, firstColor, lightValue }: PlayerStatsProps) => {
             bg: lighten(lightValue, firstColor),
           }}
         >
-          <Text fontWeight="500" color={lighten(lightValue, firstColor)}>
+          <Text
+            fontSize="16px"
+            fontWeight="500"
+            color={lighten(lightValue, firstColor)}
+          >
             {stat.label}
           </Text>
-          <Text fontWeight="600" fontSize="2xl" color="white">
+          <Text
+            fontWeight="500"
+            fontSize={{ base: "1xl", sm: "lg", md: "xl", lg: "lg", xl: "2xl" }}
+            color="white"
+          >
             {stat.value}
           </Text>
         </Box>

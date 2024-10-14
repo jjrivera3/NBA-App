@@ -1,4 +1,3 @@
-// src/components/PlayerDetailPage.tsx
 import { Box, Flex, Skeleton, SkeletonText } from "@chakra-ui/react";
 import { lighten } from "polished";
 import { useEffect } from "react";
@@ -28,8 +27,6 @@ const PlayerDetailPage = () => {
   const foundTeam = nbateams.find((team) => team.teamId === teamID);
   const lightValue = foundTeam?.light || 0.2;
 
-  console.log(player.rating);
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -44,32 +41,49 @@ const PlayerDetailPage = () => {
         as="section"
         padding="20px"
         borderRadius="md"
-        w={"full"}
+        w="full"
         bg={`linear-gradient(360deg, #26262640 30%, ${firstColor} 125%)`}
-        boxShadow={"2xl"}
-        rounded={"md"}
-        overflow={"hidden"}
+        boxShadow="2xl"
+        rounded="md"
+        overflow="hidden"
         border="1px solid #000"
         mt={5}
       >
         <Flex
-          direction={["column", "row"]}
+          direction={{ base: "column", md: "row" }}
           justify="space-between"
           align="center"
           w="full"
+          wrap="wrap"
+          gap={{ base: 5, md: 0 }}
         >
-          <PlayerImage avatarSrc={avatarSrc} playerName={player?.espnName} />
-          <PlayerInfo
-            player={player}
-            teamCity={teamCity}
-            teamName={teamName}
-            espnLogo1={espnLogo1}
-            firstColor={firstColor}
-          />
+          {/* Inner Flex for Player Image and Player Info */}
+          <Flex
+            direction={{ base: "column", md: "row" }}
+            align="center"
+            gap={4}
+          >
+            <PlayerImage avatarSrc={avatarSrc} playerName={player?.espnName} />
+            <PlayerInfo
+              player={player}
+              teamCity={teamCity}
+              teamName={teamName}
+              espnLogo1={espnLogo1}
+              firstColor={firstColor}
+            />
+          </Flex>
+
+          {/* Player Additional Info on the other side */}
           <PlayerAdditionalInfo player={player} />
         </Flex>
 
-        <Box height="1px" bg={lighten(lightValue, firstColor)} />
+        <Box
+          height="1px"
+          bg={lighten(lightValue, firstColor)}
+          mt={3}
+          display={{ base: "none", md: "block" }}
+        />
+
         <PlayerStats
           player={player}
           firstColor={firstColor}
@@ -82,7 +96,7 @@ const PlayerDetailPage = () => {
         as="section"
         padding="20px"
         borderRadius="md"
-        w={"full"}
+        w="full"
         mt={5}
         bg="#26262640"
         boxShadow="lg"
@@ -109,7 +123,7 @@ const PlayerDetailPage = () => {
         as="section"
         padding="20px"
         borderRadius="md"
-        w={"full"}
+        w="full"
         mt={5}
         bg="#26262640"
         boxShadow="lg"

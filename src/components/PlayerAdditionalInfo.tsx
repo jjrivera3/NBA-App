@@ -14,7 +14,13 @@ interface Props {
 
 const PlayerAdditionalInfo = ({ player }: Props) => {
   return (
-    <VStack align="flex-start" spacing={4} w={["100%", "30%"]}>
+    <VStack
+      alignItems={{ base: "center", lg: "flex-start" }}
+      spacing={4}
+      paddingRight={{ base: 0, sm: 0, md: 4, xl: 125 }}
+      mt={[0, 0]}
+      mb={[5, 0]}
+    >
       <Text color="white" fontSize="15px">
         HT, WT:{" "}
         <Text as="span" fontWeight="bold" fontSize="14px">

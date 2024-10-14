@@ -19,7 +19,7 @@ const PlayerImage = ({ avatarSrc, playerName }: PlayerImageProps) => {
       onError={(e) => {
         (e.currentTarget as HTMLImageElement).src = playerAvatar;
       }}
-      minW={{ base: "150px", md: "240px", lg: "200px", xl: "350px" }}
+      minW={{ base: "150px", md: "200px", lg: "200px", xl: "320px" }}
       h="auto"
       w="300px"
     />

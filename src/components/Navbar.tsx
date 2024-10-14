@@ -29,7 +29,12 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const isMobile = useBreakpointValue({ base: true, md: false });
+  const isMobile = useBreakpointValue({
+    base: true,
+    sm: true,
+    md: true,
+    lg: false,
+  });
   const logoSize = useBreakpointValue({ base: "28px", md: "34px" });
   const logoTextSize = useBreakpointValue({ base: "16px", md: "17px" });
 
