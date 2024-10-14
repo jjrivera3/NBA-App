@@ -1,4 +1,4 @@
-import { Box, Image, Text } from "@chakra-ui/react"; // Import Chakra UI components
+import { Box, Image, Text } from "@chakra-ui/react";
 import {
   Chart as ChartJS,
   Filler,
@@ -8,8 +8,8 @@ import {
   RadialLinearScale,
   Tooltip,
 } from "chart.js";
-import ChartDataLabels from "chartjs-plugin-datalabels"; // Import the plugin
-import { rgba } from "polished"; // Import rgba from polished
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import { rgba } from "polished";
 import { Radar } from "react-chartjs-2";
 import twoKlogo from "../assets/NBA-2K25-dark.svg";
 
@@ -21,7 +21,7 @@ ChartJS.register(
   Filler,
   Tooltip,
   Legend,
-  ChartDataLabels // Register ChartDataLabels plugin
+  ChartDataLabels
 );
 
 // Utility function to calculate the average of an array of numbers
@@ -34,7 +34,7 @@ const calculateAverage = (attributes: number[]) => {
 // Define the props interface
 interface PlayerRadarChartProps {
   firstColor: string;
-  playerRating: any; // Change type to any to access object fields dynamically
+  playerRating: any;
 }
 
 const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
@@ -139,21 +139,21 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false, // Allow dynamic adjustment based on container
+    maintainAspectRatio: false,
     scales: {
       r: {
         angleLines: {
-          color: "rgba(211, 211, 211, 0.5)", // Light gray for angle lines
+          color: "rgba(211, 211, 211, 0.5)",
         },
         grid: {
-          color: "rgba(211, 211, 211, 0.5)", // Light gray for grid lines
+          color: "rgba(211, 211, 211, 0.5)",
         },
         pointLabels: {
-          color: "#ffffff", // White labels for better visibility
+          color: "#ffffff",
           font: {
-            size: window.innerWidth <= 768 ? 8 : 18, // Adjust label font size for mobile
+            size: window.innerWidth <= 768 ? 8 : 18,
           },
-          padding: window.innerWidth <= 768 ? 16 : 10, // Adds space around the point labels
+          padding: window.innerWidth <= 768 ? 10 : 10,
         },
         ticks: {
           display: false,
@@ -161,7 +161,7 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
           stepSize: 20,
         },
         suggestedMin: 0,
-        suggestedMax: 100, // Limit the max value to 100
+        suggestedMax: 100,
       },
     },
     plugins: {
@@ -190,13 +190,13 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
         color: "#ffffff",
         backgroundColor: "#26262640",
         borderRadius: 50,
-        padding: window.innerWidth <= 768 ? 2 : 5,
+        padding: window.innerWidth <= 768 ? 3 : 5,
         borderColor: firstColor,
         borderWidth: 3,
         align: "center" as const,
         anchor: "center" as const,
         font: {
-          size: window.innerWidth <= 768 ? 8 : 11,
+          size: window.innerWidth <= 768 ? 9 : 11,
           weight: "bold" as const,
         },
         formatter: (value: number) => {
@@ -215,31 +215,23 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
       rounded={"md"}
       overflow={"hidden"}
       mt={0}
-      h={["75vh", "700px"]} // Full viewport height on mobile for better scaling
+      h={["80vh", "700px"]}
       display="flex"
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
     >
-      {/* Heading above the Radar Chart */}
-      <Box
-        className="sidebar-link pb-0"
-        display="flex"
-        alignItems="center"
-        textDecoration="none"
-        mb={4}
-      >
+      {/* Header: Image and Text on the same line */}
+      <Box display="flex" alignItems="center" mb={4}>
         <Image
-          className="ml-0"
           src={twoKlogo}
           height="auto"
           width={{ base: "100px", md: "130px" }}
           alt="NBA 2K25 Missing Players"
           title="NBA 2K25 Missing Players"
+          mr={2} // Spacing between image and text
         />
         <Text
-          className="align-middle"
-          ml={2}
           fontSize={{ base: "xl", md: "3xl" }}
           color="white"
           fontWeight="bold"
@@ -249,9 +241,9 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
       </Box>
 
       {/* Radar Chart */}
-      <div style={{ width: "100%", height: "100%", position: "relative" }}>
+      <Box width="100%" height="100%" position="relative">
         <Radar data={data} options={options} />
-      </div>
+      </Box>
     </Box>
   );
 };
