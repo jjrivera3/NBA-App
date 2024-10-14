@@ -196,7 +196,7 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
         align: "center" as const,
         anchor: "center" as const,
         font: {
-          size: window.innerWidth <= 768 ? 9 : 11,
+          size: window.innerWidth <= 768 ? 9 : 12,
           weight: "bold" as const,
         },
         formatter: (value: number) => {
@@ -215,18 +215,23 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
       rounded={"md"}
       overflow={"hidden"}
       mt={0}
-      h={["80vh", "700px"]}
+      h={["80vh", "900px"]}
       display="flex"
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
+      background="#2a2a2a"
     >
-      {/* Header: Image and Text on the same line */}
-      <Box display="flex" alignItems="center" mb={4}>
+      <Box
+        display="flex"
+        alignItems="center"
+        mt={{ base: 25, sm: 5 }}
+        mb={{ base: -10, sm: 10 }}
+      >
         <Image
           src={twoKlogo}
           height="auto"
-          width={{ base: "100px", md: "130px" }}
+          width={{ base: "80px", md: "130px" }}
           alt="NBA 2K25 Missing Players"
           title="NBA 2K25 Missing Players"
           mr={2} // Spacing between image and text
