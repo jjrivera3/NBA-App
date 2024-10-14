@@ -121,7 +121,7 @@ const PlayerDetailPage = () => {
       {/* Radar Chart and Attributes Section */}
       <Box
         as="section"
-        padding="20px"
+        padding={{ base: "0px", md: "20px" }}
         borderRadius="md"
         w="full"
         mt={5}

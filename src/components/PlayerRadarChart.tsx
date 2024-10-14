@@ -150,7 +150,7 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
         pointLabels: {
           color: "#ffffff", // White labels for better visibility
           font: {
-            size: 18, // Adjust label font size
+            size: window.innerWidth <= 768 ? 8 : 18, // Adjust label font size for mobile
           },
         },
         ticks: {
@@ -206,10 +206,15 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
     maintainAspectRatio: false,
   };
 
+  // Listen for window resize and update point label font size
+  window.addEventListener("resize", () => {
+    options.scales.r.pointLabels.font.size = window.innerWidth <= 768 ? 12 : 18;
+  });
+
   return (
     <Box
       as="section"
-      padding="25px"
+      padding={{ base: "0px", lg: "25px" }}
       borderRadius="md"
       w={"full"}
       rounded={"md"}
