@@ -193,7 +193,7 @@ const TeamStandings = () => {
         <Text
           fontSize={standingsTextSize}
           fontWeight={500}
-          color="white"
+          color="#f8991d"
           mb={5}
           textAlign={standingsTextAlign}
         >

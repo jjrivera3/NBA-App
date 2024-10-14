@@ -4,6 +4,7 @@ import ErrorPage from "./pages/ErrorPage";
 import HomePage from "./pages/HomePage";
 import PlayerDetailPage from "./pages/PlayerDetailPage";
 import TeamSchedule from "./components/TeamSchedule";
+import DepthChart from "./components/DepthChart"; // Import your DepthChart component
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: ":teamAbv",
         element: <HomePage />,
+      },
+      {
+        path: ":teamAbv/depth-chart", // New route for DepthChart
+        element: <DepthChart />, // Display the DepthChart component here
       },
       {
         path: ":teamName/:playerName",

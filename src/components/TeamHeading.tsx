@@ -1,5 +1,6 @@
 import { Box, Flex, Heading, Image, Text, VStack } from "@chakra-ui/react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
+import DepthChart from "./DepthChart"; // Import your DepthChart component
 
 interface Props {
   teamCity: string;
@@ -28,7 +29,7 @@ const TeamHeading = ({
     { label: "Roster", to: `/${teamAbv}` },
     { label: "Schedule", to: `/${teamAbv}/schedule` },
     { label: "Team Stats", to: "/team-stats" },
-    { label: "Depth Chart", to: "/depth-chart" },
+    { label: "Depth Chart", to: `/${teamAbv}/depth-chart` }, // Updated path
     { label: "Injuries", to: "/injuries" },
   ];
 
@@ -45,7 +46,7 @@ const TeamHeading = ({
         justify="space-between"
         mb={0}
         direction={{ base: "column", md: "row" }}
-        mt={{ base: 6, md: 0 }} // Added margin-top on mobile
+        mt={{ base: 6, md: 0 }}
       >
         <Flex
           direction="column"
@@ -113,9 +114,9 @@ const TeamHeading = ({
                     fontWeight={isActive ? "500" : "400"}
                     textAlign="center"
                     px={3}
-                    py={1} // Reduced padding for a slimmer appearance
+                    py={1}
                     mb={{ base: 2, md: 0 }}
-                    borderRadius="4px" // Slightly rounded corners for a slim look
+                    borderRadius="4px"
                     bg={isActive ? `${firstColor}` : "transparent"}
                     width={{ base: "100%", md: "auto" }}
                   >
@@ -141,6 +142,13 @@ const TeamHeading = ({
           </Text>
         </VStack>
       </Flex>
+
+      {/* Render DepthChart only when on the Depth Chart route */}
+      {location.pathname === `/${teamAbv}/depth-chart` && (
+        <Box mt={6}>
+          <DepthChart />
+        </Box>
+      )}
     </Box>
   );
 };

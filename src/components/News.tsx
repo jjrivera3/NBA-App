@@ -38,7 +38,7 @@
 //       <Text
 //         fontSize="2xl"
 //         fontWeight={500}
-//         color="white"
+//         color="#f8991d"
 //         paddingTop={5}
 //         paddingLeft={5}
 //       >
@@ -151,11 +151,11 @@ const News = () => {
       <Text
         fontSize="2xl"
         fontWeight={500}
-        color="white"
+        color="#f8991d"
         paddingTop={5}
         paddingLeft={5}
       >
-        Top Headlines
+        News
       </Text>
       <VStack align="stretch" spacing={0} borderRadius="md" p={3}>
         {newsArticles.map((article, index) => (

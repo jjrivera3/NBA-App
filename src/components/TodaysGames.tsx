@@ -1,4 +1,5 @@
-import { Box, Text, Flex } from "@chakra-ui/react";
+import { Box, Text, Flex, Button } from "@chakra-ui/react";
+import { CalendarIcon } from "@chakra-ui/icons";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
@@ -17,7 +18,7 @@ const TodaysGames = () => {
 
   const settings = {
     dots: false,
-    infinite: true, // Enable looping
+    infinite: true,
     speed: 500,
     slidesToShow,
     slidesToScroll: 1,
@@ -46,29 +47,42 @@ const TodaysGames = () => {
       overflow="hidden"
       border="1px solid #282828"
     >
-      {/* Display the heading and controls */}
       <Flex
-        justifyContent={{ base: "center", md: "space-between" }}
+        justifyContent="space-between"
         alignItems="center"
         mb={4}
+        direction={{ base: "column", md: "row" }}
       >
-        <Text
-          fontSize={{ base: "18px", md: "2xl" }}
-          fontWeight={500}
-          color="white"
-        >
-          Scoreboard
-        </Text>
-        {/* Slider Controls for Desktop */}
-        <Flex display={{ base: "none", md: "flex" }}>
-          <SliderControls
-            handlePrevious={handlePrevious}
-            handleNext={handleNext}
-          />
+        <Flex alignItems="center" mb={{ base: 2, md: 0 }}>
+          <Text
+            fontSize={{ base: "18px", md: "2xl" }}
+            fontWeight={500}
+            color="#f8991d"
+            mr={{ base: 0, md: 4 }}
+          >
+            Scoreboard
+          </Text>
+          {/* Only display SliderControls on md and larger screens */}
+          <Flex display={{ base: "none", md: "flex" }}>
+            <SliderControls
+              handlePrevious={handlePrevious}
+              handleNext={handleNext}
+            />
+          </Flex>
         </Flex>
+        <Button
+          rightIcon={<CalendarIcon />}
+          variant="ghost"
+          color="white"
+          _hover={{ background: "transparent", color: "#f8991d" }}
+          fontWeight={500}
+          fontSize={14}
+          mt={{ base: 2, md: 0 }}
+        >
+          View All Games
+        </Button>
       </Flex>
 
-      {/* Conditional Rendering for Game Content */}
       {isLoading ? (
         <Slider {...settings}>
           {Array(6)
@@ -91,7 +105,7 @@ const TodaysGames = () => {
         </Slider>
       )}
 
-      {/* Slider Controls for Mobile */}
+      {/* Mobile controls below the slider */}
       <Flex
         justifyContent="center"
         mt={4}
