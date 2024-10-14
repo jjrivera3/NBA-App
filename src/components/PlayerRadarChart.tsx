@@ -127,18 +127,19 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
         ],
         backgroundColor: rgba(firstColor, 0.3),
         borderColor: firstColor,
-        pointBackgroundColor: firstColor, // Background color for the points (dots)
-        pointBorderColor: "#ffffff", // Border color for the points
-        pointBorderWidth: 0, // Width of the border
-        pointRadius: 16, // Increase size of points to make space for numbers
+        pointBackgroundColor: firstColor,
+        pointBorderColor: "#ffffff",
+        pointBorderWidth: 0,
+        pointRadius: 16,
         pointHoverBorderColor: firstColor,
-        pointHoverRadius: 10, // Size of the points on hover
-        size: 24, // Optional: Adjust tick font size
+        pointHoverRadius: 10,
       },
     ],
   };
 
   const options = {
+    responsive: true,
+    maintainAspectRatio: false, // Allow dynamic adjustment based on container
     scales: {
       r: {
         angleLines: {
@@ -152,11 +153,12 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
           font: {
             size: window.innerWidth <= 768 ? 8 : 18, // Adjust label font size for mobile
           },
+          padding: window.innerWidth <= 768 ? 20 : 10, // Adds space around the point labels
         },
         ticks: {
-          display: false, // Hide the tick numbers
-          backdropColor: "transparent", // Removes the tick label background
-          stepSize: 20, // Optional: Define step size if needed
+          display: false,
+          backdropColor: "transparent",
+          stepSize: 20,
         },
         suggestedMin: 0,
         suggestedMax: 100, // Limit the max value to 100
@@ -164,52 +166,45 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
     },
     plugins: {
       legend: {
-        display: false, // Hide the legend
+        display: false,
       },
       tooltip: {
         enabled: true,
-        displayColors: false, // Disable the color box in the tooltip
+        displayColors: false,
         callbacks: {
           label: function (context: any) {
             return `${context.dataset.label}: ${context.parsed.r}`;
           },
         },
-        backgroundColor: "rgba(0, 0, 0, 0.7)", // Customize tooltip background
-        titleColor: "#ffffff", // Customize tooltip title color
-        bodyColor: "#ffffff", // Customize tooltip body color
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
+        titleColor: "#ffffff",
+        bodyColor: "#ffffff",
         titleFont: {
-          size: 14, // Increase the title font size
+          size: 14,
         },
         bodyFont: {
-          size: 14, // Increase the body text font size
+          size: 14,
         },
       },
       datalabels: {
-        color: "#ffffff", // Color of the label text (numbers inside circles)
-        backgroundColor: "#26262640", // Background color behind the number
-        borderRadius: 50, // Circular background for the numbers
-        padding: 5, // Space between the number and the circle
-        borderColor: firstColor, // firstColor border around the circle
-        borderWidth: 3, // Border width
-        align: "center" as const, // Align the label to the center of the point
-        anchor: "center" as const, // Position label inside the point
+        color: "#ffffff",
+        backgroundColor: "#26262640",
+        borderRadius: 50,
+        padding: 5,
+        borderColor: firstColor,
+        borderWidth: 3,
+        align: "center" as const,
+        anchor: "center" as const,
         font: {
-          size: 11,
-          weight: "bold" as const, // Ensure weight is properly typed
+          size: window.innerWidth <= 768 ? 8 : 11,
+          weight: "bold" as const,
         },
         formatter: (value: number) => {
-          return value.toFixed(0); // Formats value as an integer
+          return value.toFixed(0);
         },
       },
     },
-    responsive: true,
-    maintainAspectRatio: false,
   };
-
-  // Listen for window resize and update point label font size
-  window.addEventListener("resize", () => {
-    options.scales.r.pointLabels.font.size = window.innerWidth <= 768 ? 12 : 18;
-  });
 
   return (
     <Box
@@ -220,9 +215,9 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
       rounded={"md"}
       overflow={"hidden"}
       mt={0}
-      h={["600px", "700px"]} // Increased height for the chart container
+      h={["600px", "700px"]}
       display="flex"
-      flexDirection="column" // To stack the chart and the average value vertically
+      flexDirection="column"
       justifyContent="center"
       alignItems="center"
     >
@@ -232,7 +227,7 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
         display="flex"
         alignItems="center"
         textDecoration="none"
-        mb={4} // Margin bottom for spacing between heading and chart
+        mb={4}
       >
         <Image
           className="ml-0"
@@ -254,7 +249,7 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
       </Box>
 
       {/* Radar Chart */}
-      <div style={{ width: "100%", height: "100%" }}>
+      <div style={{ width: "100%", height: "100%", position: "relative" }}>
         <Radar data={data} options={options} />
       </div>
     </Box>

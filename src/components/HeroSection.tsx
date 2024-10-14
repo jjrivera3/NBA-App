@@ -73,7 +73,7 @@ function HeroSection() {
                 fontSize={["sm", "lg"]} // Adjust font size for mobile
                 maxW="1000px"
                 textShadow="2px 2px 8px rgba(0, 0, 0, 0.99)"
-                px={[2, 0]} // Add padding for better readability on mobile
+                px={[0, 0]} // Add padding for better readability on mobile
                 textAlign={textAlign}
               >
                 Your go-to source for the latest NBA player stats, 2K ratings,
