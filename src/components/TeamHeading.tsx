@@ -117,10 +117,6 @@ const TeamHeading = ({
                     mb={{ base: 2, md: 0 }}
                     borderRadius="4px" // Slightly rounded corners for a slim look
                     bg={isActive ? `${firstColor}` : "transparent"}
-                    _hover={{
-                      textDecoration: "underline",
-                      color: "white",
-                    }}
                     width={{ base: "100%", md: "auto" }}
                   >
                     {item.label}

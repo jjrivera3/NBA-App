@@ -45,7 +45,7 @@ const UpcomingGame: React.FC<UpcomingGameProps> = ({
         <Text
           fontSize={{ base: "md", md: "xl" }}
           fontWeight={600}
-          color="gray.300"
+          color="gray.100"
           mt={2}
         >
           Upcoming Game

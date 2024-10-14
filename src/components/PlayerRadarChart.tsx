@@ -196,7 +196,7 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
         align: "center" as const,
         anchor: "center" as const,
         font: {
-          size: window.innerWidth <= 768 ? 9 : 12,
+          size: window.innerWidth <= 768 ? 9 : 13,
           weight: "bold" as const,
         },
         formatter: (value: number) => {
@@ -222,12 +222,7 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
       alignItems="center"
       background="#2a2a2a"
     >
-      <Box
-        display="flex"
-        alignItems="center"
-        mt={{ base: 25, sm: 5 }}
-        mb={{ base: -10, sm: 10 }}
-      >
+      <Box display="flex" alignItems="center" mt={{ base: 25, sm: 5 }}>
         <Image
           src={twoKlogo}
           height="auto"

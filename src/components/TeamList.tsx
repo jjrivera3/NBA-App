@@ -5,7 +5,9 @@ import {
   Image,
   List,
   ListItem,
+  useBreakpointValue,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import useTeams from "../hooks/useTeams";
 
 interface NbaTeamListProps {
@@ -15,6 +17,12 @@ interface NbaTeamListProps {
 
 const TeamList = ({ onSelectTeam, selectedTeamId }: NbaTeamListProps) => {
   const teams = useTeams();
+
+  // Responsive value for hover background color, only apply hover on larger screens
+  const hoverBg = useBreakpointValue({ base: "transparent", md: "#1a1a1a" });
+
+  // State to track hover status for each item
+  const [hoveredTeamId, setHoveredTeamId] = useState<string | null>(null);
 
   const handleTeamClick = (teamId: string) => {
     const selectedTeam = teams.find((team) => team.teamId === teamId);
@@ -32,8 +40,8 @@ const TeamList = ({ onSelectTeam, selectedTeamId }: NbaTeamListProps) => {
 
   return (
     <>
-      <Heading fontSize="1xl" marginTop={5} marginBottom={3}>
-        NBA Teams
+      <Heading fontWeight={600} fontSize="1xl" marginTop={5} marginBottom={5}>
+        NBA Team Rosters
       </Heading>
       <List spacing={2}>
         {teams.map((team) => (
@@ -44,7 +52,12 @@ const TeamList = ({ onSelectTeam, selectedTeamId }: NbaTeamListProps) => {
             borderRadius="md"
             bg={team.teamId === selectedTeamId ? "#121212" : "transparent"} // Highlight if selected
             onClick={() => handleTeamClick(team.teamId)}
-            _hover={{ bg: "#1a1a1a" }} // Optional hover background
+            onMouseEnter={() => setHoveredTeamId(team.teamId)} // Track hover
+            onMouseLeave={() => setHoveredTeamId(null)} // Reset hover
+            _hover={{
+              bg: hoverBg,
+              cursor: "pointer",
+            }}
           >
             <HStack spacing={2}>
               <Image
@@ -57,8 +70,14 @@ const TeamList = ({ onSelectTeam, selectedTeamId }: NbaTeamListProps) => {
               <Button
                 fontSize="14px"
                 variant="link"
-                fontWeight={team.teamId === selectedTeamId ? "bold" : "normal"} // Conditionally make it bold
-                color={team.teamId === selectedTeamId ? "white" : "white"} // Optional text color change
+                fontWeight={
+                  team.teamId === selectedTeamId ||
+                  team.teamId === hoveredTeamId
+                    ? "bold"
+                    : "normal"
+                }
+                color={team.teamId === selectedTeamId ? "white" : "white"}
+                _hover={{ textDecoration: "none" }}
               >
                 {team.name}
               </Button>

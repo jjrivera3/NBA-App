@@ -25,6 +25,11 @@ import UpcomingGame from "./UpcomingGame";
 import TeamHeadingSkeleton from "./skeletons/TeamHeadSkeleton";
 import UpcomingGameSkeleton from "./skeletons/UpcomingGameSkeleton";
 
+// Function to format time with "am" or "pm"
+const formatTime = (time: string) => {
+  return time.replace(/p$/, "pm").replace(/a$/, "am");
+};
+
 const TeamSchedule = () => {
   const { teamAbv } = useParams<{ teamAbv: string }>();
   const lowercasedTeamAbv = teamAbv?.toLowerCase();
@@ -57,7 +62,7 @@ const TeamSchedule = () => {
   const { logoImage: opponentLogo, abbrev: opponentAbbrev } =
     opponentDetails || {};
   const nextGameDate = nextGame ? formatDate(nextGame.gameDate) : "";
-  const nextGameTime = nextGame?.gameTime || "";
+  const nextGameTime = nextGame ? formatTime(nextGame.gameTime) : "";
 
   return (
     <>
@@ -90,24 +95,12 @@ const TeamSchedule = () => {
               teamColor={teamColor || "#FFFFFF"}
               opponentColor={opponentDetails?.primaryColor || "#FFFFFF"}
             />
-            <Box
-              mt={7}
-              borderRadius="md"
-              w={"full"}
-              bg="#26262640"
-              boxShadow={"2xl"}
-              rounded={"md"}
-              overflow={"hidden"}
-              border="1px solid #000"
-              padding={5}
-              paddingX="25px"
-            >
+            <Box mt={20} p={0} w={"full"} textAlign="center">
               <Text
-                fontSize="xl"
-                fontWeight={500}
-                mb="2"
-                textAlign="center"
-                color="gray.300"
+                fontSize={{ base: "18px", md: "2xl" }}
+                fontWeight={600}
+                color="white"
+                mb={5}
               >
                 2024-2025 Season Schedule
               </Text>
@@ -125,9 +118,11 @@ const TeamSchedule = () => {
                         const opponentDetails = useTeamDetails(
                           opponentId ?? null
                         );
-                        const { logoImage: opponentLogo, name: opponentName } =
-                          opponentDetails || {};
-                        const gameTime = game.gameTime;
+                        const {
+                          logoImage: opponentLogo,
+                          abbrev: opponentAbbrev,
+                        } = opponentDetails || {};
+                        const gameTime = formatTime(game.gameTime);
                         const formattedDate = formatDate(game.gameDate);
 
                         return (
@@ -135,32 +130,36 @@ const TeamSchedule = () => {
                             key={game.gameID}
                             mb={4}
                             p={4}
-                            bg="#2A2A2A"
-                            borderRadius="md"
+                            bgGradient="linear(to-r, #2A2A2A, #1F1F1F)"
+                            borderRadius="lg"
+                            boxShadow="lg"
+                            transition="all 0.3s ease"
                             textAlign="center"
+                            border="1px solid #2b2b2b;"
                           >
                             <Text
-                              fontSize="lg"
-                              fontWeight={600}
+                              fontSize="sm"
+                              fontWeight={500}
+                              color="gray.400"
                               mb={2}
-                              color="white"
                             >
                               {formattedDate}
                             </Text>
-                            <Flex direction="column" align="center" mb={2}>
+                            <Flex align="center" justify="center" mb={2}>
                               <Text
-                                fontSize="lg"
-                                fontWeight={600}
-                                color="white"
+                                fontSize="md"
+                                fontWeight={500}
+                                color="gray.200"
+                                mr={1}
                               >
-                                {isHomeGame ? "vs" : "@"} {opponentName}
+                                {isHomeGame ? "vs" : "@"}
                               </Text>
                               {opponentLogo && (
                                 <Image
                                   src={opponentLogo}
-                                  alt={`${opponentName} logo`}
-                                  boxSize="35px"
-                                  my={2}
+                                  alt={`${opponentAbbrev} logo`}
+                                  boxSize="30px"
+                                  mr={2}
                                 />
                               )}
                               <Text
@@ -168,11 +167,20 @@ const TeamSchedule = () => {
                                 fontWeight={600}
                                 color="white"
                               >
-                                {gameTime}
+                                {opponentAbbrev}
                               </Text>
                             </Flex>
-                            <Text fontSize="lg" fontWeight={600} color="white">
-                              —
+                            <Box
+                              fontSize="md"
+                              fontWeight={600}
+                              color="gray.200"
+                              mb={1}
+                            >
+                              {gameTime}
+                            </Box>
+                            <Box h="1px" bg="gray.600" my={2} />
+                            <Text fontSize="xs" color="gray.400">
+                              {isHomeGame ? "Home" : "Away"}
                             </Text>
                           </Box>
                         );
@@ -205,7 +213,7 @@ const TeamSchedule = () => {
                             logoImage: opponentLogo,
                             name: opponentName,
                           } = opponentDetails || {};
-                          const gameTime = game.gameTime;
+                          const gameTime = formatTime(game.gameTime);
                           const formattedDate = formatDate(game.gameDate);
 
                           return (
@@ -233,7 +241,7 @@ const TeamSchedule = () => {
                                     fontSize="14px"
                                     color="white"
                                   >
-                                    {opponentName}
+                                    {isMobile ? opponentAbbrev : opponentName}
                                   </Text>
                                 </Flex>
                               </Td>

@@ -1,4 +1,12 @@
-import { Box, Flex, Progress, Text, Grid, Heading } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Progress,
+  Text,
+  Grid,
+  Heading,
+  Divider,
+} from "@chakra-ui/react";
 
 interface AttributeBarProps {
   label: string;
@@ -18,10 +26,10 @@ const AttributeBar: React.FC<AttributeBarProps> = ({ label, value, max }) => {
   return (
     <Box p={2} borderRadius="md" mb={3} boxShadow="sm">
       <Flex justify="space-between" align="center" mb={1}>
-        <Text fontWeight={500} fontSize="14px" color="gray.300">
+        <Text fontWeight={500} fontSize="14px" color="gray.200">
           {label}
         </Text>
-        <Text fontWeight="bold" fontSize="sm" color="gray.500">
+        <Text fontWeight="bold" fontSize="sm" color="gray.200">
           {value}
         </Text>
       </Flex>
@@ -48,9 +56,10 @@ interface CategoryBoxProps {
 
 const CategoryBox: React.FC<CategoryBoxProps> = ({ title, attributes }) => (
   <Box p={4} borderRadius="md" mb={4} background="#2a2a2a">
-    <Heading size="sm" color="gray.100" mb={3}>
+    <Heading size="sm" color="gray.100" mb={4} fontWeight={600}>
       {title}
     </Heading>
+    <Divider borderColor="#6c6c6c" mb={4} />
     {attributes.map((attr, idx) => (
       <AttributeBar key={idx} label={attr.label} value={attr.value} max={100} />
     ))}
