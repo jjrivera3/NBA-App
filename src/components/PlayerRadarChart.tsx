@@ -130,7 +130,7 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
         pointBackgroundColor: firstColor,
         pointBorderColor: "#ffffff",
         pointBorderWidth: 0,
-        pointRadius: 16,
+        pointRadius: window.innerWidth <= 768 ? 8 : 16,
         pointHoverBorderColor: firstColor,
         pointHoverRadius: 10,
       },
@@ -153,7 +153,7 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
           font: {
             size: window.innerWidth <= 768 ? 8 : 18, // Adjust label font size for mobile
           },
-          padding: window.innerWidth <= 768 ? 20 : 10, // Adds space around the point labels
+          padding: window.innerWidth <= 768 ? 16 : 10, // Adds space around the point labels
         },
         ticks: {
           display: false,
@@ -190,7 +190,7 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
         color: "#ffffff",
         backgroundColor: "#26262640",
         borderRadius: 50,
-        padding: 5,
+        padding: window.innerWidth <= 768 ? 2 : 5,
         borderColor: firstColor,
         borderWidth: 3,
         align: "center" as const,
@@ -215,7 +215,7 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
       rounded={"md"}
       overflow={"hidden"}
       mt={0}
-      h={["600px", "700px"]}
+      h={["75vh", "700px"]} // Full viewport height on mobile for better scaling
       display="flex"
       flexDirection="column"
       justifyContent="center"
@@ -233,14 +233,14 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
           className="ml-0"
           src={twoKlogo}
           height="auto"
-          width="130px"
+          width={{ base: "100px", md: "130px" }}
           alt="NBA 2K25 Missing Players"
           title="NBA 2K25 Missing Players"
         />
         <Text
           className="align-middle"
           ml={2}
-          fontSize="3xl"
+          fontSize={{ base: "xl", md: "3xl" }}
           color="white"
           fontWeight="bold"
         >
