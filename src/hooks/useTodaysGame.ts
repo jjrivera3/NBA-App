@@ -26,9 +26,11 @@ const useTodaysGame = (
       const data = await apiClient.getAll<GameData>({ params: queryParams });
       return data;
     },
-    refetchOnWindowFocus: false, // Disable refetch on tab focus
+    refetchOnWindowFocus: options.refetchOnWindowFocus,
     refetchInterval: options.refetchInterval,
-    staleTime: options.staleTime ?? 10 * 60 * 1000, // Adjust the staleTime as needed
+    staleTime: options.staleTime ?? 10 * 60 * 1000, // Adjust staleTime as needed
+    //@ts-ignore
+    keepPreviousData: true, // Keep the current data while fetching new data
   });
 };
 

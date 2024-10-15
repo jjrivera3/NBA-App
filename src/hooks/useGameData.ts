@@ -64,12 +64,14 @@ const useGameData = () => {
   );
 
   useEffect(() => {
+    //@ts-ignore
     if (todayData?.events) {
       const liveGameStatus = [
         "STATUS_IN_PROGRESS",
         "STATUS_HALFTIME",
         "STATUS_END_PERIOD",
       ];
+      //@ts-ignore
       const hasLiveGames = todayData.events.some((game) => {
         const statusType = game.status.type.name;
         return liveGameStatus.includes(statusType);
