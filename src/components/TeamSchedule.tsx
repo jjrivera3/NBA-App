@@ -25,9 +25,11 @@ import UpcomingGame from "./UpcomingGame";
 import TeamHeadingSkeleton from "./skeletons/TeamHeadSkeleton";
 import UpcomingGameSkeleton from "./skeletons/UpcomingGameSkeleton";
 
-// Function to format time with "am" or "pm"
-const formatTime = (time: string) => {
-  return time.replace(/p$/, "pm").replace(/a$/, "am");
+// Function to format the game time to local time zone
+const formatTime = (epoch: string | number) => {
+  const timeInSeconds = typeof epoch === "string" ? Number(epoch) : epoch;
+  const date = new Date(timeInSeconds * 1000); // Convert seconds to milliseconds
+  return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
 };
 
 const TeamSchedule = () => {
@@ -62,7 +64,7 @@ const TeamSchedule = () => {
   const { logoImage: opponentLogo, abbrev: opponentAbbrev } =
     opponentDetails || {};
   const nextGameDate = nextGame ? formatDate(nextGame.gameDate) : "";
-  const nextGameTime = nextGame ? formatTime(nextGame.gameTime) : "";
+  const nextGameTime = nextGame ? formatTime(nextGame.gameTime_epoch) : "";
 
   return (
     <>
@@ -122,7 +124,7 @@ const TeamSchedule = () => {
                           logoImage: opponentLogo,
                           abbrev: opponentAbbrev,
                         } = opponentDetails || {};
-                        const gameTime = formatTime(game.gameTime);
+                        const gameTime = formatTime(game.gameTime_epoch);
                         const formattedDate = formatDate(game.gameDate);
 
                         return (
@@ -213,7 +215,7 @@ const TeamSchedule = () => {
                             logoImage: opponentLogo,
                             name: opponentName,
                           } = opponentDetails || {};
-                          const gameTime = formatTime(game.gameTime);
+                          const gameTime = formatTime(game.gameTime_epoch);
                           const formattedDate = formatDate(game.gameDate);
 
                           return (
