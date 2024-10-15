@@ -1,5 +1,6 @@
 export default interface GameData {
   events: {
+    id: any;
     competitions?: {
       date: string;
       competitors: {

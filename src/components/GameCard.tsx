@@ -12,6 +12,7 @@ import { FaCaretRight, FaCaretLeft } from "react-icons/fa";
 
 interface GameProps {
   game: {
+    gameID: string; // Add this line to include the unique identifier
     awayTeamColor: string;
     homeTeamColor: string;
     awayLogo: string;

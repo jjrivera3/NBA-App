@@ -9,6 +9,7 @@ import GameSkeleton from "./skeletons/GameSkeleton";
 import SliderControls from "./SliderControls";
 import GameCard from "./GameCard";
 import "/src/TodaysGame.css";
+import { Link } from "react-router-dom";
 
 const TodaysGames = () => {
   const { games, isLoading, error, refetch } = useGameData();
@@ -76,6 +77,8 @@ const TodaysGames = () => {
           </Flex>
         </Flex>
         <Button
+          as={Link} // Add the Link component
+          to="/scoreboard" // Link to scoreboard route
           rightIcon={<CalendarIcon />}
           variant="ghost"
           color="#f8991d"

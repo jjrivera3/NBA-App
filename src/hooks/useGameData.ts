@@ -135,6 +135,7 @@ const useGameData = () => {
           : "";
 
       return {
+        gameID: game.id, // <-- Adding gameID here
         homeTeam: homeTeam?.abbreviation || "",
         awayTeam: awayTeam?.abbreviation || "",
         time: gameDate.toLocaleTimeString([], {
