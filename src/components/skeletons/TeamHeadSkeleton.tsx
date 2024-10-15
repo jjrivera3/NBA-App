@@ -7,7 +7,7 @@ const TeamHeadingSkeleton = () => {
       padding={5}
       paddingY="20px"
       paddingX="20px"
-      minHeight="136px"
+      minHeight="120px"
       background="linear-gradient(295deg, #555 0%, rgba(0, 0, 0, 0.3) 60%, rgb(12 12 12 / 80%) 100%)"
     >
       <Flex

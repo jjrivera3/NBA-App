@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import useTodaysGame from "./useTodaysGame";
 import GameData from "../entities/GameData";
-import useYesterdaysTodaysGame from "./useYesterdaysGame";
 import Team from "../entities/Team";
+import useYesterdaysTodaysGame from "./useYesterdaysGame";
 
 const useGameData = () => {
   const [refetchInterval, setRefetchInterval] = useState<number | false>(false);
@@ -38,13 +38,14 @@ const useGameData = () => {
     data: todayData,
     isLoading: todayLoading,
     error: todayError,
+    refetch: refetchTodayData,
   } = useTodaysGame(
     {
       ...todayDate,
       limit: "0",
     },
     {
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true, // Ensures fresh data on window focus
       refetchInterval,
       staleTime,
     }
@@ -73,12 +74,30 @@ const useGameData = () => {
         return liveGameStatus.includes(statusType);
       });
 
-      console.log("Resetinterval is:", refetchInterval);
-
-      setRefetchInterval(hasLiveGames ? 30000 : false); // 30 seconds or disable
-      setStaleTime(hasLiveGames ? 0 : 10 * 60 * 1000); // No staleTime for live games, staleTime for non-live
+      if (hasLiveGames) {
+        console.log("There are live games");
+        setRefetchInterval(30000); // 30 seconds for live games
+        setStaleTime(0); // No staleTime for live games
+      } else {
+        console.log("There are no live games");
+        setRefetchInterval(false); // Disable refetch for non-live games
+        setStaleTime(10 * 60 * 1000); // Set staleTime for non-live games
+      }
     }
   }, [todayData]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        refetchTodayData(); // Refetch the data when the page gains focus
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [refetchTodayData]);
 
   const games = [
     ...((todayData as GameData)?.events || []),
@@ -101,7 +120,10 @@ const useGameData = () => {
       const statusType = game.status.type.name;
       const shortDetail = game.status.type.shortDetail || "";
       const gameDate = competition ? new Date(competition.date) : new Date();
-      const gameDateFormatted = formatGameDate(gameDate);
+      const gameDateFormatted =
+        formatGameDate(gameDate) === formatGameDate(today)
+          ? "Today"
+          : formatGameDate(gameDate);
 
       const oddsDetails =
         statusType !== "STATUS_FINAL" &&
@@ -158,10 +180,11 @@ const useGameData = () => {
             : null,
         isToday: formatGameDate(gameDate) === formatGameDate(today),
         isYesterday: formatGameDate(gameDate) === formatGameDate(yesterday),
+        startTime: gameDate,
       };
     })
     .sort((a, b) => {
-      const statusOrder: { [key: string]: number } = {
+      const liveGameStatusOrder: Record<string, number> = {
         STATUS_IN_PROGRESS: 1,
         STATUS_END_PERIOD: 2,
         STATUS_HALFTIME: 3,
@@ -169,16 +192,16 @@ const useGameData = () => {
         STATUS_FINAL: 5,
       };
 
-      const aOrder = statusOrder[a.statusType as keyof typeof statusOrder] || 6;
-      const bOrder = statusOrder[b.statusType as keyof typeof statusOrder] || 6;
+      const aLiveOrder = liveGameStatusOrder[a.statusType] ?? 6;
+      const bLiveOrder = liveGameStatusOrder[b.statusType] ?? 6;
 
-      if (aOrder !== bOrder) return aOrder - bOrder;
-      if (a.statusType === "STATUS_FINAL" && b.statusType === "STATUS_FINAL") {
-        if (a.isToday && !b.isToday) return -1;
-        if (!a.isToday && b.isToday) return 1;
-      }
+      if (aLiveOrder !== bLiveOrder) return aLiveOrder - bLiveOrder;
 
-      return 0;
+      // Ensure today's final games come before yesterday's games
+      if (a.statusType === "STATUS_FINAL" && a.isToday && !b.isToday) return -1;
+      if (b.statusType === "STATUS_FINAL" && b.isToday && !a.isToday) return 1;
+
+      return a.startTime.getTime() - b.startTime.getTime();
     });
 
   return { games, isLoading: todayLoading, error: todayError || yestError };

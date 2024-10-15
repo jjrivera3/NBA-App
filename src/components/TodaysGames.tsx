@@ -73,7 +73,7 @@ const TodaysGames = () => {
         <Button
           rightIcon={<CalendarIcon />}
           variant="ghost"
-          color="white"
+          color="#f8991d"
           _hover={{ background: "transparent", color: "#f8991d" }}
           fontWeight={500}
           fontSize={14}

@@ -83,6 +83,7 @@ const TeamSchedule = () => {
               loss={selectedTeam.loss}
               firstColor={teamColor || defaultColor}
               teamAbv={teamAbv ?? ""}
+              isLoading={false}
             />
             <UpcomingGame
               isHomeTeam={isHomeTeam}
@@ -95,7 +96,7 @@ const TeamSchedule = () => {
               teamColor={teamColor || "#FFFFFF"}
               opponentColor={opponentDetails?.primaryColor || "#FFFFFF"}
             />
-            <Box mt={20} p={0} w={"full"} textAlign="center">
+            <Box mt={10} p={0} w={"full"} textAlign="center">
               <Text
                 fontSize={{ base: "18px", md: "2xl" }}
                 fontWeight={600}

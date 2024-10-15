@@ -1,70 +1,179 @@
-import { Box, Text, Flex, Divider } from "@chakra-ui/react";
+import { Box, Text, VStack, Flex } from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { lighten } from "polished";
+import nbaTeams from "../data/nbateams";
+import useDepthChart from "../hooks/useDepthChart";
+import TeamHeading from "./TeamHeading";
+import useTeamInfo from "../hooks/useTeamInfo";
+import useTeamColor from "../hooks/useTeamColor";
+import TeamHeadingSkeleton from "./skeletons/TeamHeadSkeleton";
+import DepthChartSkeleton from "./skeletons/DepthChartSkeleton";
+
+type Player = {
+  longName: string;
+  playerID: string;
+};
+
+// Mapping of position abbreviations to full names
+const positionNames = {
+  PG: "Point Guard",
+  SG: "Shooting Guard",
+  SF: "Small Forward",
+  PF: "Power Forward",
+  C: "Center",
+};
 
 const DepthChart = () => {
-  // Example hardcoded depth chart data
-  const depthChartData = {
-    PG: [
-      { name: "Stephen Curry", number: 30 },
-      { name: "Chris Paul", number: 3 },
-    ],
-    SG: [
-      { name: "Klay Thompson", number: 11 },
-      { name: "Gary Payton II", number: 8 },
-    ],
-    SF: [
-      { name: "Andrew Wiggins", number: 22 },
-      { name: "Moses Moody", number: 4 },
-    ],
-    PF: [
-      { name: "Draymond Green", number: 23 },
-      { name: "Jonathan Kuminga", number: 0 },
-    ],
-    C: [
-      { name: "Kevon Looney", number: 5 },
-      { name: "Dario Šarić", number: 20 },
-    ],
-  };
+  const { teamAbv } = useParams<{ teamAbv: string }>();
+
+  useEffect(() => {
+    if (teamAbv) {
+      console.log("Team Abbreviation:", teamAbv);
+    } else {
+      console.warn("teamAbv is undefined");
+    }
+  }, [teamAbv]);
+
+  if (!teamAbv) {
+    return <Text color="white">Invalid team or team not found.</Text>;
+  }
+
+  const lowercasedTeamAbv = teamAbv.toLowerCase();
+  const selectedAbv = nbaTeams.find(
+    (team) => team.info.abbrev.toLowerCase() === lowercasedTeamAbv
+  );
+
+  const teamId = selectedAbv ? selectedAbv.teamId : null;
+  const teamColor = useTeamColor(teamId);
+  const { data: depthChart, isLoading: isDepthChartLoading } = useDepthChart(
+    teamId || ""
+  );
+
+  const { data: teamInfo, isLoading: isTeamInfoLoading } = useTeamInfo(teamId, {
+    schedules: "true",
+  });
+
+  const foundTeam = nbaTeams.find((team) => team.teamId === teamId);
+  const lightValue = foundTeam?.light || 0.2;
+
+  // Calculate the lightened color for the position heading
+  const lightenedTeamColor = teamColor
+    ? lighten(lightValue, teamColor)
+    : "#cccccc";
+
+  console.log(teamColor);
+
+  // Find the selected team in the depth chart data
+  // @ts-ignore
+  const selectedTeam = depthChart?.body?.find((team) => team.teamID === teamId);
+  const teamDepthChart = selectedTeam?.depthChart;
+
+  const positions = ["PG", "SG", "SF", "PF", "C"];
+  const depths = ["Starter", "2nd", "3rd", "4th", "5th"];
+
+  // Safely accessing selectedTeamInfo and its properties
+  //@ts-ignore
+  const selectedTeamInfo = teamInfo?.body?.find(
+    (team: { teamID: string | null }) => team.teamID === teamId
+  );
+
+  // Combine loading states for both `teamInfo` and `depthChart`
+  const isLoading = isTeamInfoLoading || isDepthChartLoading;
+
+  if (isLoading) {
+    return (
+      <>
+        <Box mt={7}>
+          <TeamHeadingSkeleton />
+          <DepthChartSkeleton />
+        </Box>
+      </>
+    );
+  }
+
+  if (!teamDepthChart) {
+    return (
+      <Text color="white">No depth chart data available for this team.</Text>
+    );
+  }
 
   return (
-    <Box
-      background="#2a2a2a"
-      p={4}
-      borderRadius="md"
-      overflow="hidden"
-      border="1px solid #282828"
-      color="white"
-    >
-      <Text fontSize="2xl" fontWeight="bold" color="#f8991d" mb={4}>
-        Depth Chart
-      </Text>
-      <Divider mb={4} borderColor="#444" />
-      <Flex direction="column" gap={4}>
-        {Object.entries(depthChartData).map(([position, players]) => (
-          <Box key={position}>
-            <Text fontSize="lg" fontWeight="bold" color="#f8991d" mb={2}>
-              {position}
-            </Text>
-            <Flex
-              direction={{ base: "column", md: "row" }}
-              justifyContent="space-between"
-              alignItems="center"
-              bg="#1f1f1f"
-              p={3}
-              borderRadius="md"
-              mb={3}
+    <>
+      {selectedTeamInfo && (
+        <Box pt={7}>
+          <TeamHeading
+            teamCity={selectedTeamInfo.teamCity}
+            teamName={selectedTeamInfo.teamName}
+            conference={selectedTeamInfo.conference}
+            espnLogo1={selectedTeamInfo?.espnLogo1}
+            wins={selectedTeamInfo?.wins || 0}
+            loss={selectedTeamInfo?.loss}
+            firstColor={teamColor || "#000000"}
+            teamAbv={teamAbv}
+          />
+        </Box>
+      )}
+      <Box color="white" mt={7} borderRadius="12px" boxShadow="xl">
+        <Flex wrap="wrap" justifyContent="space-between" gap={6}>
+          {positions.map((position) => (
+            <VStack
+              key={position}
+              align="center"
+              bg="radial-gradient(circle, rgb(48 48 48) 0%, rgb(51 51 51) 70%, rgb(49 49 49) 120%)"
+              borderRadius="10px"
+              p={5}
+              width={{ base: "100%", md: "18%" }}
+              spacing={4}
+              boxShadow="md"
+              transition="all 0.2s"
             >
-              {players.map((player, index) => (
-                <Box key={index} textAlign="center" flexBasis="50%">
-                  <Text fontSize="md" fontWeight="bold">
-                    #{player.number} {player.name}
-                  </Text>
-                </Box>
-              ))}
-            </Flex>
-          </Box>
-        ))}
-      </Flex>
-    </Box>
+              <Text
+                fontSize="md"
+                fontWeight={600}
+                color={lightenedTeamColor}
+                textAlign="center"
+              >
+                {positionNames[position as keyof typeof positionNames]}
+              </Text>
+
+              {depths.map((depth, index) => {
+                const players = teamDepthChart[
+                  position as keyof typeof teamDepthChart
+                ] as Player[] | undefined;
+                const player = players ? players[index] : null;
+
+                return (
+                  <Box
+                    key={index}
+                    w="100%"
+                    bg={
+                      player
+                        ? "rgba(255, 255, 255, 0.08)"
+                        : "rgba(255, 255, 255, 0.05)"
+                    }
+                    p={3}
+                    borderRadius="8px"
+                    textAlign="center"
+                  >
+                    <Text fontSize="xs" fontWeight={600} color="#999999" mb={1}>
+                      {depth}
+                    </Text>
+                    <Text
+                      fontSize="15px"
+                      fontWeight={600}
+                      color={player ? "white" : "#555555"}
+                    >
+                      {player ? player.longName : "-"}
+                    </Text>
+                  </Box>
+                );
+              })}
+            </VStack>
+          ))}
+        </Flex>
+      </Box>
+    </>
   );
 };
 

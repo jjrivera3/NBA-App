@@ -17,16 +17,17 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: ":teamAbv/schedule",
+        path: ":teamAbv/schedule", // More specific paths should come first
         element: <TeamSchedule />,
       },
+
       {
-        path: ":teamAbv",
-        element: <HomePage />,
+        path: ":teamAbv/depth-chart",
+        element: <DepthChart />,
       },
       {
-        path: ":teamAbv/depth-chart", // New route for DepthChart
-        element: <DepthChart />, // Display the DepthChart component here
+        path: ":teamAbv", // Place the general route at the end
+        element: <HomePage />,
       },
       {
         path: ":teamName/:playerName",

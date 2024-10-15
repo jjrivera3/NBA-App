@@ -50,11 +50,11 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
       color="white"
       position="relative"
       overflow="hidden"
-      background="radial-gradient(circle, rgb(48 48 48) 0%, rgb(51 51 51) 70%, rgb(49 49 49) 120%)"
+      background="linear-gradient(145deg, #464646, #3a3a3a, #333333)"
       pt={3}
       pb={1}
       boxShadow="md"
-      border="1px solid #2b2b2b"
+      border="1px solid #3a3a3a"
     >
       <Flex
         height="6px"
@@ -215,6 +215,7 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
             borderRadius="md"
             boxShadow="md"
             border="1px solid #3a3a3a"
+            background="#2a2a2a"
           >
             <Flex justifyContent="center" alignItems="center">
               <Text fontSize="12px" fontWeight={500} color="#f8991d">
@@ -235,7 +236,8 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
             alignItems="center"
             justifyContent="center"
             borderRadius="md"
-            backgroundColor="#403f3f"
+            backgroundColor="#2a2a2a"
+            borderTopRadius="md"
             boxShadow="md"
             border="1px solid #3a3a3a"
           >
