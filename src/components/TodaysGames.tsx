@@ -4,14 +4,14 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import useGameData from "../hooks/useGameData";
-import "/src/TodaysGame.css";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import GameSkeleton from "./skeletons/GameSkeleton";
 import SliderControls from "./SliderControls";
 import GameCard from "./GameCard";
+import "/src/TodaysGame.css";
 
 const TodaysGames = () => {
-  const { games, isLoading, error } = useGameData();
+  const { games, isLoading, error, refetch } = useGameData();
   const sliderRef = useRef<any>(null);
 
   const slidesToShow = 5;
@@ -38,6 +38,11 @@ const TodaysGames = () => {
   const handleNext = () => {
     sliderRef.current?.slickNext();
   };
+
+  // Refetch data on component mount
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   return (
     <Box

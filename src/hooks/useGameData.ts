@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import useTodaysGame from "./useTodaysGame";
+import useYesterdaysTodaysGame from "./useYesterdaysGame";
 import GameData from "../entities/GameData";
 import Team from "../entities/Team";
-import useYesterdaysTodaysGame from "./useYesterdaysGame";
 
 const useGameData = () => {
   const [refetchInterval, setRefetchInterval] = useState<number | false>(false);
@@ -11,6 +11,7 @@ const useGameData = () => {
   ); // Default staleTime for non-live games
 
   const formatGameDate = (date: Date) => {
+    if (!date) return ""; // Ensure a string is always returned
     const options: Intl.DateTimeFormatOptions = {
       month: "short",
       day: "numeric",
@@ -38,13 +39,14 @@ const useGameData = () => {
     data: todayData,
     isLoading: todayLoading,
     error: todayError,
+    refetch, // Add refetch here
   } = useTodaysGame(
     {
       ...todayDate,
       limit: "0",
     },
     {
-      refetchOnWindowFocus: false, // Prevents refetching on tab focus∏
+      refetchOnWindowFocus: false,
       refetchInterval,
       staleTime,
     }
@@ -74,11 +76,9 @@ const useGameData = () => {
       });
 
       if (hasLiveGames) {
-        console.log("There are live games");
         setRefetchInterval(30000); // 30 seconds for live games
         setStaleTime(0); // No staleTime for live games
       } else {
-        console.log("There are no live games");
         setRefetchInterval(false); // Disable refetch for non-live games
         setStaleTime(10 * 60 * 1000); // Set staleTime for non-live games
       }
@@ -106,10 +106,12 @@ const useGameData = () => {
       const statusType = game.status.type.name;
       const shortDetail = game.status.type.shortDetail || "";
       const gameDate = competition ? new Date(competition.date) : new Date();
+
+      // Ensure gameDateFormatted is always a string
       const gameDateFormatted =
         formatGameDate(gameDate) === formatGameDate(today)
           ? "Today"
-          : formatGameDate(gameDate);
+          : formatGameDate(gameDate) || ""; // Default to an empty string if undefined
 
       const oddsDetails =
         statusType !== "STATUS_FINAL" &&
@@ -183,14 +185,18 @@ const useGameData = () => {
 
       if (aLiveOrder !== bLiveOrder) return aLiveOrder - bLiveOrder;
 
-      // Ensure today's final games come before yesterday's games
       if (a.statusType === "STATUS_FINAL" && a.isToday && !b.isToday) return -1;
       if (b.statusType === "STATUS_FINAL" && b.isToday && !a.isToday) return 1;
 
       return a.startTime.getTime() - b.startTime.getTime();
     });
 
-  return { games, isLoading: todayLoading, error: todayError || yestError };
+  return {
+    games,
+    isLoading: todayLoading,
+    error: todayError || yestError,
+    refetch,
+  };
 };
 
 export default useGameData;
