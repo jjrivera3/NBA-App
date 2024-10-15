@@ -38,14 +38,13 @@ const useGameData = () => {
     data: todayData,
     isLoading: todayLoading,
     error: todayError,
-    refetch: refetchTodayData,
   } = useTodaysGame(
     {
       ...todayDate,
       limit: "0",
     },
     {
-      refetchOnWindowFocus: true, // Ensures fresh data on window focus
+      refetchOnWindowFocus: false, // Prevents refetching on tab focus∏
       refetchInterval,
       staleTime,
     }
@@ -85,19 +84,6 @@ const useGameData = () => {
       }
     }
   }, [todayData]);
-
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        refetchTodayData(); // Refetch the data when the page gains focus
-      }
-    };
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, [refetchTodayData]);
 
   const games = [
     ...((todayData as GameData)?.events || []),
