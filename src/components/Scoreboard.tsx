@@ -30,6 +30,7 @@ interface GameEvent {
         logo: string;
       };
       score: string;
+      linescores?: { value: number }[];
     }[];
     status: {
       type: {
@@ -74,18 +75,11 @@ const Scoreboard: React.FC = () => {
 
   const handleDateChange = (date: Date | null) => {
     if (date) {
-      console.log(
-        `Month: ${
-          date.getMonth() + 1
-        }, Day: ${date.getDate()}, Year: ${date.getFullYear()}`
-      );
       setSelectedDate(date);
       setShowCalendar(false);
       refetch();
     }
   };
-
-  console.log(todayData);
 
   return (
     <VStack spacing={5} p={5} align="center" width="100%">
@@ -206,7 +200,6 @@ const Scoreboard: React.FC = () => {
                   borderRadius="md"
                   boxShadow="md"
                 >
-                  {/* Scoreboard Score Card */}
                   <Box width="60%" pr={4}>
                     <ScoreboardScoreCard
                       game={{
@@ -222,19 +215,18 @@ const Scoreboard: React.FC = () => {
                         statusType:
                           competition.status.type.name ?? "Unknown Status",
                         shortDetail: competition.status.type.shortDetail ?? "",
-                        gameDateFormatted: format(
-                          new Date(event.date),
-                          "MMM d, yyyy"
-                        ),
-                        time: format(new Date(event.date), "h:mm a"),
-                        odds: competition.odds ?? null,
+                        awayLinescores: awayTeam?.linescores?.map(
+                          (score) => score.value
+                        ) || [0, 0, 0, 0],
+                        homeLinescores: homeTeam?.linescores?.map(
+                          (score) => score.value
+                        ) || [0, 0, 0, 0],
                       }}
                     />
                   </Box>
 
                   <Divider orientation="vertical" borderColor="gray.500" />
 
-                  {/* Game Leaders */}
                   <Box width="40%" pl={4} color="white">
                     <Text fontWeight="bold" mb={1} textAlign="center">
                       Game Leaders
