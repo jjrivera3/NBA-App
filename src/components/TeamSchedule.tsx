@@ -83,7 +83,6 @@ const TeamSchedule = () => {
               loss={selectedTeam.loss}
               firstColor={teamColor || defaultColor}
               teamAbv={teamAbv ?? ""}
-              isLoading={false}
             />
             <UpcomingGame
               isHomeTeam={isHomeTeam}
