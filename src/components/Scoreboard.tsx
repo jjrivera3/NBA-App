@@ -8,6 +8,7 @@ import {
   Text,
   IconButton,
   Divider,
+  Image,
 } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -82,16 +83,16 @@ const Scoreboard: React.FC = () => {
   };
 
   return (
-    <VStack spacing={5} p={5} align="center" width="100%">
+    <VStack spacing={6} p={6} align="center" width="100%" bg="#2a2a2a">
       <Heading as="h1" size="lg" color="white">
         NBA Scoreboard
       </Heading>
 
-      <Flex alignItems="center" justifyContent="center" width="100%">
+      <Flex alignItems="center" justifyContent="center" width="100%" mb={4}>
         <Button
           onClick={() => setSelectedDate(subDays(selectedDate, 1))}
           variant="ghost"
-          size="lg"
+          color="gray.300"
         >
           <FaChevronLeft size={20} />
         </Button>
@@ -101,16 +102,14 @@ const Scoreboard: React.FC = () => {
           alignItems="center"
           width="100%"
           maxW="746px"
-          overflow="hidden"
         >
           {Array.from({ length: 7 }, (_, index) => (
             <Box
               key={index}
               textAlign="center"
-              px={2}
-              py={1}
+              px={3}
+              py={2}
               cursor="pointer"
-              onClick={() => handleDateChange(addDays(selectedDate, index - 3))}
               borderRadius="md"
               bg={
                 selectedDate.toDateString() ===
@@ -124,7 +123,7 @@ const Scoreboard: React.FC = () => {
                   ? "black"
                   : "gray.300"
               }
-              _hover={{ bg: "#f8991d", color: "black" }}
+              onClick={() => handleDateChange(addDays(selectedDate, index - 3))}
             >
               <Text fontSize="sm">
                 {format(addDays(selectedDate, index - 3), "EEE")}
@@ -139,7 +138,7 @@ const Scoreboard: React.FC = () => {
         <Button
           onClick={() => setSelectedDate(addDays(selectedDate, 1))}
           variant="ghost"
-          size="lg"
+          color="gray.300"
         >
           <FaChevronRight size={20} />
         </Button>
@@ -172,7 +171,7 @@ const Scoreboard: React.FC = () => {
         </Box>
       )}
 
-      <Box width="100%" mt={4} p={4} bg="gray.800" borderRadius="md">
+      <Box width="100%" mt={4} borderRadius="md">
         <Heading as="h2" size="md" mb={4} color="white">
           Games on {format(selectedDate, "MMMM d, yyyy")}
         </Heading>
@@ -195,12 +194,13 @@ const Scoreboard: React.FC = () => {
                   mb={5}
                   width="100%"
                   mx="auto"
-                  p={4}
-                  bg="gray.700"
+                  p={5}
                   borderRadius="md"
                   boxShadow="md"
+                  alignItems="center"
+                  background="linear-gradient(145deg, #464646, #3a3a3a, #333333)"
                 >
-                  <Box width="60%" pr={4}>
+                  <Box width="70%" pr={4}>
                     <ScoreboardScoreCard
                       game={{
                         gameID: competition.id,
@@ -227,23 +227,62 @@ const Scoreboard: React.FC = () => {
 
                   <Divider orientation="vertical" borderColor="gray.500" />
 
+                  {/* Top Performers Section */}
                   <Box width="40%" pl={4} color="white">
                     <Text fontWeight="bold" mb={1} textAlign="center">
-                      Game Leaders
+                      Top Performers
                     </Text>
-                    <VStack spacing={3} align="center">
-                      <Box>
-                        <Text fontWeight="bold">Player 1</Text>
-                        <Text>Points: 25</Text>
-                        <Text>Rebounds: 10</Text>
-                        <Text>Assists: 5</Text>
-                      </Box>
-                      <Box>
-                        <Text fontWeight="bold">Player 2</Text>
-                        <Text>Points: 30</Text>
-                        <Text>Rebounds: 8</Text>
-                        <Text>Assists: 7</Text>
-                      </Box>
+                    <VStack spacing={4} align="center">
+                      <Flex align="center">
+                        <Image
+                          src="https://a.espncdn.com/i/headshots/nba/players/full/4065648.png"
+                          alt="J. Tatum"
+                          boxSize="40px"
+                          borderRadius="full"
+                          mr={3}
+                        />
+                        <Box textAlign="left">
+                          <Text fontSize="md" fontWeight="600">
+                            J. Tatum
+                            <Text
+                              as="span"
+                              fontSize="sm"
+                              color="gray.400"
+                              ml={2}
+                            >
+                              SF - BOS
+                            </Text>
+                          </Text>
+                          <Text fontSize="sm" color="gray.400">
+                            10 PTS
+                          </Text>
+                        </Box>
+                      </Flex>
+                      <Flex align="center">
+                        <Image
+                          src="https://a.espncdn.com/i/headshots/nba/players/full/4433134.png"
+                          alt="S. Barnes"
+                          boxSize="40px"
+                          borderRadius="full"
+                          mr={3}
+                        />
+                        <Box textAlign="left">
+                          <Text fontSize="md" fontWeight="600">
+                            S. Barnes
+                            <Text
+                              as="span"
+                              fontSize="sm"
+                              color="gray.400"
+                              ml={2}
+                            >
+                              SF - TOR
+                            </Text>
+                          </Text>
+                          <Text fontSize="sm" color="gray.400">
+                            17 PTS, 6 REB
+                          </Text>
+                        </Box>
+                      </Flex>
                     </VStack>
                   </Box>
                 </Flex>
