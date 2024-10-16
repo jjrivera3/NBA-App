@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Flex, Image, Text, Grid } from "@chakra-ui/react";
+import { FaCaretLeft } from "react-icons/fa";
 
 interface ScoreboardScoreCardProps {
   game: {
@@ -16,13 +17,14 @@ interface ScoreboardScoreCardProps {
     homeLinescores: number[];
     statusType: string;
     shortDetail: string;
+    awayRecord?: string;
+    homeRecord?: string;
   };
 }
 
 const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
   const { awayLinescores = [0, 0, 0, 0], homeLinescores = [0, 0, 0, 0] } = game;
 
-  // Ensure each team has 4 quarters' scores, defaulting to "-" if missing or zero
   const filledAwayScores = awayLinescores
     .map((score) => (score === 0 ? "-" : score))
     .concat(["-", "-", "-", "-"])
@@ -32,11 +34,15 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
     .concat(["-", "-", "-", "-"])
     .slice(0, 4);
 
-  // Get the team name without the city
   const getTeamOnlyName = (teamName: string) =>
     teamName.split(" ").slice(-1)[0];
-
   const isScheduled = game.statusType === "STATUS_SCHEDULED";
+  const isAwayWinner = parseInt(game.awayScore) > parseInt(game.homeScore);
+  const isHomeWinner = parseInt(game.homeScore) > parseInt(game.awayScore);
+
+  // Logging to check if records are being received
+  console.log("Away Record:", game.awayRecord || "N/A");
+  console.log("Home Record:", game.homeRecord || "N/A");
 
   return (
     <Box
@@ -45,6 +51,8 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
       color="white"
       position="relative"
       overflow="hidden"
+      boxShadow="md"
+      background="linear-gradient(135deg, #464646, #333333)"
     >
       <Flex
         height="6px"
@@ -70,7 +78,6 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
         <Box flex="1" backgroundColor={game.homeTeamColor}></Box>
       </Flex>
 
-      {/* Header Row */}
       <Flex justifyContent="space-between" alignItems="center" mb={3}>
         <Text width="120px" fontWeight="medium" color="gray.400">
           {game.shortDetail}
@@ -87,7 +94,7 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
             <Text>2</Text>
             <Text>3</Text>
             <Text>4</Text>
-            <Text>T</Text>
+            <Text fontWeight="bold">T</Text>
           </Grid>
         )}
       </Flex>
@@ -101,9 +108,20 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
             boxSize="35px"
             mr={3}
           />
-          <Text fontWeight="medium" color={game.awayTeamColor} fontSize="lg">
-            {getTeamOnlyName(game.awayTeam)}
-          </Text>
+          <Box>
+            <Text fontWeight="medium" color={game.awayTeamColor} fontSize="lg">
+              {getTeamOnlyName(game.awayTeam)}
+            </Text>
+            {game.awayRecord ? (
+              <Text fontSize="sm" color="gray.400">
+                {game.awayRecord}
+              </Text>
+            ) : (
+              <Text fontSize="sm" color="gray.500">
+                Record N/A
+              </Text>
+            )}
+          </Box>
         </Flex>
         {!isScheduled && (
           <Grid templateColumns="repeat(5, 50px)" gap={0} textAlign="center">
@@ -112,9 +130,26 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
                 {score}
               </Text>
             ))}
-            <Text fontSize="lg" fontWeight="medium">
-              {game.awayScore === "0" ? "-" : game.awayScore}
-            </Text>
+            <Box position="relative">
+              <Text
+                fontSize="lg"
+                fontWeight="bold"
+                color={isAwayWinner ? "white" : "gray.500"}
+              >
+                {game.awayScore === "0" ? "-" : game.awayScore}
+              </Text>
+              {isAwayWinner && (
+                <Box
+                  as={FaCaretLeft}
+                  color={game.awayTeamColor}
+                  position="absolute"
+                  left="40px"
+                  top="50%"
+                  transform="translateY(-50%)"
+                  fontSize="20px"
+                />
+              )}
+            </Box>
           </Grid>
         )}
       </Flex>
@@ -128,9 +163,20 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
             boxSize="35px"
             mr={3}
           />
-          <Text fontWeight="medium" color={game.homeTeamColor} fontSize="lg">
-            {getTeamOnlyName(game.homeTeam)}
-          </Text>
+          <Box>
+            <Text fontWeight="medium" color={game.homeTeamColor} fontSize="lg">
+              {getTeamOnlyName(game.homeTeam)}
+            </Text>
+            {game.homeRecord ? (
+              <Text fontSize="sm" color="gray.400">
+                {game.homeRecord}
+              </Text>
+            ) : (
+              <Text fontSize="sm" color="gray.500">
+                Record N/A
+              </Text>
+            )}
+          </Box>
         </Flex>
         {!isScheduled && (
           <Grid templateColumns="repeat(5, 50px)" gap={0} textAlign="center">
@@ -139,9 +185,26 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
                 {score}
               </Text>
             ))}
-            <Text fontSize="lg" fontWeight="medium">
-              {game.homeScore === "0" ? "-" : game.homeScore}
-            </Text>
+            <Box position="relative">
+              <Text
+                fontSize="lg"
+                fontWeight="bold"
+                color={isHomeWinner ? "white" : "gray.500"}
+              >
+                {game.homeScore === "0" ? "-" : game.homeScore}
+              </Text>
+              {isHomeWinner && (
+                <Box
+                  as={FaCaretLeft}
+                  color={game.homeTeamColor}
+                  position="absolute"
+                  left="40px"
+                  top="50%"
+                  transform="translateY(-50%)"
+                  fontSize="20px"
+                />
+              )}
+            </Box>
           </Grid>
         )}
       </Flex>

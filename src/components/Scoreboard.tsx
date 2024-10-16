@@ -1,21 +1,19 @@
-import React, { useState, useRef } from "react";
 import {
   Box,
   Button,
   Flex,
   Heading,
-  VStack,
-  Text,
   IconButton,
-  Divider,
   Image,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
+import { addDays, format, subDays } from "date-fns";
+import React, { useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { format, addDays, subDays } from "date-fns";
-import { FaChevronLeft, FaChevronRight, FaCalendarAlt } from "react-icons/fa";
+import { FaCalendarAlt, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import useTodaysGame from "../hooks/useTodaysGame";
-import "/src/CustomDatePicker.css";
 import ScoreboardScoreCard from "./ScoreboardScoreCard";
 
 interface GameEvent {
@@ -29,9 +27,34 @@ interface GameEvent {
         displayName: string;
         color: string;
         logo: string;
+        abbreviation: string;
+        // Adding records to team
+        records?: {
+          name: string;
+          abbreviation: string;
+          type: string;
+          summary: string;
+        }[];
       };
       score: string;
       linescores?: { value: number }[];
+      leaders?: {
+        name: string;
+        displayName: string;
+        shortDisplayName: string;
+        abbreviation: string;
+        leaders: {
+          displayValue: string;
+          value: number;
+          athlete: {
+            headshot: string;
+            shortName: string;
+            position: {
+              abbreviation: string;
+            };
+          };
+        }[];
+      }[];
     }[];
     status: {
       type: {
@@ -39,10 +62,6 @@ interface GameEvent {
         shortDetail: string;
       };
     };
-    odds?: {
-      details: string;
-      overUnder: string;
-    } | null;
   }[];
 }
 
@@ -60,19 +79,15 @@ const Scoreboard: React.FC = () => {
   const day = selectedDate.getDate().toString().padStart(2, "0");
 
   const todayDate = { year, month, day, limit: "0" };
-
-  const {
-    data,
-    isLoading: todayLoading,
-    error: todayError,
-    refetch,
-  } = useTodaysGame(todayDate, {
+  const { data, isLoading, error, refetch } = useTodaysGame(todayDate, {
     refetchOnWindowFocus: false,
     refetchInterval: false,
     staleTime: 10 * 60 * 1000,
   });
 
   const todayData = data as GameData;
+
+  console.log(todayData);
 
   const handleDateChange = (date: Date | null) => {
     if (date) {
@@ -173,10 +188,10 @@ const Scoreboard: React.FC = () => {
 
       <Box width="100%" mt={4} borderRadius="md">
         <Heading as="h2" size="md" mb={4} color="white">
-          Games on {format(selectedDate, "MMMM d, yyyy")}
+          {format(selectedDate, "MMMM d, yyyy")}
         </Heading>
-        {todayLoading && <Text color="white">Loading...</Text>}
-        {todayError && <Text color="red.300">Error loading data</Text>}
+        {isLoading && <Text color="white">Loading...</Text>}
+        {error && <Text color="red.300">Error loading data</Text>}
 
         {todayData?.events && todayData.events.length > 0
           ? todayData.events.map((event) => {
@@ -194,13 +209,13 @@ const Scoreboard: React.FC = () => {
                   mb={5}
                   width="100%"
                   mx="auto"
-                  p={5}
                   borderRadius="md"
                   boxShadow="md"
                   alignItems="center"
                   background="linear-gradient(145deg, #464646, #3a3a3a, #333333)"
                 >
-                  <Box width="70%" pr={4}>
+                  {/* ScoreboardScoreCard on the left */}
+                  <Box flex="1">
                     <ScoreboardScoreCard
                       game={{
                         gameID: competition.id,
@@ -221,75 +236,104 @@ const Scoreboard: React.FC = () => {
                         homeLinescores: homeTeam?.linescores?.map(
                           (score) => score.value
                         ) || [0, 0, 0, 0],
+                        awayRecord: awayTeam?.records?.find(
+                          (record) => record.type === "total"
+                        )?.summary,
+                        homeRecord: homeTeam?.records?.find(
+                          (record) => record.type === "total"
+                        )?.summary,
                       }}
                     />
                   </Box>
 
-                  <Divider orientation="vertical" borderColor="gray.500" />
-
-                  {/* Top Performers Section */}
-                  <Box width="40%" pl={4} color="white">
-                    <Text fontWeight="bold" mb={1} textAlign="center">
+                  {/* Top Performers Section on the right */}
+                  <Box flex="1" textAlign="left" ml={8} color="white">
+                    <Text fontWeight="bold" mb={2}>
                       Top Performers
                     </Text>
-                    <VStack spacing={4} align="center">
-                      <Flex align="center">
-                        <Image
-                          src="https://a.espncdn.com/i/headshots/nba/players/full/4065648.png"
-                          alt="J. Tatum"
-                          boxSize="40px"
-                          borderRadius="full"
-                          mr={3}
-                        />
-                        <Box textAlign="left">
-                          <Text fontSize="md" fontWeight="600">
-                            J. Tatum
-                            <Text
-                              as="span"
-                              fontSize="sm"
-                              color="gray.400"
-                              ml={2}
-                            >
-                              SF - BOS
+                    <VStack align="flex-start" spacing={4}>
+                      {/* Away Team Top Performer */}
+                      {awayTeam?.leaders && awayTeam.leaders[0] && (
+                        <Flex alignItems="center">
+                          <Image
+                            src={
+                              awayTeam.leaders[0].leaders[0].athlete.headshot
+                            }
+                            alt={
+                              awayTeam.leaders[0].leaders[0].athlete.shortName
+                            }
+                            boxSize="40px"
+                            borderRadius="full"
+                            objectFit="cover"
+                            mr={3}
+                          />
+                          <Box>
+                            <Text fontSize="md" fontWeight="600">
+                              {awayTeam.leaders[0].leaders[0].athlete.shortName}
+                              <Text
+                                as="span"
+                                fontSize="sm"
+                                color="gray.400"
+                                ml={2}
+                              >
+                                {
+                                  awayTeam.leaders[0].leaders[0].athlete
+                                    .position.abbreviation
+                                }{" "}
+                                - {awayTeam.team.abbreviation}
+                              </Text>
                             </Text>
-                          </Text>
-                          <Text fontSize="sm" color="gray.400">
-                            10 PTS
-                          </Text>
-                        </Box>
-                      </Flex>
-                      <Flex align="center">
-                        <Image
-                          src="https://a.espncdn.com/i/headshots/nba/players/full/4433134.png"
-                          alt="S. Barnes"
-                          boxSize="40px"
-                          borderRadius="full"
-                          mr={3}
-                        />
-                        <Box textAlign="left">
-                          <Text fontSize="md" fontWeight="600">
-                            S. Barnes
-                            <Text
-                              as="span"
-                              fontSize="sm"
-                              color="gray.400"
-                              ml={2}
-                            >
-                              SF - TOR
+                            <Text fontSize="sm" color="gray.400">
+                              {awayTeam.leaders[0].leaders[0].displayValue} PTS
                             </Text>
-                          </Text>
-                          <Text fontSize="sm" color="gray.400">
-                            17 PTS, 6 REB
-                          </Text>
-                        </Box>
-                      </Flex>
+                          </Box>
+                        </Flex>
+                      )}
+
+                      {/* Home Team Top Performer */}
+                      {homeTeam?.leaders && homeTeam.leaders[0] && (
+                        <Flex alignItems="center">
+                          <Image
+                            src={
+                              homeTeam.leaders[0].leaders[0].athlete.headshot
+                            }
+                            alt={
+                              homeTeam.leaders[0].leaders[0].athlete.shortName
+                            }
+                            boxSize="40px"
+                            borderRadius="full"
+                            objectFit="cover"
+                            mr={3}
+                          />
+                          <Box>
+                            <Text fontSize="md" fontWeight="600">
+                              {homeTeam.leaders[0].leaders[0].athlete.shortName}
+                              <Text
+                                as="span"
+                                fontSize="sm"
+                                color="gray.400"
+                                ml={2}
+                              >
+                                {
+                                  homeTeam.leaders[0].leaders[0].athlete
+                                    .position.abbreviation
+                                }{" "}
+                                - {homeTeam.team.abbreviation}
+                              </Text>
+                            </Text>
+                            <Text fontSize="sm" color="gray.400">
+                              {homeTeam.leaders[0].leaders[0].displayValue} PTS
+                            </Text>
+                          </Box>
+                        </Flex>
+                      )}
                     </VStack>
                   </Box>
                 </Flex>
               );
             })
-          : !todayLoading &&
-            !todayError && (
+          : !isLoading &&
+            !error && (
               <Text color="white" fontSize="lg" textAlign="center">
                 No Games
               </Text>
