@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Flex, Image, Text, Grid } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, Grid, keyframes } from "@chakra-ui/react";
 import { FaCaretLeft } from "react-icons/fa";
 
 interface ScoreboardScoreCardProps {
@@ -22,6 +22,12 @@ interface ScoreboardScoreCardProps {
   };
 }
 
+// Define keyframes for the animated green line
+const lineAnimation = keyframes`
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+`;
+
 const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
   const { awayLinescores = [0, 0, 0, 0], homeLinescores = [0, 0, 0, 0] } = game;
 
@@ -39,10 +45,6 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
   const isScheduled = game.statusType === "STATUS_SCHEDULED";
   const isAwayWinner = parseInt(game.awayScore) > parseInt(game.homeScore);
   const isHomeWinner = parseInt(game.homeScore) > parseInt(game.awayScore);
-
-  // Logging to check if records are being received
-  console.log("Away Record:", game.awayRecord || "N/A");
-  console.log("Home Record:", game.homeRecord || "N/A");
 
   return (
     <Box
@@ -79,9 +81,35 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
       </Flex>
 
       <Flex justifyContent="space-between" alignItems="center" mb={3}>
-        <Text width="120px" fontWeight="medium" color="gray.400">
-          {game.shortDetail}
-        </Text>
+        {/* Updated Short Detail */}
+        {game.statusType === "STATUS_IN_PROGRESS" ||
+        game.statusType === "STATUS_HALFTIME" ||
+        game.statusType === "STATUS_END_PERIOD" ? (
+          <Box maxW="120px">
+            <Text fontSize="14px" color="#20da77" fontWeight={500}>
+              {game.shortDetail}
+            </Text>
+            <Box
+              width="100%"
+              height="2px"
+              overflow="hidden"
+              position="relative"
+            >
+              <Box
+                width="150%"
+                height="2px"
+                backgroundColor="#20da77"
+                position="absolute"
+                animation={`${lineAnimation} 1.7s infinite alternate cubic-bezier(0.21, 0.85, 0.34, 0.98)`}
+              />
+            </Box>
+          </Box>
+        ) : (
+          <Text width="120px" fontWeight="medium" color="gray.400">
+            {game.shortDetail}
+          </Text>
+        )}
+
         {!isScheduled && (
           <Grid
             templateColumns="repeat(5, 50px)"
@@ -124,9 +152,14 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
           </Box>
         </Flex>
         {!isScheduled && (
-          <Grid templateColumns="repeat(5, 50px)" gap={0} textAlign="center">
+          <Grid
+            templateColumns="repeat(5, 50px)"
+            gap={0}
+            textAlign="center"
+            alignItems="center"
+          >
             {filledAwayScores.map((score, index) => (
-              <Text key={index} fontSize="lg">
+              <Text key={index} fontSize="md">
                 {score}
               </Text>
             ))}
@@ -179,9 +212,14 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
           </Box>
         </Flex>
         {!isScheduled && (
-          <Grid templateColumns="repeat(5, 50px)" gap={0} textAlign="center">
+          <Grid
+            templateColumns="repeat(5, 50px)"
+            gap={0}
+            textAlign="center"
+            alignItems="center"
+          >
             {filledHomeScores.map((score, index) => (
-              <Text key={index} fontSize="lg">
+              <Text key={index} fontSize="md">
                 {score}
               </Text>
             ))}
