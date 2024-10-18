@@ -44,7 +44,7 @@ const GameEvents: React.FC<GameEventsProps> = ({
   });
 
   return (
-    <Box width="100%" mt={4} borderRadius="md">
+    <Box width="100%" borderRadius="md">
       {sortedEvents.length > 0 ? (
         sortedEvents.map((event) => {
           const competition = event.competitions[0];
@@ -153,7 +153,7 @@ const GameEvents: React.FC<GameEventsProps> = ({
           );
         })
       ) : (
-        <Text color="white" fontSize="lg" textAlign="center">
+        <Text height="500px" color="white" fontSize="lg" textAlign="center">
           No Games
         </Text>
       )}

@@ -72,13 +72,15 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
   return (
     <Box
       pt="20px"
-      borderRadius="md"
+      borderTopLeftRadius="md" // Apply border radius to top-left corner
+      borderBottomLeftRadius="md" // Apply border radius to bottom-left corner
       color="white"
       position="relative"
       overflow="hidden"
       px={5}
-      paddingBottom="30px"
-      background="linear-gradient(135deg, #464646, #333333)"
+      paddingBottom="35px"
+      background="linear-gradient(135deg, #464646, #3a3a3a, #333333)"
+      borderRight="1px solid #545454" // Keep the right border solid
     >
       {/* Final/Game Time in Top Left Corner */}
       <Flex justifyContent="space-between" alignItems="center" mb="15px">
@@ -156,7 +158,11 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
               </Text>
             ))}
             <Box position="relative">
-              <Text fontSize="lg" fontWeight="bold" color="white">
+              <Text
+                fontSize="lg"
+                fontWeight={isAwayWinner ? "bold" : "300"} // Change font weight here
+                color="white"
+              >
                 {game.awayScore === "0" ? "-" : game.awayScore}
               </Text>
               {isAwayWinner && (
@@ -206,7 +212,11 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
               </Text>
             ))}
             <Box position="relative">
-              <Text fontSize="lg" fontWeight="bold" color="white">
+              <Text
+                fontSize="lg"
+                fontWeight={isHomeWinner ? "bold" : "300"} // Change font weight here
+                color="white"
+              >
                 {game.homeScore === "0" ? "-" : game.homeScore}
               </Text>
               {isHomeWinner && (

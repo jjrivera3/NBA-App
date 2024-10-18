@@ -27,14 +27,7 @@ const ScheduledGameDetails: React.FC<ScheduledGameDetailsProps> = ({
   tickets,
 }) => {
   return (
-    <Box
-      p={4}
-      borderRadius="md"
-      boxShadow="md"
-      background="linear-gradient(135deg, #333333, #1f1f1f)"
-      color="white"
-      width="250px"
-    >
+    <Box p={4} borderRadius="md" color="white" width="250px">
       <VStack spacing={3} align="left">
         {/* Venue Details */}
         <Box>

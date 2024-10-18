@@ -57,7 +57,6 @@ const Scoreboard: React.FC = () => {
       <DateNavigation
         selectedDate={selectedDate}
         handleDateChange={handleDateChange}
-        toggleCalendar={() => setShowCalendar(!showCalendar)}
       />
 
       {showCalendar && (
@@ -74,7 +73,7 @@ const Scoreboard: React.FC = () => {
         </Box>
       )}
 
-      <Heading as="h2" size="md" mb={4} color="white">
+      <Heading as="h2" size="md" color="white">
         {format(selectedDate, "MMMM d, yyyy")}
       </Heading>
 

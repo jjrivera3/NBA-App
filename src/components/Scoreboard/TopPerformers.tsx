@@ -16,7 +16,15 @@ const TopPerformers: React.FC<{
   const homeRatingLeader = getRatingLeader(homeTeam);
 
   return (
-    <Box flex="1" textAlign="left" color="white" borderRadius={0} py={5} pl={5}>
+    <Box
+      flex="1"
+      textAlign="left"
+      color="white"
+      borderRadius={0}
+      py={6}
+      pl={5}
+      background="linear-gradient(145deg, #464646, #3a3a3a, #333333)"
+    >
       <Text fontWeight={500} mb={2}>
         Top Performers
       </Text>
