@@ -32,10 +32,21 @@ const GameEvents: React.FC<GameEventsProps> = ({
     return <Text color="red.300">Error loading data</Text>;
   }
 
+  // Sort events by game status
+  const sortedEvents = events.sort((a, b) => {
+    const statusA = a.competitions[0].status.type.name;
+    const statusB = b.competitions[0].status.type.name;
+
+    // Move STATUS_FINAL to the bottom
+    if (statusA === "STATUS_FINAL" && statusB !== "STATUS_FINAL") return 1;
+    if (statusB === "STATUS_FINAL" && statusA !== "STATUS_FINAL") return -1;
+    return 0; // Keep the order for other statuses
+  });
+
   return (
     <Box width="100%" mt={4} borderRadius="md">
-      {events.length > 0 ? (
-        events.map((event) => {
+      {sortedEvents.length > 0 ? (
+        sortedEvents.map((event) => {
           const competition = event.competitions[0];
           const homeTeam = competition.competitors.find(
             (team) => team.homeAway === "home"
@@ -48,7 +59,6 @@ const GameEvents: React.FC<GameEventsProps> = ({
 
           // Ensure we extract the correct records from the array
           const getRecordSummary = (team: any) => {
-            // Find the record where the name is "overall"
             const overallRecord = team?.records?.find(
               (record: { name: string }) => record.name === "overall"
             );
@@ -58,9 +68,6 @@ const GameEvents: React.FC<GameEventsProps> = ({
           // Log the home and away team records
           const awayRecord = getRecordSummary(awayTeam);
           const homeRecord = getRecordSummary(homeTeam);
-
-          console.log("Away Team Record:", awayRecord);
-          console.log("Home Team Record:", homeRecord);
 
           return (
             <Flex
@@ -95,9 +102,8 @@ const GameEvents: React.FC<GameEventsProps> = ({
                     homeLinescores: homeTeam?.linescores?.map(
                       (score) => score.value
                     ) || [0, 0, 0, 0],
-                    // Use the `getRecordSummary` function to extract records
-                    awayRecord: getRecordSummary(awayTeam),
-                    homeRecord: getRecordSummary(homeTeam),
+                    awayRecord: awayRecord,
+                    homeRecord: homeRecord,
                   }}
                 />
               </Box>

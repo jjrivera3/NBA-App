@@ -84,7 +84,7 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
       <Flex justifyContent="space-between" alignItems="center" mb="15px">
         <Box maxW="120px">
           <Text
-            fontSize="md"
+            fontSize="sm"
             fontWeight={500}
             color={isInProgress ? "#20da77" : "gray.200"}
           >
