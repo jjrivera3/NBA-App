@@ -13,8 +13,8 @@ const ScoreboardScoreCardSkeleton: React.FC = () => {
       boxShadow="md"
       background="linear-gradient(135deg, #464646, #333333)"
       width="100%" // Ensure full width
-      mt={4}
-      mb={-3}
+      mt={0}
+      mb={1}
       borderRadius={5}
     >
       {/* Final/Game Time in Top Left Corner */}

@@ -32,9 +32,9 @@ const ScheduledGameDetails: React.FC<ScheduledGameDetailsProps> = ({
         {/* Venue Details */}
         <Box>
           <Flex>
-            <Text fontSize="md">{venue.fullName}</Text>
+            <Text fontSize="15px">{venue.fullName}</Text>
 
-            <Text fontSize="md" color="gray.400" ml={2}>
+            <Text fontSize="15px" color="gray.400" ml={2}>
               {venue.address.city}, {venue.address.state}
             </Text>
           </Flex>
