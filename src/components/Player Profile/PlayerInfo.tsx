@@ -1,7 +1,7 @@
 import { Flex, HStack, Image, Text, VStack } from "@chakra-ui/react";
+import RatingScore from "../RatingScore";
 // import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
 // import { FaArrowLeft } from "react-icons/fa"; // Import the back arrow icon
-import RatingScore from "./RatingScore";
 
 interface Player {
   espnName: string;

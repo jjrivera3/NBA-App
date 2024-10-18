@@ -11,7 +11,7 @@ import {
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { rgba } from "polished";
 import { Radar } from "react-chartjs-2";
-import twoKlogo from "../assets/NBA-2K25-dark.svg";
+import twoKlogo from "../../assets/NBA-2K25-dark.svg";
 
 // Register necessary chart components and the plugin
 ChartJS.register(

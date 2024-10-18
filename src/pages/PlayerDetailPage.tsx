@@ -2,16 +2,18 @@ import { Box, Flex, Skeleton, SkeletonText } from "@chakra-ui/react";
 import { lighten } from "polished";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import PlayerAdditionalInfo from "../components/PlayerAdditionalInfo";
-import PlayerAttributes from "../components/PlayerAttributes";
+
+import PlayerAttributes from "../components/Player Profile/PlayerAttributes";
 import PlayerImage from "../components/PlayerImage";
-import PlayerInfo from "../components/PlayerInfo";
-import PlayerRadarChart from "../components/PlayerRadarChart";
-import PlayerStats from "../components/PlayerStats";
-import StatsTable from "../components/PlayerStatsTable";
+import PlayerRadarChart from "../components/Player Profile/PlayerRadarChart";
+
+import StatsTable from "../components/Player Profile/PlayerStatsTable";
 import nbateams from "../data/nbateams";
 import useAvatarSrc from "../hooks/useAvatarSrc";
 import usePlayerStats from "../hooks/usePlayerStats";
+import PlayerInfo from "../components/Player Profile/PlayerInfo";
+import PlayerStats from "../components/PlayerStats";
+import PlayerAdditionalInfo from "../components/Player Profile/PlayerAdditionalInfo";
 
 const PlayerDetailPage = () => {
   const location = useLocation();

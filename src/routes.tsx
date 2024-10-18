@@ -6,7 +6,7 @@ import HomePage from "./pages/HomePage";
 import PlayerDetailPage from "./pages/PlayerDetailPage";
 import TeamSchedule from "./components/TeamSchedule";
 import DepthChart from "./components/DepthChart";
-import Scoreboard from "./components/Scoreboard";
+import Scoreboard from "./components/Scoreboard/Scoreboard";
 
 const router = createBrowserRouter([
   {

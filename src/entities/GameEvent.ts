@@ -2,6 +2,9 @@ export default interface GameEvent {
   id: string;
   date: string;
   competitions: {
+    odds: any;
+    tickets: any;
+    venue: any;
     id: string;
     competitors: {
       homeAway: string;

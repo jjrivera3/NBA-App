@@ -13,12 +13,13 @@ interface ScoreboardScoreCardProps {
     homeTeam: string;
     awayScore: string;
     homeScore: string;
-    awayLinescores: number[];
-    homeLinescores: number[];
+    awayLinescores?: number[];
+    homeLinescores?: number[];
     statusType: string;
     shortDetail: string;
-    awayRecord?: string;
-    homeRecord?: string;
+    awayRecord: string; // Expecting a string for record now
+    homeRecord: string; // Expecting a string for record now
+    date: string;
   };
 }
 
@@ -42,53 +43,50 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
 
   const getTeamOnlyName = (teamName: string) =>
     teamName.split(" ").slice(-1)[0];
+
   const isScheduled = game.statusType === "STATUS_SCHEDULED";
+  const isFinal = game.statusType === "STATUS_FINAL";
+  const isInProgress =
+    game.statusType === "STATUS_IN_PROGRESS" ||
+    game.statusType === "STATUS_HALFTIME" ||
+    game.statusType === "STATUS_END_PERIOD";
   const isAwayWinner = parseInt(game.awayScore) > parseInt(game.homeScore);
   const isHomeWinner = parseInt(game.homeScore) > parseInt(game.awayScore);
 
+  const formatDateTime = (isoString: string) => {
+    const date = new Date(isoString);
+    if (isNaN(date.getTime())) return "Time Unavailable";
+
+    return date.toLocaleString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+    });
+  };
+
+  const formattedTime = formatDateTime(game.date);
+
   return (
     <Box
-      p={4}
+      pt="20px"
       borderRadius="md"
       color="white"
       position="relative"
       overflow="hidden"
-      boxShadow="md"
       background="linear-gradient(135deg, #464646, #333333)"
+      px={5}
+      py={7}
     >
-      <Flex
-        height="6px"
-        borderTopRadius="md"
-        overflow="hidden"
-        position="relative"
-        marginTop="-12px"
-      >
-        <Box
-          flex="1"
-          backgroundColor={game.awayTeamColor}
-          position="relative"
-          _after={{
-            content: '""',
-            position: "absolute",
-            top: 0,
-            right: "-8px",
-            width: "16px",
-            height: "100%",
-            background: `linear-gradient(135deg, ${game.awayTeamColor} 50%, ${game.homeTeamColor} 50%)`,
-          }}
-        />
-        <Box flex="1" backgroundColor={game.homeTeamColor}></Box>
-      </Flex>
-
-      <Flex justifyContent="space-between" alignItems="center" mb={3}>
-        {/* Updated Short Detail */}
-        {game.statusType === "STATUS_IN_PROGRESS" ||
-        game.statusType === "STATUS_HALFTIME" ||
-        game.statusType === "STATUS_END_PERIOD" ? (
-          <Box maxW="120px">
-            <Text fontSize="14px" color="#20da77" fontWeight={500}>
-              {game.shortDetail}
-            </Text>
+      {/* Final/Game Time in Top Left Corner */}
+      <Flex justifyContent="space-between" alignItems="center" mb="15px">
+        <Box maxW="120px">
+          <Text
+            fontSize="sm"
+            fontWeight={500}
+            color={isInProgress ? "#20da77" : "gray.200"}
+          >
+            {isFinal ? "Final" : isScheduled ? formattedTime : game.shortDetail}
+          </Text>
+          {isInProgress && (
             <Box
               width="100%"
               height="2px"
@@ -103,12 +101,8 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
                 animation={`${lineAnimation} 1.7s infinite alternate cubic-bezier(0.21, 0.85, 0.34, 0.98)`}
               />
             </Box>
-          </Box>
-        ) : (
-          <Text width="120px" fontWeight="medium" color="gray.400">
-            {game.shortDetail}
-          </Text>
-        )}
+          )}
+        </Box>
 
         {!isScheduled && (
           <Grid
@@ -129,7 +123,7 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
 
       {/* Away Team Row */}
       <Flex justifyContent="space-between" alignItems="center" mb={6}>
-        <Flex alignItems="center" width="120px" mr={5}>
+        <Flex alignItems="center" width="250px" mr={5}>
           <Image
             src={game.awayLogo}
             alt={getTeamOnlyName(game.awayTeam)}
@@ -139,16 +133,10 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
           <Box>
             <Text fontWeight="medium" color={game.awayTeamColor} fontSize="lg">
               {getTeamOnlyName(game.awayTeam)}
-            </Text>
-            {game.awayRecord ? (
-              <Text fontSize="sm" color="gray.400">
+              <Text as="span" fontSize="md" color="gray.400" ml={2}>
                 {game.awayRecord}
               </Text>
-            ) : (
-              <Text fontSize="sm" color="gray.500">
-                Record N/A
-              </Text>
-            )}
+            </Text>
           </Box>
         </Flex>
         {!isScheduled && (
@@ -189,7 +177,7 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
 
       {/* Home Team Row */}
       <Flex justifyContent="space-between" alignItems="center" mt={3}>
-        <Flex alignItems="center" width="120px" mr={5}>
+        <Flex alignItems="center" width="250px" mr={5}>
           <Image
             src={game.homeLogo}
             alt={getTeamOnlyName(game.homeTeam)}
@@ -199,16 +187,10 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
           <Box>
             <Text fontWeight="medium" color={game.homeTeamColor} fontSize="lg">
               {getTeamOnlyName(game.homeTeam)}
-            </Text>
-            {game.homeRecord ? (
-              <Text fontSize="sm" color="gray.400">
+              <Text as="span" fontSize="md" color="gray.400" ml={2}>
                 {game.homeRecord}
               </Text>
-            ) : (
-              <Text fontSize="sm" color="gray.500">
-                Record N/A
-              </Text>
-            )}
+            </Text>
           </Box>
         </Flex>
         {!isScheduled && (
