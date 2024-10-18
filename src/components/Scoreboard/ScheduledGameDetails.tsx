@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Text, Link, VStack, Divider } from "@chakra-ui/react";
+import { Box, Text, Link, VStack, Divider, Flex } from "@chakra-ui/react";
 
 interface ScheduledGameDetailsProps {
   venue: {
@@ -27,14 +27,17 @@ const ScheduledGameDetails: React.FC<ScheduledGameDetailsProps> = ({
   tickets,
 }) => {
   return (
-    <Box p={4} borderRadius="md" color="white" width="250px">
+    <Box p={3} borderRadius="md" color="white">
       <VStack spacing={3} align="left">
         {/* Venue Details */}
         <Box>
-          <Text fontSize="md">{venue.fullName}</Text>
-          <Text fontSize="sm" color="gray.400">
-            {venue.address.city}, {venue.address.state}
-          </Text>
+          <Flex>
+            <Text fontSize="md">{venue.fullName}</Text>
+
+            <Text fontSize="md" color="gray.400" ml={2}>
+              {venue.address.city}, {venue.address.state}
+            </Text>
+          </Flex>
         </Box>
 
         <Divider borderColor="gray.600" />
@@ -61,21 +64,16 @@ const ScheduledGameDetails: React.FC<ScheduledGameDetailsProps> = ({
         {tickets ? (
           <Box>
             <Text fontSize="md">{tickets.summary}</Text>
-            <Text fontSize="sm" color="gray.400">
-              Tickets Available: {tickets.numberAvailable}
-            </Text>
+
             {tickets.links.length > 0 ? (
-              tickets.links.map((link, index) => (
-                <Link
-                  key={index}
-                  href={link}
-                  color="blue.300"
-                  fontSize="sm"
-                  isExternal
-                >
-                  Buy Tickets
-                </Link>
-              ))
+              <Link
+                href={tickets.links[0]} // Only the first link is used
+                color="blue.300"
+                fontSize="sm"
+                isExternal
+              >
+                Buy Tickets
+              </Link>
             ) : (
               <Text fontSize="md" color="gray.400">
                 No Ticket Links Available
