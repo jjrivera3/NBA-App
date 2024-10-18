@@ -2,8 +2,8 @@ import { Box, Flex, Text, VStack } from "@chakra-ui/react";
 import ScoreboardScoreCard from "./ScoreboardScoreCard";
 import TopPerformers from "./TopPerformers";
 import ScheduledGameDetails from "./ScheduledGameDetails";
-import ScoreboardScoreCardSkeleton from "./ScoreboardScoreCardSkeleton";
 import GameEvent from "../../entities/GameEvent";
+import ScoreboardScoreCardSkeleton from "../skeletons/ScoreboardScoreCardSkeleton";
 
 interface GameEventsProps {
   events: GameEvent[];
@@ -48,11 +48,19 @@ const GameEvents: React.FC<GameEventsProps> = ({
 
           // Ensure we extract the correct records from the array
           const getRecordSummary = (team: any) => {
-            const totalRecord = team?.team.records?.find(
-              (record: { type: string }) => record.type === "total"
+            // Find the record where the name is "overall"
+            const overallRecord = team?.records?.find(
+              (record: { name: string }) => record.name === "overall"
             );
-            return totalRecord?.summary || "Record N/A";
+            return overallRecord?.summary || "Record N/A";
           };
+
+          // Log the home and away team records
+          const awayRecord = getRecordSummary(awayTeam);
+          const homeRecord = getRecordSummary(homeTeam);
+
+          console.log("Away Team Record:", awayRecord);
+          console.log("Home Team Record:", homeRecord);
 
           return (
             <Flex

@@ -4,23 +4,25 @@ import { Box, Flex, Grid, Skeleton } from "@chakra-ui/react";
 const ScoreboardScoreCardSkeleton: React.FC = () => {
   return (
     <Box
-      px={4}
-      pt="55px" // Reduced padding-top
-      pb={8} // Reduced padding-bottom
+      px={6}
+      pt="72px" // Reduced padding-top
+      pb={6} // Reduced padding-bottom
       color="white"
       position="relative"
       overflow="hidden"
       boxShadow="md"
       background="linear-gradient(135deg, #464646, #333333)"
       width="100%" // Ensure full width
-      mb={1} // Adjust margin between skeletons if needed
+      mt={4}
+      mb={-3}
+      borderRadius={5}
     >
       {/* Final/Game Time in Top Left Corner */}
       <Skeleton
         position="absolute"
-        top="8px"
+        top="25px"
         left="8px"
-        height="14px" // Adjusted height
+        height="18px" // Adjusted height
         width="50px"
       />
 
@@ -32,8 +34,8 @@ const ScoreboardScoreCardSkeleton: React.FC = () => {
           <Skeleton boxSize="30px" borderRadius="full" mr={3} />{" "}
           {/* Reduced size */}
           <Box>
-            <Skeleton height="14px" width="120px" /> {/* Adjusted height */}
-            <Skeleton height="14px" width="60px" mt={2} />{" "}
+            <Skeleton height="16px" width="120px" /> {/* Adjusted height */}
+            <Skeleton height="15px" width="60px" mt={2} />{" "}
             {/* Adjusted height */}
           </Box>
         </Flex>
@@ -57,8 +59,8 @@ const ScoreboardScoreCardSkeleton: React.FC = () => {
           <Skeleton boxSize="30px" borderRadius="full" mr={3} />{" "}
           {/* Reduced size */}
           <Box>
-            <Skeleton height="14px" width="120px" /> {/* Adjusted height */}
-            <Skeleton height="14px" width="60px" mt={2} />{" "}
+            <Skeleton height="15px" width="120px" /> {/* Adjusted height */}
+            <Skeleton height="15px" width="60px" mt={2} />{" "}
             {/* Adjusted height */}
           </Box>
         </Flex>

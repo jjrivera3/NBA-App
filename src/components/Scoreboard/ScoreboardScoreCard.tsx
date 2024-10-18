@@ -50,8 +50,12 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
     game.statusType === "STATUS_IN_PROGRESS" ||
     game.statusType === "STATUS_HALFTIME" ||
     game.statusType === "STATUS_END_PERIOD";
-  const isAwayWinner = parseInt(game.awayScore) > parseInt(game.homeScore);
-  const isHomeWinner = parseInt(game.homeScore) > parseInt(game.awayScore);
+
+  // Only highlight winner when the game is final
+  const isAwayWinner =
+    isFinal && parseInt(game.awayScore) > parseInt(game.homeScore);
+  const isHomeWinner =
+    isFinal && parseInt(game.homeScore) > parseInt(game.awayScore);
 
   const formatDateTime = (isoString: string) => {
     const date = new Date(isoString);
@@ -72,15 +76,15 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
       color="white"
       position="relative"
       overflow="hidden"
-      background="linear-gradient(135deg, #464646, #333333)"
       px={5}
-      py={7}
+      paddingBottom="30px"
+      background="linear-gradient(135deg, #464646, #333333)"
     >
       {/* Final/Game Time in Top Left Corner */}
       <Flex justifyContent="space-between" alignItems="center" mb="15px">
         <Box maxW="120px">
           <Text
-            fontSize="sm"
+            fontSize="md"
             fontWeight={500}
             color={isInProgress ? "#20da77" : "gray.200"}
           >
@@ -133,7 +137,7 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
           <Box>
             <Text fontWeight="medium" color={game.awayTeamColor} fontSize="lg">
               {getTeamOnlyName(game.awayTeam)}
-              <Text as="span" fontSize="md" color="gray.400" ml={2}>
+              <Text as="span" fontSize="sm" color="gray.400" ml={2}>
                 {game.awayRecord}
               </Text>
             </Text>
@@ -147,16 +151,12 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
             alignItems="center"
           >
             {filledAwayScores.map((score, index) => (
-              <Text key={index} fontSize="md">
+              <Text key={index} fontSize="15px">
                 {score}
               </Text>
             ))}
             <Box position="relative">
-              <Text
-                fontSize="lg"
-                fontWeight="bold"
-                color={isAwayWinner ? "white" : "gray.500"}
-              >
+              <Text fontSize="lg" fontWeight="bold" color="white">
                 {game.awayScore === "0" ? "-" : game.awayScore}
               </Text>
               {isAwayWinner && (
@@ -187,7 +187,7 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
           <Box>
             <Text fontWeight="medium" color={game.homeTeamColor} fontSize="lg">
               {getTeamOnlyName(game.homeTeam)}
-              <Text as="span" fontSize="md" color="gray.400" ml={2}>
+              <Text as="span" fontSize="sm" color="gray.400" ml={2}>
                 {game.homeRecord}
               </Text>
             </Text>
@@ -201,16 +201,12 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
             alignItems="center"
           >
             {filledHomeScores.map((score, index) => (
-              <Text key={index} fontSize="md">
+              <Text key={index} fontSize="15px">
                 {score}
               </Text>
             ))}
             <Box position="relative">
-              <Text
-                fontSize="lg"
-                fontWeight="bold"
-                color={isHomeWinner ? "white" : "gray.500"}
-              >
+              <Text fontSize="lg" fontWeight="bold" color="white">
                 {game.homeScore === "0" ? "-" : game.homeScore}
               </Text>
               {isHomeWinner && (
