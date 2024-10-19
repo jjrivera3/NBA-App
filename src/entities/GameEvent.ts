@@ -40,6 +40,7 @@ export default interface GameEvent {
     }[];
     status: {
       type: {
+        detail: string;
         name: string;
         shortDetail: string;
       };

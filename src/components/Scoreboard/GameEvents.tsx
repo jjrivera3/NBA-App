@@ -1,9 +1,11 @@
 import { Box, Flex, Text, VStack } from "@chakra-ui/react";
 import ScoreboardScoreCard from "./ScoreboardScoreCard";
 import TopPerformers from "./TopPerformers";
-import ScheduledGameDetails from "./ScheduledGameDetails";
 import GameEvent from "../../entities/GameEvent";
 import ScoreboardScoreCardSkeleton from "../skeletons/ScoreboardScoreCardSkeleton";
+import ScheduledGameDetails from "./ScheduledGameDetails";
+import GameCard from "../GameCard";
+import ScoreboardGameCardScheduled from "./ScoreboardGameCardScheduled";
 
 interface GameEventsProps {
   events: GameEvent[];
@@ -78,35 +80,67 @@ const GameEvents: React.FC<GameEventsProps> = ({
               borderRadius="md"
               boxShadow="md"
               alignItems="center"
-              background="linear-gradient(145deg, #464646, #3a3a3a, #333333)"
+              background="#464646"
             >
-              <Box width="60%">
-                <ScoreboardScoreCard
-                  game={{
-                    gameID: competition.id,
-                    date: event.date,
-                    awayTeamColor: awayTeam?.team.color ?? "#000000",
-                    homeTeamColor: homeTeam?.team.color ?? "#000000",
-                    awayLogo: awayTeam?.team.logo ?? "",
-                    homeLogo: homeTeam?.team.logo ?? "",
-                    awayTeam: awayTeam?.team.displayName ?? "Unknown Team",
-                    homeTeam: homeTeam?.team.displayName ?? "Unknown Team",
-                    awayScore: awayTeam?.score ?? "0",
-                    homeScore: homeTeam?.score ?? "0",
-                    statusType:
-                      competition.status.type.name ?? "Unknown Status",
-                    shortDetail: competition.status.type.shortDetail ?? "",
-                    awayLinescores: awayTeam?.linescores?.map(
-                      (score) => score.value
-                    ) || [0, 0, 0, 0],
-                    homeLinescores: homeTeam?.linescores?.map(
-                      (score) => score.value
-                    ) || [0, 0, 0, 0],
-                    awayRecord: awayRecord,
-                    homeRecord: homeRecord,
-                  }}
-                />
-              </Box>
+              {/* Use GameCard if the game is scheduled */}
+              {isScheduled ? (
+                <Box
+                  width="68%"
+                  background="linear-gradient(145deg, #464646, #484848, #333333)"
+                >
+                  <ScoreboardGameCardScheduled
+                    game={{
+                      gameID: competition.id,
+                      awayTeamColor: awayTeam?.team.color ?? "#000000",
+                      homeTeamColor: homeTeam?.team.color ?? "#000000",
+                      awayLogo: awayTeam?.team.logo ?? "",
+                      homeLogo: homeTeam?.team.logo ?? "",
+                      awayTeam: awayTeam?.team.displayName ?? "Unknown Team",
+                      homeTeam: homeTeam?.team.displayName ?? "Unknown Team",
+                      statusType:
+                        competition.status.type.name ?? "Unknown Status",
+                      shortDetail: competition.status.type.shortDetail ?? "",
+                      gameDateFormatted: event.date,
+                      time: new Date(event.date).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }),
+                      odds: competition.odds?.[0] ?? null,
+                    }}
+                  />
+                </Box>
+              ) : (
+                <Box
+                  width="68%"
+                  background="linear-gradient(145deg, #464646, #484848, #333333)"
+                >
+                  <ScoreboardScoreCard
+                    game={{
+                      gameID: competition.id,
+                      date: event.date,
+                      awayTeamColor: awayTeam?.team.color ?? "#000000",
+                      homeTeamColor: homeTeam?.team.color ?? "#000000",
+                      awayLogo: awayTeam?.team.logo ?? "",
+                      homeLogo: homeTeam?.team.logo ?? "",
+                      awayTeam: awayTeam?.team.displayName ?? "Unknown Team",
+                      homeTeam: homeTeam?.team.displayName ?? "Unknown Team",
+                      awayScore: awayTeam?.score ?? "0",
+                      homeScore: homeTeam?.score ?? "0",
+                      statusType:
+                        competition.status.type.name ?? "Unknown Status",
+                      shortDetail: competition.status.type.shortDetail ?? "",
+                      awayLinescores: awayTeam?.linescores?.map(
+                        (score) => score.value
+                      ) || [0, 0, 0, 0],
+                      homeLinescores: homeTeam?.linescores?.map(
+                        (score) => score.value
+                      ) || [0, 0, 0, 0],
+                      awayRecord: awayRecord,
+                      homeRecord: homeRecord,
+                    }}
+                  />
+                </Box>
+              )}
 
               {!isScheduled && (
                 <TopPerformers

@@ -5,7 +5,7 @@ const ScoreboardScoreCardSkeleton: React.FC = () => {
   return (
     <Box
       px={6}
-      pt="72px" // Reduced padding-top
+      pt="100px" // Reduced padding-top
       pb={6} // Reduced padding-bottom
       color="white"
       position="relative"
@@ -34,7 +34,7 @@ const ScoreboardScoreCardSkeleton: React.FC = () => {
           <Skeleton boxSize="30px" borderRadius="full" mr={3} />{" "}
           {/* Reduced size */}
           <Box>
-            <Skeleton height="16px" width="120px" /> {/* Adjusted height */}
+            <Skeleton height="16px" width="200px" /> {/* Adjusted height */}
             <Skeleton height="15px" width="60px" mt={2} />{" "}
             {/* Adjusted height */}
           </Box>
@@ -59,7 +59,7 @@ const ScoreboardScoreCardSkeleton: React.FC = () => {
           <Skeleton boxSize="30px" borderRadius="full" mr={3} />{" "}
           {/* Reduced size */}
           <Box>
-            <Skeleton height="15px" width="120px" /> {/* Adjusted height */}
+            <Skeleton height="15px" width="200px" /> {/* Adjusted height */}
             <Skeleton height="15px" width="60px" mt={2} />{" "}
             {/* Adjusted height */}
           </Box>

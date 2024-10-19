@@ -1,4 +1,3 @@
-// router.ts
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "./pages/Layout";
 import ErrorPage from "./pages/ErrorPage";
@@ -20,7 +19,7 @@ const router = createBrowserRouter([
       },
       {
         path: "scoreboard",
-        element: <Scoreboard />, // Add the new route here
+        element: <Scoreboard />,
       },
       {
         path: ":teamAbv/schedule",
@@ -35,7 +34,7 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: ":teamName/:playerName",
+        path: ":teamAbv/:playerName", // This route must be here for player details
         element: <PlayerDetailPage />,
       },
     ],

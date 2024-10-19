@@ -36,7 +36,7 @@ const TeamGrid = ({ teamAbv }: TeamGridProps) => {
     selectedTeam?.teamID === "29" ? Utah_Jazz : selectedTeam?.espnLogo1;
   const defaultColor = "#000000";
 
-  console.log(selectedTeam);
+  console.log(teamInfo);
 
   return (
     <>

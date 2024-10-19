@@ -1,27 +1,7 @@
+import { Box, Flex, Grid, Image, Text, keyframes } from "@chakra-ui/react";
 import React from "react";
-import { Box, Flex, Image, Text, Grid, keyframes } from "@chakra-ui/react";
-import { FaCaretLeft } from "react-icons/fa";
-
-interface ScoreboardScoreCardProps {
-  game: {
-    gameID: string;
-    awayTeamColor: string;
-    homeTeamColor: string;
-    awayLogo: string;
-    homeLogo: string;
-    awayTeam: string;
-    homeTeam: string;
-    awayScore: string;
-    homeScore: string;
-    awayLinescores?: number[];
-    homeLinescores?: number[];
-    statusType: string;
-    shortDetail: string;
-    awayRecord: string; // Expecting a string for record now
-    homeRecord: string; // Expecting a string for record now
-    date: string;
-  };
-}
+import { FaCaretLeft, FaEye } from "react-icons/fa"; // Import the FaEye icon
+import ScoreboardScoreCardProps from "../../entities/ScoreboardScoreCardProps";
 
 // Define keyframes for the animated green line
 const lineAnimation = keyframes`
@@ -51,7 +31,6 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
     game.statusType === "STATUS_HALFTIME" ||
     game.statusType === "STATUS_END_PERIOD";
 
-  // Only highlight winner when the game is final
   const isAwayWinner =
     isFinal && parseInt(game.awayScore) > parseInt(game.homeScore);
   const isHomeWinner =
@@ -71,43 +50,30 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
 
   return (
     <Box
-      pt="20px"
-      borderTopLeftRadius="md" // Apply border radius to top-left corner
-      borderBottomLeftRadius="md" // Apply border radius to bottom-left corner
+      borderLeftRadius="5px"
       color="white"
       position="relative"
       overflow="hidden"
-      px={5}
-      paddingBottom="35px"
-      background="linear-gradient(135deg, #464646, #3a3a3a, #333333)"
-      borderRight="1px solid #545454" // Keep the right border solid
+      px={8}
+      pt={5}
+      pb={5}
+      borderRight="1px solid #545454"
+      background="linear-gradient(90deg, #5b5b5b 0%, #2e2e2e 100%, #353535 100%)"
     >
-      {/* Final/Game Time in Top Left Corner */}
-      <Flex justifyContent="space-between" alignItems="center" mb="15px">
-        <Box maxW="120px">
+      <Flex justifyContent="space-between" alignItems="center" mb={2}>
+        {/* Game Status or Time */}
+        <Box maxW="220px" display="flex" alignItems="center">
           <Text
-            fontSize="sm"
-            fontWeight={500}
-            color={isInProgress ? "#20da77" : "gray.200"}
+            fontWeight={600}
+            fontSize="14px"
+            color={isFinal ? "white" : "#20da77"}
           >
-            {isFinal ? "Final" : isScheduled ? formattedTime : game.shortDetail}
+            {game.shortDetail
+              ? game.shortDetail
+              : isScheduled
+              ? formattedTime
+              : "Status Unavailable"}
           </Text>
-          {isInProgress && (
-            <Box
-              width="100%"
-              height="2px"
-              overflow="hidden"
-              position="relative"
-            >
-              <Box
-                width="150%"
-                height="2px"
-                backgroundColor="#20da77"
-                position="absolute"
-                animation={`${lineAnimation} 1.7s infinite alternate cubic-bezier(0.21, 0.85, 0.34, 0.98)`}
-              />
-            </Box>
-          )}
         </Box>
 
         {!isScheduled && (
@@ -115,8 +81,9 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
             templateColumns="repeat(5, 50px)"
             gap={0}
             textAlign="center"
-            color="gray.400"
-            fontWeight="medium"
+            color="gray.200"
+            fontWeight="500"
+            fontSize="15px"
           >
             <Text>1</Text>
             <Text>2</Text>
@@ -127,8 +94,26 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
         )}
       </Flex>
 
-      {/* Away Team Row */}
-      <Flex justifyContent="space-between" alignItems="center" mb={6}>
+      {/* Progress Bar for In-Progress Games */}
+      {isInProgress && (
+        <Box
+          width="100%"
+          height="2px"
+          overflow="hidden"
+          position="relative"
+          mt={1}
+        >
+          <Box
+            width="150%"
+            height="2px"
+            backgroundColor="#20da77"
+            position="absolute"
+            animation={`${lineAnimation} 1.7s infinite alternate cubic-bezier(0.21, 0.85, 0.34, 0.98)`}
+          />
+        </Box>
+      )}
+
+      <Flex justifyContent="space-between" alignItems="center" mt={3} mb={4}>
         <Flex alignItems="center" width="250px" mr={5}>
           <Image
             src={game.awayLogo}
@@ -137,20 +122,39 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
             mr={3}
           />
           <Box>
-            <Text fontWeight="medium" color={game.awayTeamColor} fontSize="lg">
+            <Text
+              fontWeight={
+                isInProgress || (!isAwayWinner && isFinal)
+                  ? "600"
+                  : isAwayWinner
+                  ? "bold"
+                  : "300"
+              }
+              color={game.awayTeamColor}
+              fontSize="lg"
+            >
               {getTeamOnlyName(game.awayTeam)}
-              <Text as="span" fontSize="sm" color="gray.400" ml={2}>
-                {game.awayRecord}
+              <Text
+                as="span"
+                fontSize="sm"
+                color={isAwayWinner ? "white" : "gray.100"} // Make record white for winners
+                ml={2}
+              >
+                ( {game.awayRecord} )
               </Text>
             </Text>
           </Box>
         </Flex>
+
         {!isScheduled && (
           <Grid
             templateColumns="repeat(5, 50px)"
             gap={0}
             textAlign="center"
             alignItems="center"
+            color="gray.200"
+            fontWeight="500"
+            fontSize="15px"
           >
             {filledAwayScores.map((score, index) => (
               <Text key={index} fontSize="15px">
@@ -160,8 +164,8 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
             <Box position="relative">
               <Text
                 fontSize="lg"
-                fontWeight={isAwayWinner ? "bold" : "300"} // Change font weight here
-                color="white"
+                fontWeight={isAwayWinner ? "bold" : "400"}
+                color={isAwayWinner ? "white" : "gray.200"}
               >
                 {game.awayScore === "0" ? "-" : game.awayScore}
               </Text>
@@ -181,7 +185,6 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
         )}
       </Flex>
 
-      {/* Home Team Row */}
       <Flex justifyContent="space-between" alignItems="center" mt={3}>
         <Flex alignItems="center" width="250px" mr={5}>
           <Image
@@ -191,14 +194,30 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
             mr={3}
           />
           <Box>
-            <Text fontWeight="medium" color={game.homeTeamColor} fontSize="lg">
+            <Text
+              fontWeight={
+                isInProgress || (!isHomeWinner && isFinal)
+                  ? "600"
+                  : isHomeWinner
+                  ? "bold"
+                  : "300"
+              }
+              color={game.homeTeamColor}
+              fontSize="lg"
+            >
               {getTeamOnlyName(game.homeTeam)}
-              <Text as="span" fontSize="sm" color="gray.400" ml={2}>
-                {game.homeRecord}
+              <Text
+                as="span"
+                fontSize="sm"
+                color={isHomeWinner ? "white" : "gray.100"} // Make record white for winners
+                ml={2}
+              >
+                ( {game.homeRecord} )
               </Text>
             </Text>
           </Box>
         </Flex>
+
         {!isScheduled && (
           <Grid
             templateColumns="repeat(5, 50px)"
@@ -214,8 +233,8 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
             <Box position="relative">
               <Text
                 fontSize="lg"
-                fontWeight={isHomeWinner ? "bold" : "300"} // Change font weight here
-                color="white"
+                fontWeight={isHomeWinner ? "bold" : "400"}
+                color={isHomeWinner ? "white" : "gray.200"}
               >
                 {game.homeScore === "0" ? "-" : game.homeScore}
               </Text>
@@ -234,6 +253,25 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
           </Grid>
         )}
       </Flex>
+
+      {!isScheduled && (
+        <Flex justifyContent="flex-end" mt={4} alignItems="center">
+          <FaEye color="#f8991d" />
+          <Text
+            as="span"
+            color="#f8991d"
+            fontSize="14px"
+            cursor="pointer"
+            onClick={() => {
+              console.log("View Box Score clicked!");
+            }}
+            ml={2}
+            _hover={{ textDecoration: "underline" }}
+          >
+            View Box Score
+          </Text>
+        </Flex>
+      )}
     </Box>
   );
 };

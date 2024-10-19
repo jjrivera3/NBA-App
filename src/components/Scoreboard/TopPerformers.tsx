@@ -1,5 +1,5 @@
-import React from "react";
 import { Box, Flex, Image, Text, VStack } from "@chakra-ui/react";
+import React from "react";
 
 const TopPerformers: React.FC<{
   awayTeam: any;
@@ -16,16 +16,8 @@ const TopPerformers: React.FC<{
   const homeRatingLeader = getRatingLeader(homeTeam);
 
   return (
-    <Box
-      flex="1"
-      textAlign="left"
-      color="white"
-      borderRadius={0}
-      py={6}
-      pl={5}
-      background="linear-gradient(145deg, #464646, #3a3a3a, #333333)"
-    >
-      <Text fontWeight={500} mb={2}>
+    <Box flex="1" textAlign="left" color="white" borderRadius={0} px={5}>
+      <Text fontWeight={500} mb={2} fontSize="14px">
         Top Performers
       </Text>
       <VStack align="flex-start" spacing={4}>
@@ -40,14 +32,20 @@ const TopPerformers: React.FC<{
               mr={3}
             />
             <Box>
-              <Text fontSize="md" fontWeight="600">
+              <Text fontSize="md" fontWeight="500">
                 {awayRatingLeader.athlete?.shortName}
-                <Text as="span" fontSize="sm" color="gray.400" ml={2}>
+                <Text
+                  as="span"
+                  fontSize="sm"
+                  color="gray.400"
+                  ml={2}
+                  fontWeight={400}
+                >
                   {awayRatingLeader.athlete?.position?.abbreviation} -{" "}
                   {awayTeam.abbreviation}
                 </Text>
               </Text>
-              <Text fontSize="sm" color="gray.400">
+              <Text fontSize="sm" color="gray.300" fontWeight={500}>
                 {getTopPerformerDisplayValue(awayTeam)}
               </Text>
             </Box>
@@ -64,14 +62,20 @@ const TopPerformers: React.FC<{
               mr={3}
             />
             <Box>
-              <Text fontSize="md" fontWeight="600">
+              <Text fontSize="md" fontWeight="500">
                 {homeRatingLeader.athlete?.shortName}
-                <Text as="span" fontSize="sm" color="gray.400" ml={2}>
+                <Text
+                  as="span"
+                  fontSize="sm"
+                  color="gray.400"
+                  ml={2}
+                  fontWeight={400}
+                >
                   {homeRatingLeader.athlete?.position?.abbreviation} -{" "}
                   {homeTeam.abbreviation}
                 </Text>
               </Text>
-              <Text fontSize="sm" color="gray.400">
+              <Text fontSize="sm" color="gray.300" fontWeight={500}>
                 {getTopPerformerDisplayValue(homeTeam)}
               </Text>
             </Box>
