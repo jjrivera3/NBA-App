@@ -107,7 +107,7 @@ const SearchInput = ({ onSearch }: Props) => {
 
   const handleSelectPlayer = (
     playerName: string,
-    playerID: string,
+    _playerID: string,
     teamAbbreviation: string
   ) => {
     setSearchText(playerName);

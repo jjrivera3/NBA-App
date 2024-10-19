@@ -1,11 +1,10 @@
 import { Box, Flex, Text, VStack } from "@chakra-ui/react";
-import ScoreboardScoreCard from "./ScoreboardScoreCard";
-import TopPerformers from "./TopPerformers";
 import GameEvent from "../../entities/GameEvent";
 import ScoreboardScoreCardSkeleton from "../skeletons/ScoreboardScoreCardSkeleton";
 import ScheduledGameDetails from "./ScheduledGameDetails";
-import GameCard from "../GameCard";
 import ScoreboardGameCardScheduled from "./ScoreboardGameCardScheduled";
+import ScoreboardScoreCard from "./ScoreboardScoreCard";
+import TopPerformers from "./TopPerformers";
 
 interface GameEventsProps {
   events: GameEvent[];
