@@ -125,10 +125,10 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
             <Text
               fontWeight={
                 isInProgress || (!isAwayWinner && isFinal)
-                  ? "600"
+                  ? "400"
                   : isAwayWinner
                   ? "bold"
-                  : "300"
+                  : "500"
               }
               color={game.awayTeamColor}
               fontSize="lg"
@@ -197,10 +197,10 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
             <Text
               fontWeight={
                 isInProgress || (!isHomeWinner && isFinal)
-                  ? "600"
+                  ? "400"
                   : isHomeWinner
                   ? "bold"
-                  : "300"
+                  : "500"
               }
               color={game.homeTeamColor}
               fontSize="lg"
