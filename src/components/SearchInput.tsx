@@ -16,6 +16,8 @@ interface Player {
   playerID: string;
   longName: string;
   team: string;
+  bRefID: string;
+  espnName: string;
 }
 
 // Define the structure of a team's roster and team info
@@ -28,6 +30,8 @@ interface PlayerInfo {
   playerID: string;
   longName: string;
   team: string;
+  bRefID: string;
+  espnName: string;
 }
 
 // Define the props for the component
@@ -56,11 +60,12 @@ const SearchInput = ({ onSearch }: Props) => {
           playerID: player.playerID,
           longName: player.longName,
           team: teamAbbreviation,
+          bRefID: player.bRefID,
+          espnName: player.espnName,
         }));
       });
 
       setPlayers(allPlayers);
-      console.log("Combined Roster Players:", allPlayers);
     }
   }, [teamsData]);
 
@@ -95,7 +100,9 @@ const SearchInput = ({ onSearch }: Props) => {
         handleSelectPlayer(
           selectedPlayer.longName,
           selectedPlayer.playerID,
-          selectedPlayer.team
+          selectedPlayer.team,
+          selectedPlayer.bRefID,
+          selectedPlayer.espnName
         );
       }
     }
@@ -107,12 +114,23 @@ const SearchInput = ({ onSearch }: Props) => {
 
   const handleSelectPlayer = (
     playerName: string,
-    _playerID: string,
-    teamAbbreviation: string
+    playerID: string,
+    teamAbbreviation: string,
+    bRefID: string,
+    espnName: string
   ) => {
     setSearchText(playerName);
     setFilteredPlayers([]);
     setSelectedIndex(null); // Reset the selected index
+
+    // Log the selected player details including bRefID and espnName
+    console.log("Selected Player:", {
+      playerName,
+      playerID,
+      teamAbbreviation,
+      bRefID,
+      espnName,
+    });
 
     const formattedPlayerName = formatPlayerNameForUrl(playerName);
     const formattedTeam = teamAbbreviation.toLowerCase();
@@ -174,7 +192,9 @@ const SearchInput = ({ onSearch }: Props) => {
                   handleSelectPlayer(
                     player.longName,
                     player.playerID,
-                    player.team
+                    player.team,
+                    player.bRefID,
+                    player.espnName
                   )
                 }
                 px={3}
