@@ -1,5 +1,6 @@
 // Define the structure for a team
 export default interface Team {
+  Roster(Roster: any): unknown;
   teamName(arg0: string, teamName: any): unknown;
   color: any;
   logo: string;
