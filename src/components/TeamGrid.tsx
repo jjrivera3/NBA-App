@@ -1,7 +1,6 @@
 import { SimpleGrid, Box } from "@chakra-ui/react";
 import nbaTeams from "../data/nbateams";
 import usePlayerRatingsMap from "../hooks/usePlayerRatingsMap";
-import useRoster from "../hooks/useRoster";
 import useSortedPlayers from "../hooks/useSortedPlayers";
 import useTeamColor from "../hooks/useTeamColor";
 import useTeamInfo from "../hooks/useTeamInfo";
@@ -12,6 +11,8 @@ import Utah_Jazz from "../assets/Utah_Jazz.png";
 import PlayerCardSkeleton from "./skeletons/PlayerCardSkeleton";
 import TeamHeadingSkeleton from "./skeletons/TeamHeadSkeleton";
 import TeamGridProps from "../entities/TeamGriptProps";
+import { useTeamStore } from "../useTeamStore";
+import { useEffect } from "react";
 
 const TeamGrid = ({ teamAbv }: TeamGridProps) => {
   const lowercasedTeamAbv = teamAbv.toLowerCase();
@@ -27,20 +28,48 @@ const TeamGrid = ({ teamAbv }: TeamGridProps) => {
     statsToGet: "averages",
     schedules: "true",
   });
-  const roster = useRoster(teamInfo, teamId);
+
+  console.log(teamInfo);
+
+  // Zustand store actions
+  const setTeamData = useTeamStore((state) => state.setTeamData); // Use setTeamData from useTeamStore
+
+  // Extract roster directly from teamInfo
+  let selectedTeam = null;
+
+  // Check if teamInfo.body is an array or an object
+  if (Array.isArray(teamInfo?.body)) {
+    selectedTeam = teamInfo.body.find((team) => team.teamID === teamId);
+  } else if (teamInfo?.body && typeof teamInfo.body === "object") {
+    selectedTeam = teamInfo.body; // Adjust this based on your actual data structure
+  }
+
+  const roster = selectedTeam?.Roster ? Object.values(selectedTeam.Roster) : [];
+
   const playersWithRatings = usePlayerRatingsMap(roster);
   const sortedPlayers = useSortedPlayers(playersWithRatings);
-  //@ts-ignore
-  const selectedTeam = teamInfo?.body?.find((team) => team.teamID === teamId);
+
   const espnLogo1 =
     selectedTeam?.teamID === "29" ? Utah_Jazz : selectedTeam?.espnLogo1;
   const defaultColor = "#000000";
+
+  // Update Zustand store with team data when teamInfo is available
+  useEffect(() => {
+    if (selectedTeam) {
+      setTeamData({
+        firstColor: teamColor || defaultColor,
+        teamID: selectedTeam.teamID,
+        espnLogo1: espnLogo1,
+        teamCity: selectedTeam.teamCity,
+        teamName: `${selectedTeam.teamCity} ${selectedTeam.teamName}`, // Concatenating teamCity and teamName
+      });
+    }
+  }, [selectedTeam, setTeamData, teamColor, espnLogo1]);
 
   return (
     <>
       {isTeamInfoLoading ? (
         <Box mb={5}>
-          {/* Add margin-bottom for spacing */}
           <TeamHeadingSkeleton />
         </Box>
       ) : (
@@ -75,7 +104,7 @@ const TeamGrid = ({ teamAbv }: TeamGridProps) => {
                 firstColor={teamColor || defaultColor}
                 espnLogo1={espnLogo1}
                 teamCity={selectedTeam.teamCity}
-                teamName={selectedTeam.teamName}
+                teamName={`${selectedTeam.teamCity} ${selectedTeam.teamName}`} // Concatenating teamCity and teamName
                 teamID={selectedTeam.teamID}
               />
             ))}

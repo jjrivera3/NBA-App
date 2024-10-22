@@ -1,39 +1,58 @@
 import { Box, Flex, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
 import { lighten } from "polished";
 
-interface PlayerStatsProps {
-  player: {
-    stats: {
-      pts: number | null;
-      reb: number | null;
-      ast: number | null;
-      fgp: number | null;
-      tptfgp: number | null;
-      ftp: number | null;
-    };
-  };
+const PlayerStats = ({
+  firstColor,
+  lightValue,
+}: {
   firstColor: string;
   lightValue: number;
-}
-
-const PlayerStats = ({ player, firstColor, lightValue }: PlayerStatsProps) => {
+}) => {
+  // Hard-code the stats to zero for now
   const stats = [
-    { label: "PPG", value: player.stats.pts !== null ? player.stats.pts : "-" },
-    { label: "RPG", value: player.stats.reb !== null ? player.stats.reb : "-" },
-    { label: "APG", value: player.stats.ast !== null ? player.stats.ast : "-" },
-    {
-      label: "FG%",
-      value: player.stats.fgp !== null ? `${player.stats.fgp}%` : "-",
-    },
-    {
-      label: "3PT%",
-      value: player.stats.tptfgp !== null ? `${player.stats.tptfgp}%` : "-",
-    },
-    {
-      label: "FTP%",
-      value: player.stats.ftp !== null ? `${player.stats.ftp}%` : "-",
-    },
+    { label: "PPG", value: 0 },
+    { label: "RPG", value: 0 },
+    { label: "APG", value: 0 },
+    { label: "FG%", value: "0%" },
+    { label: "3PT%", value: "0%" },
+    { label: "FTP%", value: "0%" },
   ];
+
+  // const stats = player
+  //   ? [
+  //       {
+  //         label: "PPG",
+  //         value: player.stats.pts !== null ? player.stats.pts : 0,
+  //       },
+  //       {
+  //         label: "RPG",
+  //         value: player.stats.reb !== null ? player.stats.reb : 0,
+  //       },
+  //       {
+  //         label: "APG",
+  //         value: player.stats.ast !== null ? player.stats.ast : 0,
+  //       },
+  //       {
+  //         label: "FG%",
+  //         value: player.stats.fgp !== null ? `${player.stats.fgp}%` : "0%",
+  //       },
+  //       {
+  //         label: "3PT%",
+  //         value: player.stats.tptfgp !== null ? `${player.stats.tptfgp}%` : "0%",
+  //       },
+  //       {
+  //         label: "FTP%",
+  //         value: player.stats.ftp !== null ? `${player.stats.ftp}%` : "0%",
+  //       },
+  //     ]
+  //   : [
+  //       { label: "PPG", value: 0 },
+  //       { label: "RPG", value: 0 },
+  //       { label: "APG", value: 0 },
+  //       { label: "FG%", value: "0%" },
+  //       { label: "3PT%", value: "0%" },
+  //       { label: "FTP%", value: "0%" },
+  //     ];
 
   // Check if the layout should be grid or flex based on screen size
   const isMobileLayout = useBreakpointValue({ base: true, md: false });
@@ -46,7 +65,7 @@ const PlayerStats = ({ player, firstColor, lightValue }: PlayerStatsProps) => {
           textAlign="center"
           padding="15px"
           borderRadius="md"
-          border={`1px solid ${lighten(lightValue, firstColor)}`} // Not this one
+          border={`1px solid ${lighten(lightValue, firstColor)}`}
         >
           <Text
             fontSize="16px"
@@ -70,7 +89,7 @@ const PlayerStats = ({ player, firstColor, lightValue }: PlayerStatsProps) => {
       justify="space-between"
       align="center"
       background="linear-gradient(180deg, #1a1a1d 0%, #2e2e2e 90%, #353535 100%)"
-      borderBottom={`1px solid ${lighten(lightValue, firstColor)}`} // Not this
+      borderBottom={`1px solid ${lighten(lightValue, firstColor)}`}
     >
       {stats.map((stat, index) => (
         <Box

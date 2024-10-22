@@ -1,8 +1,8 @@
 import {
+  Box,
   Input,
   InputGroup,
   InputLeftElement,
-  Box,
   List,
   ListItem,
 } from "@chakra-ui/react";
@@ -10,28 +10,40 @@ import { useEffect, useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import useTeamInfo from "../hooks/useTeamInfo";
+import { usePlayerStore } from "../usePlayerStore"; // Import the player store
+import { usePlayerAttributesStore } from "../usePlayerAttributesStore"; // Import the attributes store
+import nbaTeams from "../data/nbateams";
+import Player from "../entities/Player";
 
-// Define the structure of a player
-interface Player {
-  playerID: string;
-  longName: string;
-  team: string;
-  bRefID: string;
-  espnName: string;
-}
-
-// Define the structure of a team's roster and team info
 interface Team {
   teamAbv: string;
-  Roster: Record<string, PlayerInfo>; // Dynamic object with player data
+  teamCity: string;
+  teamName: string;
+  currentStreak: {
+    length: string;
+    result: string;
+  };
+  loss: string;
+  ppg: string;
+  Roster: Record<string, PlayerInfo>;
 }
 
 interface PlayerInfo {
+  teamName: any;
+  rating: any;
+  college: any;
   playerID: string;
   longName: string;
   team: string;
   bRefID: string;
   espnName: string;
+  espnID?: string;
+  exp: string;
+  bDay?: string;
+  height?: string;
+  weight?: string;
+  pos?: string;
+  jerseyNum?: string;
 }
 
 // Define the props for the component
@@ -44,13 +56,17 @@ const SearchInput = ({ onSearch }: Props) => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [filteredPlayers, setFilteredPlayers] = useState<Player[]>([]);
   const [searchText, setSearchText] = useState("");
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // Track the selected index
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const navigate = useNavigate();
 
   const { data: teamsData, isError } = useTeamInfo();
+  const setPlayerData = usePlayerStore((state) => state.setPlayerData);
+  const setPlayerRating = usePlayerAttributesStore(
+    (state) => state.setPlayerRating
+  ); // Get setPlayerRating from the store
 
   useEffect(() => {
-    if (teamsData && Array.isArray(teamsData.body)) {
+    if (teamsData?.body && Array.isArray(teamsData.body)) {
       const teams = teamsData.body as Team[];
 
       const allPlayers: Player[] = teams.flatMap((team) => {
@@ -62,6 +78,19 @@ const SearchInput = ({ onSearch }: Props) => {
           team: teamAbbreviation,
           bRefID: player.bRefID,
           espnName: player.espnName,
+          espnID: player.espnID,
+          exp: player.exp,
+          bDay: player.bDay,
+          height: player.height,
+          weight: player.weight,
+          pos: player.pos,
+          jerseyNum: player.jerseyNum,
+          college: player.college,
+          stats: { pts: "0", reb: "0", ast: "0" }, // Default stats
+          teamId: "", // Set this to a valid value if available
+          name: player.longName, // Set this to the player's name or relevant value
+          rating: player.rating || {}, // Initialize rating, set to empty object if not available
+          espnHeadshot: `https://a.espncdn.com/i/headshots/nba/players/full/${player.espnID}.png`, // Default headshot URL
         }));
       });
 
@@ -85,7 +114,7 @@ const SearchInput = ({ onSearch }: Props) => {
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "ArrowDown") {
-      event.preventDefault(); // Prevent scrolling the page
+      event.preventDefault();
       setSelectedIndex((prev) =>
         prev === null ? 0 : prev < filteredPlayers.length - 1 ? prev + 1 : prev
       );
@@ -100,9 +129,7 @@ const SearchInput = ({ onSearch }: Props) => {
         handleSelectPlayer(
           selectedPlayer.longName,
           selectedPlayer.playerID,
-          selectedPlayer.team,
-          selectedPlayer.bRefID,
-          selectedPlayer.espnName
+          selectedPlayer.team
         );
       }
     }
@@ -115,28 +142,84 @@ const SearchInput = ({ onSearch }: Props) => {
   const handleSelectPlayer = (
     playerName: string,
     playerID: string,
-    teamAbbreviation: string,
-    bRefID: string,
-    espnName: string
+    teamAbbreviation: string
   ) => {
-    setSearchText(playerName);
+    setSearchText(""); // Clear the search bar
     setFilteredPlayers([]);
     setSelectedIndex(null); // Reset the selected index
 
-    // Log the selected player details including bRefID and espnName
-    console.log("Selected Player:", {
-      playerName,
-      playerID,
-      teamAbbreviation,
-      bRefID,
-      espnName,
-    });
+    // Convert "gs" to "gsw" for the Golden State Warriors
+    const adjustedTeamAbbreviation =
+      teamAbbreviation.toLowerCase() === "gs" ? "gsw" : teamAbbreviation;
 
-    const formattedPlayerName = formatPlayerNameForUrl(playerName);
-    const formattedTeam = teamAbbreviation.toLowerCase();
+    if (teamsData?.body) {
+      const playerInfo = Object.values(teamsData.body as unknown as Team[])
+        .flatMap((team) => Object.values(team.Roster))
+        .find((p: PlayerInfo) => p.playerID === playerID);
 
-    navigate(`/${formattedTeam}/${formattedPlayerName}`);
-    onSearch(playerName);
+      if (playerInfo) {
+        // Find the matching team in nbaTeams.ts
+        const selectedTeam = nbaTeams.find(
+          (team) =>
+            team.info.abbrev.toLowerCase() ===
+            adjustedTeamAbbreviation.toLowerCase()
+        );
+
+        if (selectedTeam) {
+          const firstTeamColor = selectedTeam.info.colors[0] || "#000000"; // Default to black if no color is found
+          const teamLogo = selectedTeam.info.logoImage || "defaultLogo.png"; // Fallback to default logo
+
+          const espnHeadshot = `https://a.espncdn.com/i/headshots/nba/players/full/${playerInfo.espnID}.png`; // Example ESPN headshot URL
+
+          const player: Player = {
+            playerID: playerInfo.playerID,
+            longName: playerInfo.longName,
+            team: playerInfo.team,
+            bRefID: playerInfo.bRefID,
+            espnName: playerInfo.espnName,
+            espnID: playerInfo.espnID,
+            exp: playerInfo.exp,
+            bDay: playerInfo.bDay,
+            height: playerInfo.height,
+            weight: playerInfo.weight,
+            pos: playerInfo.pos,
+            jerseyNum: playerInfo.jerseyNum,
+            rating: playerInfo.rating,
+            college: playerInfo.college,
+            espnHeadshot: espnHeadshot,
+            stats: { pts: "0", reb: "0", ast: "0" }, // Default stats
+            teamId: "",
+            name: "",
+          };
+
+          console.log(selectedTeam);
+
+          // Update usePlayerStore with player data and team logo
+          setPlayerData({
+            player,
+            firstColor: firstTeamColor,
+            teamID: selectedTeam.teamId || "unknown",
+            espnLogo1: teamLogo,
+            teamCity: selectedTeam.info.city || "Unknown City",
+            teamName: selectedTeam.name,
+          });
+
+          if (player.rating) {
+            setPlayerRating(player.rating);
+          }
+
+          const formattedPlayerName = formatPlayerNameForUrl(playerName);
+          const formattedTeam = adjustedTeamAbbreviation.toLowerCase();
+          navigate(`/${formattedTeam}/${formattedPlayerName}`);
+          onSearch(playerName);
+        } else {
+          console.error(
+            "Team not found for abbreviation:",
+            adjustedTeamAbbreviation
+          );
+        }
+      }
+    }
   };
 
   if (isError) return <p>Error fetching rosters.</p>;
@@ -157,7 +240,7 @@ const SearchInput = ({ onSearch }: Props) => {
             ref={ref}
             value={searchText}
             onChange={handleSearch}
-            onKeyDown={handleKeyDown} // Add key down event
+            onKeyDown={handleKeyDown}
             borderRadius={20}
             placeholder="Search players..."
             variant="filled"
@@ -192,15 +275,13 @@ const SearchInput = ({ onSearch }: Props) => {
                   handleSelectPlayer(
                     player.longName,
                     player.playerID,
-                    player.team,
-                    player.bRefID,
-                    player.espnName
+                    player.team
                   )
                 }
                 px={3}
                 py={2}
                 color="white"
-                bg={selectedIndex === index ? "#f8991d" : "transparent"} // Highlight selected item
+                bg={selectedIndex === index ? "#f8991d" : "transparent"}
               >
                 {player.longName}
               </ListItem>

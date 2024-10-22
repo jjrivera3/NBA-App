@@ -1,3 +1,4 @@
+// src/components/Player Profile/PlayerAttributes.tsx
 import {
   Box,
   Flex,
@@ -7,6 +8,7 @@ import {
   Heading,
   Divider,
 } from "@chakra-ui/react";
+import { usePlayerAttributesStore } from "../../usePlayerAttributesStore";
 
 interface AttributeBarProps {
   label: string;
@@ -66,13 +68,13 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({ title, attributes }) => (
   </Box>
 );
 
-interface PlayerAttributesProps {
-  playerRating: any; // Modify to be more specific if you have a type for playerRating
-}
+const PlayerAttributes: React.FC = () => {
+  const playerRating = usePlayerAttributesStore((state) => state.playerRating); // Access the store
 
-const PlayerAttributes: React.FC<PlayerAttributesProps> = ({
-  playerRating,
-}) => {
+  if (!playerRating) {
+    return <Text>No player ratings available</Text>; // Handle the case when there's no player data
+  }
+
   return (
     <Grid
       templateColumns={{

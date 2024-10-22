@@ -1,5 +1,6 @@
 // Define the structure for a team
 export default interface Team {
+  teamName(arg0: string, teamName: any): unknown;
   color: any;
   logo: string;
   abbreviation: string;
@@ -7,6 +8,8 @@ export default interface Team {
   name: string;
   light: number;
   info: {
+    name: any;
+    city: string;
     abbrev: string;
     colors: string[];
     logoImage: string;

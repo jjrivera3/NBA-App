@@ -14,58 +14,54 @@ import {
 } from "@chakra-ui/react";
 import Player from "../entities/Player";
 import playerAvatar from "../assets/player_avatar.png";
-import RatingScore from "./RatingScore"; // Ensure RatingScore is correctly imported
+import RatingScore from "./RatingScore";
 import { Link } from "react-router-dom";
 import { svgString } from "../services/svgString";
-import { useState } from "react"; // Import useState
+import { useState } from "react";
+import { useTeamStore } from "../useTeamStore";
+import { usePlayerStore } from "../usePlayerStore";
 
 interface Props {
   player: Player;
-  firstColor: string | null; // Add firstColor as a prop
-  espnLogo1: string; // Add espnLogo1 as a prop
-  teamCity: string;
-  teamName: string;
-  teamID: string;
+  firstColor: string; // Added firstColor
+  espnLogo1: string; // Add this line
+  teamCity: string; // Add this line
+  teamName: string; // Add this line
+  teamID: string; // Add this line
 }
 
-const PlayerCard = ({
-  player,
-  firstColor,
-  espnLogo1,
-  teamCity,
-  teamName,
-  teamID,
-}: Props) => {
+const PlayerCard = ({ player, firstColor }: Props) => {
   const [avatarSrc, setAvatarSrc] = useState(
     player?.espnID
       ? `https://a.espncdn.com/i/headshots/nba/players/full/${player.espnID}.png`
       : playerAvatar
   );
 
-  // Check if player exists
-  const isLoading = !player;
+  const { teamID, espnLogo1, teamCity, teamName } = useTeamStore(
+    (state) => state
+  ); // Access team data from Zustand
 
-  // Default stats if player is defined but stats are missing
-  const stats = player?.stats || {
-    pts: "0",
-    reb: "0",
-    ast: "0",
+  const setPlayerData = usePlayerStore((state) => state.setPlayerData);
+
+  const handleClick = () => {
+    setPlayerData({
+      player,
+      firstColor: firstColor || "#000000",
+      teamID: teamID || "unknown",
+      espnLogo1: espnLogo1 || "defaultLogo.png",
+      teamCity: teamCity || "Unknown City",
+      teamName: teamName || "Unknown Team",
+    });
   };
 
-  // Determine if the button should be disabled
-  const isButtonDisabled =
-    stats.pts === "0" && stats.reb === "0" && stats.ast === "0";
-
-  // Change team abbreviation from "GS" to "GSW" if necessary
+  const isLoading = !player;
+  const stats = player?.stats || { pts: "0", reb: "0", ast: "0" };
   const teamAbbreviation = player.team === "GS" ? "GSW" : player.team;
-
   const playerProfileUrl = `/${teamAbbreviation
     .toLowerCase()
     .replace(/\s+/g, "-")}/${player?.espnName
     .toLowerCase()
     .replace(/\s+/g, "-")}`;
-
-  // Safely access the player's rating
   const playerRating = player?.rating?.overallAttribute || 0;
 
   return (
@@ -94,10 +90,8 @@ const PlayerCard = ({
           <Avatar
             size={"2xl"}
             src={avatarSrc}
-            onError={() => setAvatarSrc(playerAvatar)} // Fallback to playerAvatar on error
-            css={{
-              border: "2px solid white",
-            }}
+            onError={() => setAvatarSrc(playerAvatar)}
+            css={{ border: "2px solid white" }}
             bg={"#ffffff"}
           />
         </Flex>
@@ -108,7 +102,6 @@ const PlayerCard = ({
               {player?.espnName}
             </Heading>
             <HStack mt={2} mb={2}>
-              {/* Pass the player's rating to the RatingScore component */}
               <RatingScore rating={playerRating} />
             </HStack>
             <Text fontSize={"15px"} color={"gray.400"}>
@@ -145,26 +138,15 @@ const PlayerCard = ({
               </Stack>
             )}
           </Center>
-          <Link
-            to={playerProfileUrl}
-            state={{
-              espnLogo1,
-              player,
-              teamCity,
-              teamName,
-              firstColor,
-              teamID,
-            }} // Pass player and team info via state
-          >
+          <Link to={playerProfileUrl} onClick={handleClick}>
             <Button
               w={"full"}
               mt={8}
-              bg={firstColor || "#151f21"} // Use firstColor as the background color
+              bg={firstColor || "#151f21"}
               color={"white"}
               rounded={"md"}
               fontSize={13}
               fontWeight={600}
-              isDisabled={isButtonDisabled}
               _hover={{
                 transform: "translateY(-2px)",
                 boxShadow: "lg",

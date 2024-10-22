@@ -1,42 +1,20 @@
 import { Flex, HStack, Image, Text, VStack } from "@chakra-ui/react";
 import RatingScore from "../RatingScore";
-// import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
-// import { FaArrowLeft } from "react-icons/fa"; // Import the back arrow icon
 
-interface Player {
-  espnName: string;
-  rating: {
-    overallAttribute: number;
-  };
-  jerseyNum: string;
-  pos: string;
-}
+import { usePlayerStore } from "../../usePlayerStore";
 
-interface Props {
-  player: Player; // Update player type to be an object
-  teamCity: string;
-  teamName: string;
-  espnLogo1: string;
-  firstColor: string;
-}
-
-const PlayerInfo = ({
-  player,
-  teamCity,
-  teamName,
-  espnLogo1,
-}: // firstColor,
-Props) => {
-  // const navigate = useNavigate(); // Initialize the navigate function
+const PlayerInfo = () => {
+  const { player, teamName, espnLogo1 } = usePlayerStore((state) => state); // Get player from store
 
   // Define the responsive font size as a constant
   const responsiveFontSize = { base: 22, sm: 24, md: 22, xl: 32 };
 
-  // Apply the font size, using the same value conditionally
   const fontSize =
-    player.espnName === "Shai Gilgeous-Alexander"
+    player?.espnName === "Shai Gilgeous-Alexander"
       ? responsiveFontSize
       : responsiveFontSize;
+
+  if (!player) return null; // Handle case when player is not available
 
   return (
     <VStack
@@ -46,14 +24,14 @@ Props) => {
     >
       <Flex align="center">
         <Image
-          src={espnLogo1}
+          src={espnLogo1 ?? undefined}
           alt={`${teamName} Logo`}
           title={`${teamName} Logo`}
           boxSize="25px"
           mr={2}
         />
         <Text fontSize={["sm", "md"]} fontWeight="400" color="white">
-          {teamCity} {teamName}
+          {teamName}
         </Text>
       </Flex>
       <HStack align="flex-start" spacing={2}>
@@ -64,7 +42,7 @@ Props) => {
           {player.espnName.split(" ").slice(1).join(" ")} {/* Last name */}
         </Text>
       </HStack>
-      <RatingScore rating={player.rating.overallAttribute} />
+      <RatingScore rating={player.rating?.overallAttribute || 0} />
       <Text
         fontSize="md"
         fontWeight="400"
@@ -73,17 +51,6 @@ Props) => {
       >
         #{player.jerseyNum} • {player.pos}
       </Text>
-
-      {/* <Button
-        leftIcon={<FaArrowLeft />}
-        background={firstColor}
-        color="white"
-        size="sm"
-        mt={4}
-        onClick={() => navigate(-1)} // Go back to the previous page
-      >
-        Back to Team
-      </Button> */}
     </VStack>
   );
 };
