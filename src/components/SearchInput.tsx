@@ -12,11 +12,7 @@ import { useNavigate } from "react-router-dom";
 import usePlayerSearch from "../hooks/usePlayerSearch"; // Use the renamed hook
 import Player from "../entities/Player";
 
-interface Props {
-  onSearch: (searchText: string) => void;
-}
-
-const SearchInput = ({ onSearch }: Props) => {
+const SearchInput = () => {
   const ref = useRef<HTMLInputElement>(null);
   const [filteredPlayers, setFilteredPlayers] = useState<Player[]>([]);
   const [searchText, setSearchText] = useState("");
@@ -71,7 +67,6 @@ const SearchInput = ({ onSearch }: Props) => {
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          if (ref.current) onSearch(ref.current.value);
         }}
       >
         <InputGroup>

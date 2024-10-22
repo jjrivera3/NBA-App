@@ -29,8 +29,6 @@ const TeamGrid = ({ teamAbv }: TeamGridProps) => {
     schedules: "true",
   });
 
-  console.log(teamInfo);
-
   // Zustand store actions
   const setTeamData = useTeamStore((state) => state.setTeamData); // Use setTeamData from useTeamStore
 

@@ -1,23 +1,24 @@
 import { Badge } from "@chakra-ui/react";
+import { usePlayerStore } from "../usePlayerStore"; // Import Zustand store
 
-interface Props {
-  rating: number;
-}
+const RatingScore = () => {
+  const playerRating = usePlayerStore(
+    (state) => state.player?.rating?.overallAttribute || 0
+  ); // Access rating from Zustand
 
-const RatingScore = ({ rating }: Props) => {
   let color = "";
-  let displayText = `2K Rating: ${rating}`;
+  let displayText = `2K Rating: ${playerRating}`;
 
-  if (rating === 0) {
+  if (playerRating === 0) {
     color = "gray";
     displayText = "No Rating";
-  } else if (rating >= 90) {
+  } else if (playerRating >= 90) {
     color = "green";
-  } else if (rating >= 80) {
+  } else if (playerRating >= 80) {
     color = "teal";
-  } else if (rating >= 70) {
+  } else if (playerRating >= 70) {
     color = "yellow";
-  } else if (rating >= 60) {
+  } else if (playerRating >= 60) {
     color = "orange";
   } else {
     color = "red";

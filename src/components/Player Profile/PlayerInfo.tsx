@@ -1,6 +1,5 @@
 import { Flex, HStack, Image, Text, VStack } from "@chakra-ui/react";
 import RatingScore from "../RatingScore";
-
 import { usePlayerStore } from "../../usePlayerStore";
 
 const PlayerInfo = () => {
@@ -42,7 +41,7 @@ const PlayerInfo = () => {
           {player.espnName.split(" ").slice(1).join(" ")} {/* Last name */}
         </Text>
       </HStack>
-      <RatingScore rating={player.rating?.overallAttribute || 0} />
+      <RatingScore /> {/* No need to pass rating as a prop */}
       <Text
         fontSize="md"
         fontWeight="400"

@@ -12,6 +12,8 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 import { rgba } from "polished";
 import { Radar } from "react-chartjs-2";
 import twoKlogo from "../../assets/NBA-2K25-dark.svg";
+import { usePlayerAttributesStore } from "../../usePlayerAttributesStore";
+import { usePlayerStore } from "../../usePlayerStore"; // Import from PlayerStore
 
 // Register necessary chart components and the plugin
 ChartJS.register(
@@ -24,84 +26,20 @@ ChartJS.register(
   ChartDataLabels
 );
 
-// Utility function to calculate the average of an array of numbers
-const calculateAverage = (attributes: number[]) => {
-  return Math.round(
-    attributes.reduce((acc, curr) => acc + curr, 0) / attributes.length
-  );
-};
+const PlayerRadarChart: React.FC = () => {
+  // Fetch player rating and averages from the player attributes store
+  const playerRating = usePlayerAttributesStore((state) => state.playerRating);
+  const averages = usePlayerAttributesStore((state) => state.averages);
 
-// Define the props interface
-interface PlayerRadarChartProps {
-  firstColor: string;
-  playerRating: any;
-}
+  // Fetch firstColor from usePlayerStore
+  const firstColor = usePlayerStore((state) => state.firstColor);
 
-const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
-  firstColor,
-  playerRating,
-}) => {
-  // Group the attributes into arrays
-  const insideScoringAttributes = [
-    playerRating.layup,
-    playerRating.standingDunk,
-    playerRating.drivingDunk,
-    playerRating.postHook,
-    playerRating.postFade,
-    playerRating.postControl,
-    playerRating.drawFoul,
-    playerRating.hands,
-  ];
-
-  const outsideScoringAttributes = [
-    playerRating.closeShot,
-    playerRating.midRangeShot,
-    playerRating.threePointShot,
-    playerRating.freeThrow,
-    playerRating.shotIQ,
-    playerRating.offensiveConsistency,
-  ];
-
-  const reboundingAttributes = [
-    playerRating.offensiveRebound,
-    playerRating.defensiveRebound,
-  ];
-
-  const athleticismAttributes = [
-    playerRating.speed,
-    playerRating.agility,
-    playerRating.strength,
-    playerRating.vertical,
-    playerRating.stamina,
-    playerRating.hustle,
-    playerRating.overallDurability,
-  ];
-
-  const playmakingAttributes = [
-    playerRating.passAccuracy,
-    playerRating.ballHandle,
-    playerRating.speedWithBall,
-    playerRating.passIQ,
-    playerRating.passVision,
-  ];
-
-  const defenseAttributes = [
-    playerRating.interiorDefense,
-    playerRating.perimeterDefense,
-    playerRating.steal,
-    playerRating.block,
-    playerRating.helpDefenseIQ,
-    playerRating.passPerception,
-    playerRating.defensiveConsistency,
-  ];
-
-  // Use the utility function to calculate averages
-  const insideScoringAverage = calculateAverage(insideScoringAttributes);
-  const outsideScoringAverage = calculateAverage(outsideScoringAttributes);
-  const reboundingAverage = calculateAverage(reboundingAttributes);
-  const athleticismAverage = calculateAverage(athleticismAttributes);
-  const playmakingAverage = calculateAverage(playmakingAttributes);
-  const defenseAverage = calculateAverage(defenseAttributes);
+  if (!playerRating || !firstColor || !averages) {
+    console.log("Player Rating:", playerRating);
+    console.log("First Color:", firstColor);
+    console.log("Averages:", averages);
+    return <div>No player rating data available</div>;
+  }
 
   const data = {
     labels: [
@@ -115,15 +53,15 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
     ],
     datasets: [
       {
-        label: playerRating.name,
+        label: playerRating.name || "Player",
         data: [
           playerRating.overallAttribute,
-          insideScoringAverage,
-          outsideScoringAverage,
-          athleticismAverage,
-          playmakingAverage,
-          reboundingAverage,
-          defenseAverage,
+          averages.insideScoringAverage,
+          averages.outsideScoringAverage,
+          averages.athleticismAverage,
+          averages.playmakingAverage,
+          averages.reboundingAverage,
+          averages.defenseAverage,
         ],
         backgroundColor: rgba(firstColor, 0.3),
         borderColor: firstColor,
@@ -137,54 +75,39 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
     ],
   };
 
+  console.log("Radar Chart Data:", data); // Log the chart data for debugging
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
     scales: {
       r: {
-        angleLines: {
-          color: "rgba(211, 211, 211, 0.5)",
-        },
-        grid: {
-          color: "rgba(211, 211, 211, 0.5)",
-        },
+        angleLines: { color: "rgba(211, 211, 211, 0.5)" },
+        grid: { color: "rgba(211, 211, 211, 0.5)" },
         pointLabels: {
           color: "#ffffff",
-          font: {
-            size: window.innerWidth <= 768 ? 8 : 18,
-          },
+          font: { size: window.innerWidth <= 768 ? 8 : 18 },
           padding: window.innerWidth <= 768 ? 10 : 10,
         },
-        ticks: {
-          display: false,
-          backdropColor: "transparent",
-          stepSize: 20,
-        },
+        ticks: { display: false, backdropColor: "transparent", stepSize: 20 },
         suggestedMin: 0,
         suggestedMax: 100,
       },
     },
     plugins: {
-      legend: {
-        display: false,
-      },
+      legend: { display: false },
       tooltip: {
         enabled: true,
         displayColors: false,
         callbacks: {
-          label: function (context: any) {
-            return `${context.dataset.label}: ${context.parsed.r}`;
-          },
+          label: (context: any) =>
+            `${context.dataset.label}: ${context.parsed.r}`,
         },
         backgroundColor: "rgba(0, 0, 0, 0.7)",
         titleColor: "#ffffff",
         bodyColor: "#ffffff",
-        titleFont: {
-          size: 14,
-        },
-        bodyFont: {
-          size: 14,
-        },
+        titleFont: { size: 14 },
+        bodyFont: { size: 14 },
       },
       datalabels: {
         color: "#ffffff",
@@ -199,9 +122,7 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
           size: window.innerWidth <= 768 ? 9 : 13,
           weight: "bold" as const,
         },
-        formatter: (value: number) => {
-          return value.toFixed(0);
-        },
+        formatter: (value: number) => value.toFixed(0),
       },
     },
   };
@@ -229,7 +150,7 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
           width={{ base: "80px", md: "130px" }}
           alt="NBA 2K25 Missing Players"
           title="NBA 2K25 Missing Players"
-          mr={2} // Spacing between image and text
+          mr={2}
         />
         <Text
           fontSize={{ base: "xl", md: "3xl" }}
@@ -241,7 +162,7 @@ const PlayerRadarChart: React.FC<PlayerRadarChartProps> = ({
       </Box>
 
       {/* Radar Chart */}
-      <Box width="100%" height="100%" position="relative">
+      <Box width="100%" height="100%" minHeight="300px" position="relative">
         <Radar data={data} options={options} />
       </Box>
     </Box>

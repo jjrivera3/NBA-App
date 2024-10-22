@@ -4,6 +4,7 @@ import Player from "../entities/Player";
 import nbaTeams from "../data/nbateams";
 import { usePlayerStore } from "../usePlayerStore";
 import { usePlayerAttributesStore } from "../usePlayerAttributesStore";
+import ratings from "../data/ratings"; // Import ratings data
 import Team from "../entities/Team";
 
 const usePlayerSearch = () => {
@@ -51,6 +52,7 @@ const usePlayerSearch = () => {
         .find((p) => p.playerID === playerID);
 
       if (playerInfo) {
+        // Set player data in Zustand store
         setPlayerData({
           player: {
             ...playerInfo,
@@ -61,8 +63,22 @@ const usePlayerSearch = () => {
           espnLogo1: selectedTeam.info.logoImage,
           teamCity: selectedTeam.info.city,
           teamName: selectedTeam.name,
+          playerRating: null,
         });
-        setPlayerRating(playerInfo.rating);
+
+        // Find player ratings in the ratings.ts file based on player name
+        const playerRatings = ratings.find(
+          (rating) => rating.name === playerName
+        );
+
+        if (playerRatings) {
+          // If player ratings are found, set them in Zustand store
+          setPlayerRating(playerRatings);
+        } else {
+          console.warn(`No ratings found for player: ${playerName}`);
+        }
+
+        // Navigate to the player's detail page
         navigate(
           `/${adjustedTeamAbbreviation}/${playerName
             .toLowerCase()

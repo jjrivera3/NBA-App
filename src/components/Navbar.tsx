@@ -38,10 +38,6 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
   const logoSize = useBreakpointValue({ base: "28px", md: "34px" });
   const logoTextSize = useBreakpointValue({ base: "18px", md: "17px" });
 
-  const onSearch = (value: string) => {
-    console.log("Search term:", value);
-  };
-
   const handleSelectTeam = (teamId: string, teamAbv: string) => {
     onTeamSelect(teamId, teamAbv);
     onClose(); // Close the drawer on team selection
@@ -91,7 +87,7 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
       {/* Conditionally render Search Input only on non-mobile screens */}
       {!isMobile && (
         <Box flex="1" marginX={4}>
-          <SearchInput onSearch={onSearch} />
+          <SearchInput />
         </Box>
       )}
 

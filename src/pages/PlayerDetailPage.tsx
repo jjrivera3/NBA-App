@@ -3,7 +3,7 @@ import { lighten } from "polished";
 import { useEffect } from "react";
 import PlayerAttributes from "../components/Player Profile/PlayerAttributes";
 import PlayerImage from "../components/PlayerImage";
-// import PlayerRadarChart from "../components/Player Profile/PlayerRadarChart";
+import PlayerRadarChart from "../components/Player Profile/PlayerRadarChart";
 import StatsTable from "../components/Player Profile/PlayerStatsTable";
 import nbateams from "../data/nbateams";
 import useAvatarSrc from "../hooks/useAvatarSrc";
@@ -120,17 +120,14 @@ const PlayerDetailPage = () => {
 
       <Box
         as="section"
-        padding={{ base: "0px", md: "20px" }}
+        padding={{ base: "0px", md: "0px" }}
         borderRadius="md"
         w="full"
         mt={5}
         boxShadow="lg"
         rounded="md"
       >
-        {/* <PlayerRadarChart
-          firstColor={firstColor || "#000"} // Fallback to black
-          playerRating={player.rating}
-        /> */}
+        <PlayerRadarChart />
 
         <Box mt={5}>
           <PlayerAttributes />

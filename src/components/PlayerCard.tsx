@@ -51,6 +51,7 @@ const PlayerCard = ({ player, firstColor }: Props) => {
       espnLogo1: espnLogo1 || "defaultLogo.png",
       teamCity: teamCity || "Unknown City",
       teamName: teamName || "Unknown Team",
+      playerRating: null,
     });
   };
 
@@ -102,7 +103,7 @@ const PlayerCard = ({ player, firstColor }: Props) => {
               {player?.espnName}
             </Heading>
             <HStack mt={2} mb={2}>
-              <RatingScore rating={playerRating} />
+              <RatingScore />
             </HStack>
             <Text fontSize={"15px"} color={"gray.400"}>
               #{player?.jerseyNum} | {player?.pos}
