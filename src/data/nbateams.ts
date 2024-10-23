@@ -11,14 +11,16 @@ const nbaTeams: Team[] = [
     teamId: "1",
     name: "Atlanta Hawks",
     light: 0.1,
-    color: "#E03A3E", // Primary color
-    logo: generateLogoUrl("ATL"), // Logo URL
-    abbreviation: "ATL", // Abbreviation
+    color: "#E03A3E",
+    logo: generateLogoUrl("ATL"),
+    abbreviation: "ATL",
     info: {
       abbrev: "ATL",
       colors: ["#E03A3E", "#C1D32F", "#26282A"],
       logoImage: generateLogoUrl("ATL"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "2",
@@ -31,7 +33,9 @@ const nbaTeams: Team[] = [
       abbrev: "BOS",
       colors: ["#007A33", "#BA9653", "#000000"],
       logoImage: generateLogoUrl("BOS"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "3",
@@ -44,7 +48,9 @@ const nbaTeams: Team[] = [
       abbrev: "BKN",
       colors: ["#E74D53"],
       logoImage: generateLogoUrl("BKN"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "4",
@@ -57,7 +63,9 @@ const nbaTeams: Team[] = [
       abbrev: "CHA",
       colors: ["#00788C", "#1D1160", "#A1A1A4"],
       logoImage: generateLogoUrl("CHA"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "5",
@@ -70,7 +78,9 @@ const nbaTeams: Team[] = [
       abbrev: "CHI",
       colors: ["#CE1141", "#000000"],
       logoImage: generateLogoUrl("CHI"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "6",
@@ -83,7 +93,9 @@ const nbaTeams: Team[] = [
       abbrev: "CLE",
       colors: ["#6F263D", "#FFB81C", "#041E42"],
       logoImage: generateLogoUrl("CLE"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "7",
@@ -96,7 +108,9 @@ const nbaTeams: Team[] = [
       abbrev: "DAL",
       colors: ["#00538C", "#002B5C", "#26282A"],
       logoImage: generateLogoUrl("DAL"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "8",
@@ -109,7 +123,9 @@ const nbaTeams: Team[] = [
       abbrev: "DEN",
       colors: ["#8B2131", "#FEC524"],
       logoImage: generateLogoUrl("DEN"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "9",
@@ -122,7 +138,9 @@ const nbaTeams: Team[] = [
       abbrev: "DET",
       colors: ["#C8102E", "#1D428A", "#4d86c0"],
       logoImage: generateLogoUrl("DET"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "10",
@@ -135,7 +153,9 @@ const nbaTeams: Team[] = [
       abbrev: "GSW",
       colors: ["#1D428A", "#FFD100"],
       logoImage: generateLogoUrl("GSW"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "11",
@@ -148,7 +168,9 @@ const nbaTeams: Team[] = [
       abbrev: "HOU",
       colors: ["#CE1141", "#000000", "#A1A1A4"],
       logoImage: generateLogoUrl("HOU"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "12",
@@ -161,7 +183,9 @@ const nbaTeams: Team[] = [
       abbrev: "IND",
       colors: ["#002D62", "#FDBB30", "#FF883E"],
       logoImage: generateLogoUrl("IND"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "13",
@@ -174,7 +198,9 @@ const nbaTeams: Team[] = [
       abbrev: "LAC",
       colors: ["#0033A0", "#FF6C00"],
       logoImage: generateLogoUrl("LAC"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "14",
@@ -187,22 +213,25 @@ const nbaTeams: Team[] = [
       abbrev: "LAL",
       colors: ["#552583", "#FDB927", "#000000"],
       logoImage: generateLogoUrl("LAL"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "15",
     name: "Memphis Grizzlies",
     light: 0,
-    color: "#5D76A9", // Primary color
+    color: "#5D76A9",
     logo: generateLogoUrl("MEM"),
     abbreviation: "MEM",
     info: {
       abbrev: "MEM",
       colors: ["#5D76A9", "#12173F", "#FDB927"],
       logoImage: generateLogoUrl("MEM"),
+      city: "",
     },
+    Roster: {},
   },
-
   {
     teamId: "16",
     name: "Miami Heat",
@@ -214,7 +243,9 @@ const nbaTeams: Team[] = [
       abbrev: "MIA",
       colors: ["#98002E", "#000000", "#F9A01B"],
       logoImage: generateLogoUrl("MIA"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "17",
@@ -227,7 +258,9 @@ const nbaTeams: Team[] = [
       abbrev: "MIL",
       colors: ["#00471B", "#EEE1C6", "#0077C0"],
       logoImage: generateLogoUrl("MIL"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "18",
@@ -240,7 +273,9 @@ const nbaTeams: Team[] = [
       abbrev: "MIN",
       colors: ["#236192", "#0C2340", "#78BE20"],
       logoImage: generateLogoUrl("MIN"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "19",
@@ -253,7 +288,9 @@ const nbaTeams: Team[] = [
       abbrev: "NOP",
       colors: ["#85714D", "#002B5C", "#E31837"],
       logoImage: generateLogoUrl("NO"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "20",
@@ -266,7 +303,9 @@ const nbaTeams: Team[] = [
       abbrev: "NYK",
       colors: ["#006BB6", "#F58426", "#000000"],
       logoImage: generateLogoUrl("NYK"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "21",
@@ -279,7 +318,9 @@ const nbaTeams: Team[] = [
       abbrev: "OKC",
       colors: ["#007AC1", "#EF3B24", "#002D62"],
       logoImage: generateLogoUrl("OKC"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "22",
@@ -292,7 +333,9 @@ const nbaTeams: Team[] = [
       abbrev: "ORL",
       colors: ["#0077C0", "#C4CED4", "#000000"],
       logoImage: generateLogoUrl("ORL"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "23",
@@ -305,7 +348,9 @@ const nbaTeams: Team[] = [
       abbrev: "PHI",
       colors: ["#006BB6", "#ED174C", "#005397"],
       logoImage: generateLogoUrl("PHI"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "24",
@@ -318,7 +363,9 @@ const nbaTeams: Team[] = [
       abbrev: "PHX",
       colors: ["#E56020", "#1D1160"],
       logoImage: generateLogoUrl("PHO"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "25",
@@ -331,7 +378,9 @@ const nbaTeams: Team[] = [
       abbrev: "POR",
       colors: ["#E03A3E", "#000000", "#A1A1A4"],
       logoImage: generateLogoUrl("POR"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "26",
@@ -344,7 +393,9 @@ const nbaTeams: Team[] = [
       abbrev: "SAC",
       colors: ["#5A2D81", "#63727A", "#63727A"],
       logoImage: generateLogoUrl("SAC"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "27",
@@ -357,7 +408,9 @@ const nbaTeams: Team[] = [
       abbrev: "SAS",
       colors: ["#A1A1A4", "#C4CED4", "#000000"],
       logoImage: generateLogoUrl("SAS"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "28",
@@ -370,7 +423,9 @@ const nbaTeams: Team[] = [
       abbrev: "TOR",
       colors: ["#CE1141", "#000000", "#A1A1A4"],
       logoImage: generateLogoUrl("TOR"),
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "29",
@@ -383,7 +438,9 @@ const nbaTeams: Team[] = [
       abbrev: "UTA",
       colors: ["#002B5C", "#00471B", "#8B2131"],
       logoImage: Utah_Jazz,
+      city: "",
     },
+    Roster: {},
   },
   {
     teamId: "30",
@@ -396,7 +453,9 @@ const nbaTeams: Team[] = [
       abbrev: "WAS",
       colors: ["#002B5C", "#E31837"],
       logoImage: generateLogoUrl("WAS"),
+      city: "",
     },
+    Roster: {},
   },
 ];
 

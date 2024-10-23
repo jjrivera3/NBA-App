@@ -53,7 +53,6 @@ interface PlayerAttributesState {
   } | null;
   setPlayerRating: (rating: any) => void;
   setFirstColor: (color: string) => void;
-  calculateAverages: (rating: PlayerAttributesState["playerRating"]) => void;
 }
 
 export const usePlayerAttributesStore = create<PlayerAttributesState>(
@@ -62,7 +61,7 @@ export const usePlayerAttributesStore = create<PlayerAttributesState>(
     firstColor: null,
     averages: null, // Add a new state for storing averages
     setPlayerRating: (rating) => {
-      set((state) => {
+      set(() => {
         const calculateAverage = (attributes: number[]) =>
           Math.round(
             attributes.reduce((acc, curr) => acc + curr, 0) / attributes.length
@@ -137,9 +136,6 @@ export const usePlayerAttributesStore = create<PlayerAttributesState>(
       });
     },
     setFirstColor: (color) => set(() => ({ firstColor: color })),
-    calculateAverages: (rating) => {
-      // You can reuse the logic inside setPlayerRating if you need a dedicated function
-    },
   })
 );
 

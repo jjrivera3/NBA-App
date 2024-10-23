@@ -35,9 +35,6 @@ const PlayerRadarChart: React.FC = () => {
   const firstColor = usePlayerStore((state) => state.firstColor);
 
   if (!playerRating || !firstColor || !averages) {
-    console.log("Player Rating:", playerRating);
-    console.log("First Color:", firstColor);
-    console.log("Averages:", averages);
     return <div>No player rating data available</div>;
   }
 
@@ -74,8 +71,6 @@ const PlayerRadarChart: React.FC = () => {
       },
     ],
   };
-
-  console.log("Radar Chart Data:", data); // Log the chart data for debugging
 
   const options = {
     responsive: true,

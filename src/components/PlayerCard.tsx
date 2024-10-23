@@ -14,20 +14,20 @@ import {
 } from "@chakra-ui/react";
 import Player from "../entities/Player";
 import playerAvatar from "../assets/player_avatar.png";
-import RatingScore from "./RatingScore";
 import { Link } from "react-router-dom";
 import { svgString } from "../services/svgString";
 import { useState } from "react";
 import { useTeamStore } from "../useTeamStore";
 import { usePlayerStore } from "../usePlayerStore";
+import RatingTeamScore from "./RatingTeamScore";
 
 interface Props {
   player: Player;
-  firstColor: string; // Added firstColor
-  espnLogo1: string; // Add this line
-  teamCity: string; // Add this line
-  teamName: string; // Add this line
-  teamID: string; // Add this line
+  firstColor: string;
+  espnLogo1: string;
+  teamCity: string;
+  teamName: string;
+  teamID: string;
 }
 
 const PlayerCard = ({ player, firstColor }: Props) => {
@@ -39,7 +39,7 @@ const PlayerCard = ({ player, firstColor }: Props) => {
 
   const { teamID, espnLogo1, teamCity, teamName } = useTeamStore(
     (state) => state
-  ); // Access team data from Zustand
+  );
 
   const setPlayerData = usePlayerStore((state) => state.setPlayerData);
 
@@ -63,7 +63,9 @@ const PlayerCard = ({ player, firstColor }: Props) => {
     .replace(/\s+/g, "-")}/${player?.espnName
     .toLowerCase()
     .replace(/\s+/g, "-")}`;
-  const playerRating = player?.rating?.overallAttribute || 0;
+
+  // Ensure playerRating defaults to 0 if undefined
+  const playerRating = player?.rating?.overallAttribute ?? 0;
 
   return (
     <Center mt={5} py={{ base: 1, md: 2 }}>
@@ -103,7 +105,8 @@ const PlayerCard = ({ player, firstColor }: Props) => {
               {player?.espnName}
             </Heading>
             <HStack mt={2} mb={2}>
-              <RatingScore />
+              {/* Pass the playerRating to the RatingTeamScore component */}
+              <RatingTeamScore playerRating={playerRating} />
             </HStack>
             <Text fontSize={"15px"} color={"gray.400"}>
               #{player?.jerseyNum} | {player?.pos}

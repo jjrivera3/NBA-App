@@ -1,5 +1,6 @@
 import { Box, Flex, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
 import { lighten } from "polished";
+import { usePlayerStore } from "../usePlayerStore";
 
 const PlayerStats = ({
   firstColor,
@@ -8,51 +9,51 @@ const PlayerStats = ({
   firstColor: string;
   lightValue: number;
 }) => {
-  // Hard-code the stats to zero for now
-  const stats = [
-    { label: "PPG", value: 0 },
-    { label: "RPG", value: 0 },
-    { label: "APG", value: 0 },
-    { label: "FG%", value: "0%" },
-    { label: "3PT%", value: "0%" },
-    { label: "FTP%", value: "0%" },
-  ];
+  // Get the player from the PlayerStore
+  const player = usePlayerStore((state) => state.player);
 
-  // const stats = player
-  //   ? [
-  //       {
-  //         label: "PPG",
-  //         value: player.stats.pts !== null ? player.stats.pts : 0,
-  //       },
-  //       {
-  //         label: "RPG",
-  //         value: player.stats.reb !== null ? player.stats.reb : 0,
-  //       },
-  //       {
-  //         label: "APG",
-  //         value: player.stats.ast !== null ? player.stats.ast : 0,
-  //       },
-  //       {
-  //         label: "FG%",
-  //         value: player.stats.fgp !== null ? `${player.stats.fgp}%` : "0%",
-  //       },
-  //       {
-  //         label: "3PT%",
-  //         value: player.stats.tptfgp !== null ? `${player.stats.tptfgp}%` : "0%",
-  //       },
-  //       {
-  //         label: "FTP%",
-  //         value: player.stats.ftp !== null ? `${player.stats.ftp}%` : "0%",
-  //       },
-  //     ]
-  //   : [
-  //       { label: "PPG", value: 0 },
-  //       { label: "RPG", value: 0 },
-  //       { label: "APG", value: 0 },
-  //       { label: "FG%", value: "0%" },
-  //       { label: "3PT%", value: "0%" },
-  //       { label: "FTP%", value: "0%" },
-  //     ];
+  // Check if player and player.stats exist, and safely handle missing stats
+  const stats =
+    player && player.stats
+      ? [
+          {
+            label: "PPG",
+            value: player.stats.pts !== undefined ? player.stats.pts : 0,
+          },
+          {
+            label: "RPG",
+            value: player.stats.reb !== undefined ? player.stats.reb : 0,
+          },
+          {
+            label: "APG",
+            value: player.stats.ast !== undefined ? player.stats.ast : 0,
+          },
+          {
+            label: "FG%",
+            value:
+              player.stats.fgp !== undefined ? `${player.stats.fgp}%` : "0%",
+          },
+          {
+            label: "3PT%",
+            value:
+              player.stats.tptfgp !== undefined
+                ? `${player.stats.tptfgp}%`
+                : "0%",
+          },
+          {
+            label: "FTP%",
+            value:
+              player.stats.ftp !== undefined ? `${player.stats.ftp}%` : "0%",
+          },
+        ]
+      : [
+          { label: "PPG", value: 0 },
+          { label: "RPG", value: 0 },
+          { label: "APG", value: 0 },
+          { label: "FG%", value: "0%" },
+          { label: "3PT%", value: "0%" },
+          { label: "FTP%", value: "0%" },
+        ];
 
   // Check if the layout should be grid or flex based on screen size
   const isMobileLayout = useBreakpointValue({ base: true, md: false });

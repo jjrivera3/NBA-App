@@ -10,6 +10,8 @@ const usePlayerRatings = (selectedPlayerName: string | null) => {
 
   useEffect(() => {
     if (selectedPlayerName) {
+      console.log("Fetching ratings for:", selectedPlayerName); // Log selected player name
+
       // Find the player's ratings based on the selected player's name
       const playerRatings = ratings.find(
         (rating) => rating.name === selectedPlayerName
@@ -18,6 +20,7 @@ const usePlayerRatings = (selectedPlayerName: string | null) => {
       if (playerRatings) {
         // Update Zustand store with the matched player's ratings
         setPlayerRating(playerRatings);
+        console.log(`Player Ratings for ${selectedPlayerName}:`, playerRatings); // Log player ratings
       } else {
         console.warn("No ratings found for the selected player");
       }

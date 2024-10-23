@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import useTeamInfo from "./useTeamInfo";
-import Player from "../entities/Player";
 import nbaTeams from "../data/nbateams";
-import { usePlayerStore } from "../usePlayerStore";
-import { usePlayerAttributesStore } from "../usePlayerAttributesStore";
 import ratings from "../data/ratings"; // Import ratings data
-import Team from "../entities/Team";
+import Player from "../entities/Player";
+import TeamStore from "../entities/TeamStore";
+import { usePlayerAttributesStore } from "../usePlayerAttributesStore";
+import { usePlayerStore } from "../usePlayerStore";
+import useTeamInfo from "./useTeamInfo";
 
 const usePlayerSearch = () => {
   const [players, setPlayers] = useState<Player[]>([]);
@@ -17,7 +17,7 @@ const usePlayerSearch = () => {
 
   useEffect(() => {
     if (teamsData?.body && Array.isArray(teamsData.body)) {
-      const teams = teamsData.body as Team[];
+      const teams = teamsData.body as TeamStore[];
 
       const allPlayers: Player[] = teams.flatMap((team) => {
         return Object.values(team.Roster).map((player) => ({
@@ -27,6 +27,7 @@ const usePlayerSearch = () => {
         }));
       });
       setPlayers(allPlayers);
+      console.log("Players loaded:", allPlayers); // Log players loaded
     }
   }, [teamsData]);
 
@@ -36,9 +37,12 @@ const usePlayerSearch = () => {
     teamAbbreviation: string,
     navigate: (path: string) => void
   ) => {
-    // Convert "gs" to "gsw" for the Golden State Warriors
     const adjustedTeamAbbreviation =
-      teamAbbreviation.toLowerCase() === "gs" ? "gsw" : teamAbbreviation;
+      teamAbbreviation.toLowerCase() === "gs"
+        ? "gsw"
+        : teamAbbreviation.toLowerCase() === "sa"
+        ? "sas"
+        : teamAbbreviation;
 
     const selectedTeam = nbaTeams.find(
       (team) =>
@@ -47,32 +51,40 @@ const usePlayerSearch = () => {
     );
 
     if (selectedTeam && teamsData?.body) {
-      const playerInfo = Object.values(teamsData.body as unknown as Team[])
+      const playerInfo = Object.values(teamsData.body as unknown as TeamStore[])
         .flatMap((team) => Object.values(team.Roster))
         .find((p) => p.playerID === playerID);
 
       if (playerInfo) {
-        // Set player data in Zustand store
-        setPlayerData({
-          player: {
-            ...playerInfo,
-            espnHeadshot: `https://a.espncdn.com/i/headshots/nba/players/full/${playerInfo.espnID}.png`,
-          },
-          firstColor: selectedTeam.info.colors[0],
-          teamID: selectedTeam.teamId,
-          espnLogo1: selectedTeam.info.logoImage,
-          teamCity: selectedTeam.info.city,
-          teamName: selectedTeam.name,
-          playerRating: null,
-        });
+        console.log("Selected player info:", playerInfo); // Log player info
 
         // Find player ratings in the ratings.ts file based on player name
         const playerRatings = ratings.find(
           (rating) => rating.name === playerName
         );
 
+        // Combine player info with player ratings
+        const playerWithRating = {
+          ...playerInfo,
+          rating: playerRatings || null, // Add the rating property
+          espnHeadshot: `https://a.espncdn.com/i/headshots/nba/players/full/${playerInfo.espnID}.png`,
+        };
+
+        console.log("Player with rating:", playerWithRating); // Log player with rating
+
+        // Set player data including rating into Zustand store
+        setPlayerData({
+          player: playerWithRating,
+          firstColor: selectedTeam.info.colors[0],
+          teamID: selectedTeam.teamId,
+          espnLogo1: selectedTeam.info.logoImage,
+          teamCity: selectedTeam.info.city,
+          teamName: selectedTeam.name,
+          playerRating: playerRatings || null, // You can also store ratings in a separate state
+        });
+
+        // If player ratings are found, set them in Zustand store
         if (playerRatings) {
-          // If player ratings are found, set them in Zustand store
           setPlayerRating(playerRatings);
         } else {
           console.warn(`No ratings found for player: ${playerName}`);
@@ -84,8 +96,11 @@ const usePlayerSearch = () => {
             .toLowerCase()
             .replace(/\s+/g, "-")}`
         );
+
+        return playerInfo.espnName; // Return the player's espnName
       }
     }
+    return null;
   };
 
   return { players, handleSelectPlayer, isError };

@@ -41,7 +41,7 @@ const PlayerInfo = () => {
           {player.espnName.split(" ").slice(1).join(" ")} {/* Last name */}
         </Text>
       </HStack>
-      <RatingScore /> {/* No need to pass rating as a prop */}
+      <RatingScore />
       <Text
         fontSize="md"
         fontWeight="400"

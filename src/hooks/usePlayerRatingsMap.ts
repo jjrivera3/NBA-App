@@ -28,10 +28,15 @@ const usePlayerRatingsMap = (players: any[]) => {
       }
     });
 
-    return players.map((player) => ({
-      ...player,
-      rating: playerRatingsMap[player.espnName] || null,
-    }));
+  
+    return players.map((player) => {
+      const playerWithRating = {
+        ...player,
+        rating: playerRatingsMap[player.espnName] || null,
+      };
+
+      return playerWithRating;
+    });
   }, [players, ratings]);
 };
 

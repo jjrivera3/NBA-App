@@ -11,14 +11,21 @@ import { BsSearch } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import usePlayerSearch from "../hooks/usePlayerSearch"; // Use the renamed hook
 import Player from "../entities/Player";
+import usePlayerRatings from "../hooks/usePlayerRatings"; // Import the usePlayerRatings hook
 
 const SearchInput = () => {
   const ref = useRef<HTMLInputElement>(null);
   const [filteredPlayers, setFilteredPlayers] = useState<Player[]>([]);
   const [searchText, setSearchText] = useState("");
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [selectedPlayerName, setSelectedPlayerName] = useState<string | null>(
+    null
+  ); // State to store selected player name
   const navigate = useNavigate();
   const { players, handleSelectPlayer, isError } = usePlayerSearch(); // No need to pass setSearchText
+
+  // Use the playerRatings hook to update ratings based on selected player name
+  usePlayerRatings(selectedPlayerName);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const text = event.target.value;
@@ -46,12 +53,15 @@ const SearchInput = () => {
     } else if (event.key === "Enter" && selectedIndex !== null) {
       const selectedPlayer = filteredPlayers[selectedIndex];
       if (selectedPlayer) {
-        handleSelectPlayer(
+        const espnName = handleSelectPlayer(
           selectedPlayer.longName,
           selectedPlayer.playerID,
           selectedPlayer.team,
           navigate
         );
+
+        // Set selected player name for usePlayerRatings hook
+        setSelectedPlayerName(espnName);
 
         // Clear the search bar and reset the filtered players
         setSearchText("");
@@ -109,14 +119,16 @@ const SearchInput = () => {
                   color: "white",
                 }}
                 onClick={() => {
-                  handleSelectPlayer(
+                  const espnName = handleSelectPlayer(
                     player.longName,
                     player.playerID,
                     player.team,
                     navigate
                   );
 
-                  // Clear the search bar and reset the filtered players
+                  // Set selected player name for usePlayerRatings hook
+                  setSelectedPlayerName(espnName);
+
                   setSearchText("");
                   setFilteredPlayers([]);
                 }}

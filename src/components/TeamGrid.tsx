@@ -51,6 +51,8 @@ const TeamGrid = ({ teamAbv }: TeamGridProps) => {
     selectedTeam?.teamID === "29" ? Utah_Jazz : selectedTeam?.espnLogo1;
   const defaultColor = "#000000";
 
+  console.log(selectedTeam);
+
   // Update Zustand store with team data when teamInfo is available
   useEffect(() => {
     if (selectedTeam) {
