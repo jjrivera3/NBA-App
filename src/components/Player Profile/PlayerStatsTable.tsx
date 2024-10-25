@@ -85,22 +85,20 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
       info: false,
       columnDefs: statKeys.map((_, index) => ({
         orderSequence: ["desc", "asc"],
-        targets: index + 2, // Adjust based on your columns, starts from index 2 for GP
+        targets: index + 2,
       })),
-      select: true, // Enable row selection
-      rowCallback: function (row, data, index) {
+      select: true,
+      rowCallback: function (row, _data, index) {
         $(row).css("background-color", index % 2 === 0 ? "#2b2b2b" : "#202020");
       },
       destroy: true,
     });
 
-    // Row selection event
     $("#statsTable tbody").on("click", "tr", function () {
       const selectedData = table.row(this).data();
       console.log("Selected Row Data:", selectedData);
     });
 
-    // Highlight row on mouse over
     $("#statsTable tbody")
       .on("mouseover", "tr", function () {
         $(this).addClass("highlight");
@@ -109,7 +107,6 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
         $(this).removeClass("highlight");
       });
 
-    // Highlight column on mouse over
     $("#statsTable th")
       .on("mouseover", function () {
         const columnIndex = $(this).index();
@@ -133,6 +130,8 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
   const totalGamesStarted = stats.reduce((total, stat) => {
     return stat.season !== "Career" ? total + Number(stat.gamesStarted) : total;
   }, 0);
+
+  const lastStat = stats[stats.length - 1];
 
   const thStyle: React.CSSProperties = {
     fontFamily: "var(--chakra-fonts-heading)",
@@ -203,7 +202,7 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
           </tr>
         </thead>
         <tbody>
-          {stats.map((row, index) => {
+          {stats.slice(0, -1).map((row, index) => {
             const teamData = nbateams.find((team) => {
               if (
                 (row.team === "PHO" && team.info.abbrev === "PHX") ||
@@ -235,16 +234,21 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
             return (
               <tr key={index}>
                 <td
+                  className="season-cell"
                   style={{
                     ...cellStyle,
                     fontWeight: "bold",
                     whiteSpace: "nowrap",
                     color: teamColor,
+                    minWidth: "112px",
+                    width: "112px",
+                    maxWidth: "112px",
                   }}
                 >
                   {row.season}
                 </td>
                 <td
+                  className="team-cell team-cell-custom"
                   style={{ ...cellStyle, fontWeight: "bold", color: teamColor }}
                 >
                   {displayTeamAbbrev}
@@ -252,6 +256,7 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
                 {statKeys.map((key, idx) => (
                   <td
                     key={idx}
+                    className="stats-cell"
                     style={{
                       ...cellStyle,
                     }}
@@ -268,6 +273,51 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
           })}
         </tbody>
       </table>
+
+      {/* Second Table for Last Stat */}
+
+      <table
+        id="lastStatTable"
+        className="table table-striped table-bordered"
+        style={{
+          minWidth: "1000px",
+          marginTop: "10px",
+          borderCollapse: "collapse",
+        }}
+      >
+        <thead style={{ backgroundColor: "#1f1f1f", color: "#f9f9f9" }}></thead>
+        <tbody>
+          <tr>
+            <td
+              className="season-cell"
+              style={{
+                ...cellStyle,
+                minWidth: "112px",
+                width: "112px",
+                maxWidth: "112px",
+                fontWeight: "bold", // Make the font bold
+              }}
+            >
+              {lastStat.season === "N/A" ? "" : lastStat.season}{" "}
+              {/* Remove 'N/A' */}
+            </td>
+            <td className="team-cell team-cell-custom" style={cellStyle}>
+              {lastStat.team === "N/A" ? "" : lastStat.team}{" "}
+              {/* Remove 'N/A' */}
+            </td>
+            {statKeys.map((key, idx) => (
+              <td key={idx} className="stats-cell" style={cellStyle}>
+                {lastStat.season === "Career" && key === "gamesPlayed"
+                  ? totalGamesPlayed
+                  : lastStat.season === "Career" && key === "gamesStarted"
+                  ? totalGamesStarted
+                  : lastStat[key]}
+              </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+
       <style>{`
         .highlight {
           background-color: #444 !important;
@@ -281,7 +331,20 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
         table.table.dataTable.table-striped>tbody>tr:nth-of-type(2n+1).selected>*,
         table.table.dataTable>tbody>tr.selected>* {
           box-shadow: inset 0 0 0 9999px #444;
-          box-shadow: inset 0 0 0 9999px #444;
+        }
+
+        /* Apply styles to the stats-cell class */
+        .stats-cell {
+          min-width: 70px;
+          width: 70px;
+          max-width: 70px;
+        }
+
+        /* Apply styles to the team-cell-custom class only */
+        .team-cell-custom {
+          min-width: 75px;
+          width: 75px;
+          max-width: 75px;
         }
       `}</style>
     </Box>
