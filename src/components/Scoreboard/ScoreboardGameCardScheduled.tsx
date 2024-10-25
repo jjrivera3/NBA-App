@@ -31,15 +31,15 @@ const ScoreboardGameCardScheduled: React.FC<GameProps> = ({ game }) => {
 
   return (
     <Box
-      borderRadius="md"
+      borderLeftRadius="5px"
       color="white"
       position="relative"
       overflow="hidden"
-      background="linear-gradient(90deg, #5b5b5b 0%, #2e2e2e 100%, #353535 100%)"
+      background="linear-gradient(180deg, #484848 0%, #2e2e2e 100%, #353535 100%)"
       pt={5}
       pb={7}
       boxShadow="md"
-      border="1px solid #3a3a3a"
+      borderRight="1px solid #545454"
       px={7}
     >
       {/* Game Details */}

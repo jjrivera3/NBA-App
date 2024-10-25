@@ -83,10 +83,7 @@ const GameEvents: React.FC<GameEventsProps> = ({
             >
               {/* Use GameCard if the game is scheduled */}
               {isScheduled ? (
-                <Box
-                  width="68%"
-                  background="linear-gradient(145deg, #464646, #484848, #333333)"
-                >
+                <Box width="68%">
                   <ScoreboardGameCardScheduled
                     game={{
                       gameID: competition.id,
@@ -109,10 +106,7 @@ const GameEvents: React.FC<GameEventsProps> = ({
                   />
                 </Box>
               ) : (
-                <Box
-                  width="68%"
-                  background="linear-gradient(145deg, #464646, #484848, #333333)"
-                >
+                <Box width="68%">
                   <ScoreboardScoreCard
                     game={{
                       gameID: competition.id,

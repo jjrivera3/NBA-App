@@ -27,7 +27,6 @@ const usePlayerSearch = () => {
         }));
       });
       setPlayers(allPlayers);
-      console.log("Players loaded:", allPlayers); // Log players loaded
     }
   }, [teamsData]);
 
@@ -56,8 +55,6 @@ const usePlayerSearch = () => {
         .find((p) => p.playerID === playerID);
 
       if (playerInfo) {
-        console.log("Selected player info:", playerInfo); // Log player info
-
         // Find player ratings in the ratings.ts file based on player name
         const playerRatings = ratings.find(
           (rating) => rating.name === playerName
@@ -69,8 +66,6 @@ const usePlayerSearch = () => {
           rating: playerRatings || null, // Add the rating property
           espnHeadshot: `https://a.espncdn.com/i/headshots/nba/players/full/${playerInfo.espnID}.png`,
         };
-
-        console.log("Player with rating:", playerWithRating); // Log player with rating
 
         // Set player data including rating into Zustand store
         setPlayerData({

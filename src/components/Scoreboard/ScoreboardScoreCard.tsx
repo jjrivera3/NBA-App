@@ -55,12 +55,11 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
       position="relative"
       overflow="hidden"
       px={8}
-      pt={5}
-      pb={5}
+      pt={7}
       borderRight="1px solid #545454"
-      background="linear-gradient(90deg, #5b5b5b 0%, #2e2e2e 100%, #353535 100%)"
+      background="linear-gradient(180deg, #484848 0%, #2e2e2e 100%, #353535 100%)"
     >
-      <Flex justifyContent="space-between" alignItems="center" mb={2}>
+      <Flex justifyContent="space-between" alignItems="center" mb={6}>
         {/* Game Status or Time */}
         <Box maxW="220px" display="flex" alignItems="center">
           <Text
@@ -97,7 +96,7 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
       {/* Progress Bar for In-Progress Games */}
       {isInProgress && (
         <Box
-          width="100%"
+          width="8%"
           height="2px"
           overflow="hidden"
           position="relative"
@@ -113,7 +112,7 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
         </Box>
       )}
 
-      <Flex justifyContent="space-between" alignItems="center" mt={3} mb={4}>
+      <Flex justifyContent="space-between" alignItems="center" mt={6} mb={4}>
         <Flex alignItems="center" width="250px" mr={5}>
           <Image
             src={game.awayLogo}

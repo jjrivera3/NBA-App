@@ -73,7 +73,7 @@ const Scoreboard: React.FC = () => {
         </Box>
       )}
 
-      <Heading as="h2" size="md" color="white">
+      <Heading as="h2" size="md" color="#f8991d">
         {format(selectedDate, "MMMM d, yyyy")}
       </Heading>
 

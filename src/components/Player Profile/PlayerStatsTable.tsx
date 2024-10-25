@@ -1,4 +1,9 @@
-import { Box, Table, Tbody, Td, Th, Thead, Tr, Text } from "@chakra-ui/react";
+import { useEffect } from "react";
+import $ from "jquery";
+import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
+import "datatables.net-bs5";
+import "datatables.net-select";
+import { Box, Text } from "@chakra-ui/react";
 import { lighten } from "polished";
 
 interface Stat {
@@ -44,8 +49,83 @@ interface StatsTableProps {
   nbateams: Team[];
 }
 
+type StatKeys = keyof Stat;
+
+const statKeys: StatKeys[] = [
+  "gamesPlayed",
+  "gamesStarted",
+  "minutesPerGame",
+  "pointsPerGame",
+  "totalReboundsPerGame",
+  "assistsPerGame",
+  "stealsPerGame",
+  "blocksPerGame",
+  "fieldGoalsMadePerGame",
+  "fieldGoalAttemptsPerGame",
+  "fieldGoalPercentage",
+  "threePointFieldGoalsMadePerGame",
+  "threePointFieldGoalAttemptsPerGame",
+  "threePointFieldGoalPercentage",
+  "freeThrowsMadePerGame",
+  "freeThrowAttemptsPerGame",
+  "freeThrowPercentage",
+  "offensiveReboundsPerGame",
+  "defensiveReboundsPerGame",
+  "turnoversPerGame",
+  "personalFoulsPerGame",
+];
+
 const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
-  // Calculate total games played and games started, excluding the "Career" row
+  useEffect(() => {
+    const table = $("#statsTable").DataTable({
+      paging: false,
+      searching: false,
+      lengthChange: false,
+      order: [[0, "asc"]],
+      info: false,
+      columnDefs: statKeys.map((_, index) => ({
+        orderSequence: ["desc", "asc"],
+        targets: index + 2, // Adjust based on your columns, starts from index 2 for GP
+      })),
+      select: true, // Enable row selection
+      rowCallback: function (row, data, index) {
+        $(row).css("background-color", index % 2 === 0 ? "#2b2b2b" : "#202020");
+      },
+      destroy: true,
+    });
+
+    // Row selection event
+    $("#statsTable tbody").on("click", "tr", function () {
+      const selectedData = table.row(this).data();
+      console.log("Selected Row Data:", selectedData);
+    });
+
+    // Highlight row on mouse over
+    $("#statsTable tbody")
+      .on("mouseover", "tr", function () {
+        $(this).addClass("highlight");
+      })
+      .on("mouseout", "tr", function () {
+        $(this).removeClass("highlight");
+      });
+
+    // Highlight column on mouse over
+    $("#statsTable th")
+      .on("mouseover", function () {
+        const columnIndex = $(this).index();
+        $("#statsTable tbody tr").each(function () {
+          $(this).find("td").eq(columnIndex).addClass("highlight-column");
+        });
+      })
+      .on("mouseout", function () {
+        $("#statsTable tbody tr").find("td").removeClass("highlight-column");
+      });
+
+    return () => {
+      table.destroy();
+    };
+  }, [stats]);
+
   const totalGamesPlayed = stats.reduce((total, stat) => {
     return stat.season !== "Career" ? total + Number(stat.gamesPlayed) : total;
   }, 0);
@@ -53,6 +133,27 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
   const totalGamesStarted = stats.reduce((total, stat) => {
     return stat.season !== "Career" ? total + Number(stat.gamesStarted) : total;
   }, 0);
+
+  const thStyle: React.CSSProperties = {
+    fontFamily: "var(--chakra-fonts-heading)",
+    fontWeight: "var(--chakra-fontWeights-bold)",
+    textTransform: "uppercase",
+    letterSpacing: "var(--chakra-letterSpacings-wider)",
+    textAlign: "start",
+    padding: "var(--chakra-space-1) var(--chakra-space-4)",
+    lineHeight: "var(--chakra-lineHeights-4)",
+    fontSize: "var(--chakra-fontSizes-xs)",
+    color: "var(--chakra-colors-gray-400)",
+    borderBottom: "1px solid var(--chakra-colors-gray-700)",
+  };
+
+  const cellStyle: React.CSSProperties = {
+    textAlign: "start" as "left",
+    padding: "var(--chakra-space-2) var(--chakra-space-4)",
+    fontSize: "var(--chakra-fontSizes-sm)",
+    lineHeight: "var(--chakra-lineHeights-4)",
+    borderBottom: "1px solid var(--chakra-colors-gray-700)",
+  };
 
   return (
     <Box overflowX="auto" background="#26262640" padding="5px">
@@ -65,35 +166,43 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
       >
         Career Stats
       </Text>
-      <Table variant="striped" size="sm" minWidth="1000px" marginTop="10px">
-        <Thead>
-          <Tr>
-            <Th>Season</Th>
-            <Th>TM</Th>
-            <Th isNumeric>GP</Th>
-            <Th isNumeric>GS</Th>
-            <Th isNumeric>MIN</Th>
-            <Th isNumeric>PTS</Th>
-            <Th isNumeric>REB</Th>
-            <Th isNumeric>AST</Th>
-            <Th isNumeric>STL</Th>
-            <Th isNumeric>BLK</Th>
-            <Th isNumeric>FGM</Th>
-            <Th isNumeric>FGA</Th>
-            <Th isNumeric>FG%</Th>
-            <Th isNumeric>3PM</Th>
-            <Th isNumeric>3PA</Th>
-            <Th isNumeric>3P%</Th>
-            <Th isNumeric>FTM</Th>
-            <Th isNumeric>FTA</Th>
-            <Th isNumeric>FT%</Th>
-            <Th isNumeric>OREB</Th>
-            <Th isNumeric>DREB</Th>
-            <Th isNumeric>TOV</Th>
-            <Th isNumeric>PF</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
+      <table
+        id="statsTable"
+        className="table table-striped table-bordered"
+        style={{
+          minWidth: "1000px",
+          marginTop: "10px",
+          borderCollapse: "collapse",
+        }}
+      >
+        <thead style={{ backgroundColor: "#1f1f1f", color: "#f9f9f9" }}>
+          <tr>
+            <th style={thStyle}>Season</th>
+            <th style={thStyle}>TM</th>
+            <th style={thStyle}>GP</th>
+            <th style={thStyle}>GS</th>
+            <th style={thStyle}>MIN</th>
+            <th style={thStyle}>PTS</th>
+            <th style={thStyle}>REB</th>
+            <th style={thStyle}>AST</th>
+            <th style={thStyle}>STL</th>
+            <th style={thStyle}>BLK</th>
+            <th style={thStyle}>FGM</th>
+            <th style={thStyle}>FGA</th>
+            <th style={thStyle}>FG%</th>
+            <th style={thStyle}>3PM</th>
+            <th style={thStyle}>3PA</th>
+            <th style={thStyle}>3P%</th>
+            <th style={thStyle}>FTM</th>
+            <th style={thStyle}>FTA</th>
+            <th style={thStyle}>FT%</th>
+            <th style={thStyle}>OREB</th>
+            <th style={thStyle}>DREB</th>
+            <th style={thStyle}>TOV</th>
+            <th style={thStyle}>PF</th>
+          </tr>
+        </thead>
+        <tbody>
           {stats.map((row, index) => {
             const teamData = nbateams.find((team) => {
               if (
@@ -124,45 +233,57 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
                 : row.team;
 
             return (
-              <Tr key={index}>
-                <Td fontWeight="bold" color={teamColor} whiteSpace="nowrap">
+              <tr key={index}>
+                <td
+                  style={{
+                    ...cellStyle,
+                    fontWeight: "bold",
+                    whiteSpace: "nowrap",
+                    color: teamColor,
+                  }}
+                >
                   {row.season}
-                </Td>
-                <Td fontWeight="bold" color={teamColor}>
+                </td>
+                <td
+                  style={{ ...cellStyle, fontWeight: "bold", color: teamColor }}
+                >
                   {displayTeamAbbrev}
-                </Td>
-                <Td isNumeric>
-                  {row.season === "Career" ? totalGamesPlayed : row.gamesPlayed}
-                </Td>
-                <Td isNumeric>
-                  {row.season === "Career"
-                    ? totalGamesStarted
-                    : row.gamesStarted}
-                </Td>
-                <Td isNumeric>{row.minutesPerGame}</Td>
-                <Td isNumeric>{row.pointsPerGame}</Td>
-                <Td isNumeric>{row.totalReboundsPerGame}</Td>
-                <Td isNumeric>{row.assistsPerGame}</Td>
-                <Td isNumeric>{row.stealsPerGame}</Td>
-                <Td isNumeric>{row.blocksPerGame}</Td>
-                <Td isNumeric>{row.fieldGoalsMadePerGame}</Td>
-                <Td isNumeric>{row.fieldGoalAttemptsPerGame}</Td>
-                <Td isNumeric>{row.fieldGoalPercentage}</Td>
-                <Td isNumeric>{row.threePointFieldGoalsMadePerGame}</Td>
-                <Td isNumeric>{row.threePointFieldGoalAttemptsPerGame}</Td>
-                <Td isNumeric>{row.threePointFieldGoalPercentage}</Td>
-                <Td isNumeric>{row.freeThrowsMadePerGame}</Td>
-                <Td isNumeric>{row.freeThrowAttemptsPerGame}</Td>
-                <Td isNumeric>{row.freeThrowPercentage}</Td>
-                <Td isNumeric>{row.offensiveReboundsPerGame}</Td>
-                <Td isNumeric>{row.defensiveReboundsPerGame}</Td>
-                <Td isNumeric>{row.turnoversPerGame}</Td>
-                <Td isNumeric>{row.personalFoulsPerGame}</Td>
-              </Tr>
+                </td>
+                {statKeys.map((key, idx) => (
+                  <td
+                    key={idx}
+                    style={{
+                      ...cellStyle,
+                    }}
+                  >
+                    {row.season === "Career" && key === "gamesPlayed"
+                      ? totalGamesPlayed
+                      : row.season === "Career" && key === "gamesStarted"
+                      ? totalGamesStarted
+                      : row[key]}
+                  </td>
+                ))}
+              </tr>
             );
           })}
-        </Tbody>
-      </Table>
+        </tbody>
+      </table>
+      <style>{`
+        .highlight {
+          background-color: #444 !important;
+        }
+        .highlight-column {
+          background-color: #444 !important;
+        }
+        span.dt-column-order {
+          display: none;
+        }
+        table.table.dataTable.table-striped>tbody>tr:nth-of-type(2n+1).selected>*,
+        table.table.dataTable>tbody>tr.selected>* {
+          box-shadow: inset 0 0 0 9999px #444;
+          box-shadow: inset 0 0 0 9999px #444;
+        }
+      `}</style>
     </Box>
   );
 };

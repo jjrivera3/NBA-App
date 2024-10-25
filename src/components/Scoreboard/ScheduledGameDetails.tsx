@@ -68,7 +68,7 @@ const ScheduledGameDetails: React.FC<ScheduledGameDetailsProps> = ({
             {tickets.links.length > 0 ? (
               <Link
                 href={tickets.links[0]} // Only the first link is used
-                color="blue.300"
+                color="#f8991d"
                 fontSize="sm"
                 isExternal
               >
