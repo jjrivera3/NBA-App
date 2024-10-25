@@ -15,7 +15,7 @@ import {
   useBreakpointValue,
   Link as ChakraLink,
 } from "@chakra-ui/react";
-import { HamburgerIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, SearchIcon } from "@chakra-ui/icons";
 import SearchInput from "./SearchInput";
 import logo from "../assets/logo.svg";
 import TeamList from "../components/TeamList";
@@ -29,6 +29,11 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isSearchOpen,
+    onOpen: onSearchOpen,
+    onClose: onSearchClose,
+  } = useDisclosure();
   const isMobile = useBreakpointValue({
     base: true,
     sm: true,
@@ -40,7 +45,8 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
 
   const handleSelectTeam = (teamId: string, teamAbv: string) => {
     onTeamSelect(teamId, teamAbv);
-    onClose(); // Close the drawer on team selection
+    onClose(); // Close the navigation drawer
+    onSearchClose(); // Close the search drawer
   };
 
   return (
@@ -53,7 +59,6 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
       color="white"
       boxShadow="md"
     >
-      {/* Logo and Text */}
       <Link
         to="/"
         style={{
@@ -73,38 +78,45 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
           <Text as="span" fontWeight="600" color="#f37021">
             Heat Check
           </Text>{" "}
-          <Text
-            fontSize={logoTextSize}
-            as="span"
-            fontWeight="400"
-            fontFamily="'Poppins', sans-serif"
-          >
+          <Text as="span" fontWeight="400" fontFamily="'Poppins', sans-serif">
             Hub
           </Text>
         </Text>
       </Link>
 
-      {/* Conditionally render Search Input only on non-mobile screens */}
       {!isMobile && (
-        <Box flex="1" marginX={4}>
+        <Box flex="1" marginX={4} overflow="visible">
           <SearchInput />
         </Box>
       )}
 
-      {/* Hamburger Menu Button */}
-      <IconButton
-        aria-label="Open menu"
-        icon={<HamburgerIcon />}
-        variant="outline"
-        onClick={onOpen}
-        color="#f8991d"
-        borderColor="#f8991d"
-        _hover={{
-          backgroundColor: "#f8991d",
-          color: "#1f2024",
-          borderColor: "#f8991d",
-        }}
-      />
+      <HStack spacing={2}>
+        {isMobile && (
+          <IconButton
+            aria-label="Search"
+            icon={<SearchIcon />}
+            variant="ghost"
+            onClick={onSearchOpen}
+            color="#f8991d"
+            _hover={{ backgroundColor: "transparent", color: "#f37021" }}
+            _active={{ backgroundColor: "transparent" }}
+          />
+        )}
+
+        <IconButton
+          aria-label="Open menu"
+          icon={<HamburgerIcon />}
+          variant="outline"
+          onClick={onOpen}
+          color="#f8991d"
+          borderColor="#f8991d"
+          _hover={{
+            backgroundColor: "#f8991d",
+            color: "#1f2024",
+            borderColor: "#f8991d",
+          }}
+        />
+      </HStack>
 
       {/* Drawer for Navigation Links and TeamList on Mobile */}
       <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
@@ -127,9 +139,8 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
               </Text>
             </Box>
           </DrawerHeader>
-          <DrawerBody paddingX={4} paddingTop={6}>
+          <DrawerBody paddingX={4} paddingTop={6} overflowY="auto">
             <VStack spacing={6} align="left">
-              {/* Navigation Links - Always Show */}
               <ChakraLink
                 as={Link}
                 to="/Page1"
@@ -167,7 +178,6 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
                 News
               </ChakraLink>
 
-              {/* TeamList - Show Only on Mobile */}
               {isMobile && (
                 <Box width="100%" mt={4}>
                   <TeamList
@@ -177,6 +187,20 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
                 </Box>
               )}
             </VStack>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+
+      {/* Drawer for Search Input on Mobile */}
+      <Drawer isOpen={isSearchOpen} placement="top" onClose={onSearchClose}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Search</DrawerHeader>
+          <DrawerBody overflow="visible">
+            <Box overflow="visible">
+              <SearchInput />
+            </Box>
           </DrawerBody>
         </DrawerContent>
       </Drawer>

@@ -55,11 +55,11 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
       position="relative"
       overflow="hidden"
       px={8}
-      pt={7}
+      py={5}
       borderRight="1px solid #545454"
       background="linear-gradient(180deg, #484848 0%, #2e2e2e 100%, #353535 100%)"
     >
-      <Flex justifyContent="space-between" alignItems="center" mb={6}>
+      <Flex justifyContent="space-between" alignItems="center">
         {/* Game Status or Time */}
         <Box maxW="220px" display="flex" alignItems="center">
           <Text

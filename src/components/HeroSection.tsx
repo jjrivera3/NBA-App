@@ -19,7 +19,7 @@ function HeroSection() {
   }>();
 
   const textAlign = useBreakpointValue<ResponsiveValue<Property.TextAlign>>({
-    base: "justify",
+    base: "center",
     md: "center",
   });
 

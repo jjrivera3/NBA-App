@@ -23,17 +23,20 @@ const UpcomingGame: React.FC<UpcomingGameProps> = ({
   teamColor,
   opponentColor,
 }) => {
+  // Swap colors based on whether the selected team is home or away
   const awayLogo = isHomeTeam ? opponentLogo : teamLogo;
   const awayAbbrev = isHomeTeam ? opponentAbbrev : teamAbbrev;
   const homeLogo = isHomeTeam ? teamLogo : opponentLogo;
   const homeAbbrev = isHomeTeam ? teamAbbrev : opponentAbbrev;
+  const homeColor = isHomeTeam ? teamColor : opponentColor;
+  const awayColor = isHomeTeam ? opponentColor : teamColor;
 
   return (
     <Box mt={7} borderRadius="md" boxShadow="2xl" overflow="hidden">
       {/* Top Bar with Team Colors */}
       <Flex height="6px" overflow="hidden">
-        <Box flex="1" backgroundColor={teamColor} />
-        <Box flex="1" backgroundColor={opponentColor} />
+        <Box flex="1" backgroundColor={awayColor} />
+        <Box flex="1" backgroundColor={homeColor} />
       </Flex>
 
       <Box

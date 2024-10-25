@@ -24,18 +24,17 @@ import TeamHeading from "./TeamHeading";
 import UpcomingGame from "./UpcomingGame";
 import TeamHeadingSkeleton from "./skeletons/TeamHeadSkeleton";
 import UpcomingGameSkeleton from "./skeletons/UpcomingGameSkeleton";
+import useTeamScheduleScores from "../hooks/useTeamScheduleScores";
 
-// Function to format the game time to local time zone
 const formatTime = (epoch: string | number) => {
   const timeInSeconds = typeof epoch === "string" ? Number(epoch) : epoch;
-  const date = new Date(timeInSeconds * 1000); // Convert seconds to milliseconds
+  const date = new Date(timeInSeconds * 1000);
   return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
 };
 
 const TeamSchedule = () => {
   const { teamAbv } = useParams<{ teamAbv: string }>();
   const lowercasedTeamAbv = teamAbv?.toLowerCase();
-
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   const selectedAbv = nbaTeams.find(
@@ -47,9 +46,15 @@ const TeamSchedule = () => {
   const { data: teamInfo, isLoading: isTeamInfoLoading } = useTeamInfo(teamId, {
     schedules: "true",
   });
+  const { data: scheduleScoresData, isLoading: isScheduleLoading } =
+    useTeamScheduleScores(teamId);
+  const scheduleScores = scheduleScoresData?.body?.schedule || [];
 
-  // @ts-ignore
-  const selectedTeam = teamInfo?.body?.find((team) => team.teamID === teamId);
+  const selectedTeam = Array.isArray(teamInfo?.body)
+    ? teamInfo.body.find(
+        (team: { teamID: string | null }) => team.teamID === teamId
+      )
+    : undefined;
 
   const espnLogo1 =
     selectedTeam?.teamID === "29" ? Utah_Jazz : selectedTeam?.espnLogo1;
@@ -68,7 +73,7 @@ const TeamSchedule = () => {
 
   return (
     <>
-      {isTeamInfoLoading ? (
+      {isTeamInfoLoading || isScheduleLoading ? (
         <Box mt={7} mb={5}>
           <TeamHeadingSkeleton />
           <UpcomingGameSkeleton />
@@ -127,6 +132,34 @@ const TeamSchedule = () => {
                         const gameTime = formatTime(game.gameTime_epoch);
                         const formattedDate = formatDate(game.gameDate);
 
+                        const score = scheduleScores.find(
+                          (score: { gameID: string; gameStatus: string }) =>
+                            score.gameID === game.gameID &&
+                            score.gameStatus === "Completed"
+                        );
+                        const isSelectedTeamWinner =
+                          score &&
+                          ((isHomeGame && score.homeResult === "W") ||
+                            (!isHomeGame && score.awayResult === "W"));
+                        const resultColor = score
+                          ? isSelectedTeamWinner
+                            ? "green.400"
+                            : "red.400"
+                          : "gray.400";
+                        const resultPrefix = score
+                          ? isSelectedTeamWinner
+                            ? "W"
+                            : "L"
+                          : "";
+                        const result = score
+                          ? `${resultPrefix}   ${score.awayPts} - ${score.homePts}`
+                          : "";
+                        const borderColor = score
+                          ? isSelectedTeamWinner
+                            ? "green.400"
+                            : "red.400"
+                          : "gray.400";
+
                         return (
                           <Box
                             key={game.gameID}
@@ -137,7 +170,8 @@ const TeamSchedule = () => {
                             boxShadow="lg"
                             transition="all 0.3s ease"
                             textAlign="center"
-                            border="1px solid #2b2b2b;"
+                            borderWidth="1px"
+                            borderColor={borderColor}
                           >
                             <Text
                               fontSize="sm"
@@ -180,10 +214,20 @@ const TeamSchedule = () => {
                             >
                               {gameTime}
                             </Box>
-                            <Box h="1px" bg="gray.600" my={2} />
-                            <Text fontSize="xs" color="gray.400">
-                              {isHomeGame ? "Home" : "Away"}
-                            </Text>
+                            {result ? (
+                              <Text
+                                fontSize="lg"
+                                fontWeight="bold"
+                                color={resultColor}
+                              >
+                                {result}
+                              </Text>
+                            ) : null}
+                            {!score && (
+                              <Text fontSize="xs" color="gray.400">
+                                {isHomeGame ? "Home" : "Away"}
+                              </Text>
+                            )}
                           </Box>
                         );
                       })}
@@ -218,6 +262,29 @@ const TeamSchedule = () => {
                           const gameTime = formatTime(game.gameTime_epoch);
                           const formattedDate = formatDate(game.gameDate);
 
+                          const score = scheduleScores.find(
+                            (score: { gameID: string; gameStatus: string }) =>
+                              score.gameID === game.gameID &&
+                              score.gameStatus === "Completed"
+                          );
+                          const isSelectedTeamWinner =
+                            score &&
+                            ((isHomeGame && score.homeResult === "W") ||
+                              (!isHomeGame && score.awayResult === "W"));
+                          const resultColor = score
+                            ? isSelectedTeamWinner
+                              ? "green.400"
+                              : "red.400"
+                            : "gray.400";
+                          const resultPrefix = score
+                            ? isSelectedTeamWinner
+                              ? "W"
+                              : "L"
+                            : "-";
+                          const result = score
+                            ? `${resultPrefix}   ${score.awayPts} - ${score.homePts}`
+                            : resultPrefix;
+
                           return (
                             <Tr
                               key={game.gameID}
@@ -247,10 +314,16 @@ const TeamSchedule = () => {
                                   </Text>
                                 </Flex>
                               </Td>
-                              <Td fontSize="15px" fontWeight={500}>
+                              <Td fontSize="16px" fontWeight={500}>
                                 {gameTime}
                               </Td>
-                              <Td fontSize="15px">—</Td>
+                              <Td
+                                fontSize="15px"
+                                fontWeight={700}
+                                color={resultColor}
+                              >
+                                {result}
+                              </Td>
                             </Tr>
                           );
                         })}

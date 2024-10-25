@@ -1,4 +1,3 @@
-// src/hooks/useNextGame.ts
 import GameSchedule from "../entities/GameSchedule";
 
 const useNextGame = (
@@ -11,7 +10,21 @@ const useNextGame = (
     ? teamSchedule
     : Object.values(teamSchedule);
 
-  return scheduleArray.sort((a, b) => a.gameDate.localeCompare(b.gameDate))[0];
+  // Get today's date in 'YYYYMMDD' format
+  const today = new Date();
+  const todayString = today.toISOString().split("T")[0].replace(/-/g, "");
+
+  // Filter for upcoming games including today
+  const upcomingGames = scheduleArray.filter(
+    (game) => game.gameDate >= todayString
+  );
+
+  // Sort upcoming games by date and return the first one
+  const nextGame = upcomingGames.sort((a, b) =>
+    a.gameDate.localeCompare(b.gameDate)
+  )[0];
+
+  return nextGame || null;
 };
 
 export default useNextGame;

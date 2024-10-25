@@ -83,6 +83,7 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
       lengthChange: false,
       order: [[0, "asc"]],
       info: false,
+
       columnDefs: statKeys.map((_, index) => ({
         orderSequence: ["desc", "asc"],
         targets: index + 2,
@@ -97,6 +98,7 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
     $("#statsTable tbody").on("click", "tr", function () {
       const selectedData = table.row(this).data();
       console.log("Selected Row Data:", selectedData);
+      $(this).toggleClass("selected-row"); // Toggle selected class
     });
 
     $("#statsTable tbody")
@@ -155,7 +157,7 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
   };
 
   return (
-    <Box overflowX="auto" background="#26262640" padding="5px">
+    <>
       <Text
         fontSize="2xl"
         fontWeight={500}
@@ -165,172 +167,185 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
       >
         Career Stats
       </Text>
-      <table
-        id="statsTable"
-        className="table table-striped table-bordered"
-        style={{
-          minWidth: "1000px",
-          marginTop: "10px",
-          borderCollapse: "collapse",
-        }}
-      >
-        <thead style={{ backgroundColor: "#1f1f1f", color: "#f9f9f9" }}>
-          <tr>
-            <th style={thStyle}>Season</th>
-            <th style={thStyle}>TM</th>
-            <th style={thStyle}>GP</th>
-            <th style={thStyle}>GS</th>
-            <th style={thStyle}>MIN</th>
-            <th style={thStyle}>PTS</th>
-            <th style={thStyle}>REB</th>
-            <th style={thStyle}>AST</th>
-            <th style={thStyle}>STL</th>
-            <th style={thStyle}>BLK</th>
-            <th style={thStyle}>FGM</th>
-            <th style={thStyle}>FGA</th>
-            <th style={thStyle}>FG%</th>
-            <th style={thStyle}>3PM</th>
-            <th style={thStyle}>3PA</th>
-            <th style={thStyle}>3P%</th>
-            <th style={thStyle}>FTM</th>
-            <th style={thStyle}>FTA</th>
-            <th style={thStyle}>FT%</th>
-            <th style={thStyle}>OREB</th>
-            <th style={thStyle}>DREB</th>
-            <th style={thStyle}>TOV</th>
-            <th style={thStyle}>PF</th>
-          </tr>
-        </thead>
-        <tbody>
-          {stats.slice(0, -1).map((row, index) => {
-            const teamData = nbateams.find((team) => {
-              if (
-                (row.team === "PHO" && team.info.abbrev === "PHX") ||
-                (row.team === "BRK" && team.info.abbrev === "BKN")
-              ) {
-                return true;
-              }
-              return team.info.abbrev === row.team;
-            });
+      <Box overflowX="auto" background="#26262640" padding="5px">
+        <table
+          id="statsTable"
+          className="table table-striped table-bordered"
+          style={{
+            minWidth: "1000px",
+            marginTop: "10px",
+            borderCollapse: "collapse",
+          }}
+        >
+          <thead style={{ backgroundColor: "#1f1f1f", color: "#f9f9f9" }}>
+            <tr>
+              <th style={thStyle}>Season</th>
+              <th style={thStyle}>TM</th>
+              <th style={thStyle}>GP</th>
+              <th style={thStyle}>GS</th>
+              <th style={thStyle}>MIN</th>
+              <th style={thStyle}>PTS</th>
+              <th style={thStyle}>REB</th>
+              <th style={thStyle}>AST</th>
+              <th style={thStyle}>STL</th>
+              <th style={thStyle}>BLK</th>
+              <th style={thStyle}>FGM</th>
+              <th style={thStyle}>FGA</th>
+              <th style={thStyle}>FG%</th>
+              <th style={thStyle}>3PM</th>
+              <th style={thStyle}>3PA</th>
+              <th style={thStyle}>3P%</th>
+              <th style={thStyle}>FTM</th>
+              <th style={thStyle}>FTA</th>
+              <th style={thStyle}>FT%</th>
+              <th style={thStyle}>OREB</th>
+              <th style={thStyle}>DREB</th>
+              <th style={thStyle}>TOV</th>
+              <th style={thStyle}>PF</th>
+            </tr>
+          </thead>
+          <tbody>
+            {stats.slice(0, -1).map((row, index) => {
+              const teamData = nbateams.find((team) => {
+                if (
+                  (row.team === "PHO" && team.info.abbrev === "PHX") ||
+                  (row.team === "BRK" && team.info.abbrev === "BKN")
+                ) {
+                  return true;
+                }
+                return team.info.abbrev === row.team;
+              });
 
-            const seattleColor = "#ffc200";
-            const primaryColor =
-              row.team === "SEA"
-                ? seattleColor
-                : teamData?.info.colors[0] || "#cccccc";
-            const teamColor =
-              row.team === "SEA"
-                ? seattleColor
-                : lighten(teamData?.light || 0.2, primaryColor);
-            const displayTeamAbbrev =
-              row.team === "N/A"
-                ? ""
-                : row.team === "PHO"
-                ? "PHO"
-                : row.team === "BRK"
-                ? "BKN"
-                : row.team;
+              const seattleColor = "#ffc200";
+              const primaryColor =
+                row.team === "SEA"
+                  ? seattleColor
+                  : teamData?.info.colors[0] || "#cccccc";
+              const teamColor =
+                row.team === "SEA"
+                  ? seattleColor
+                  : lighten(teamData?.light || 0.2, primaryColor);
+              const displayTeamAbbrev =
+                row.team === "N/A"
+                  ? ""
+                  : row.team === "PHO"
+                  ? "PHO"
+                  : row.team === "BRK"
+                  ? "BKN"
+                  : row.team;
 
-            return (
-              <tr key={index}>
-                <td
-                  className="season-cell"
-                  style={{
-                    ...cellStyle,
-                    fontWeight: "bold",
-                    whiteSpace: "nowrap",
-                    color: teamColor,
-                    minWidth: "112px",
-                    width: "112px",
-                    maxWidth: "112px",
-                  }}
-                >
-                  {row.season}
-                </td>
-                <td
-                  className="team-cell team-cell-custom"
-                  style={{ ...cellStyle, fontWeight: "bold", color: teamColor }}
-                >
-                  {displayTeamAbbrev}
-                </td>
-                {statKeys.map((key, idx) => (
+              return (
+                <tr key={index}>
                   <td
-                    key={idx}
-                    className="stats-cell"
+                    className="season-cell"
                     style={{
                       ...cellStyle,
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      color: teamColor,
+                      minWidth: "112px",
+                      width: "112px",
+                      maxWidth: "112px",
                     }}
                   >
-                    {row.season === "Career" && key === "gamesPlayed"
-                      ? totalGamesPlayed
-                      : row.season === "Career" && key === "gamesStarted"
-                      ? totalGamesStarted
-                      : row[key]}
+                    {row.season}
                   </td>
-                ))}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                  <td
+                    className="team-cell team-cell-custom"
+                    style={{
+                      ...cellStyle,
+                      fontWeight: "bold",
+                      color: teamColor,
+                    }}
+                  >
+                    {displayTeamAbbrev}
+                  </td>
+                  {statKeys.map((key, idx) => (
+                    <td
+                      key={idx}
+                      className="stats-cell"
+                      style={{
+                        ...cellStyle,
+                      }}
+                    >
+                      {row.season === "Career" && key === "gamesPlayed"
+                        ? totalGamesPlayed
+                        : row.season === "Career" && key === "gamesStarted"
+                        ? totalGamesStarted
+                        : row[key]}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
 
-      {/* Second Table for Last Stat */}
+        {/* Second Table for Last Stat */}
 
-      <table
-        id="lastStatTable"
-        className="table table-striped table-bordered"
-        style={{
-          minWidth: "1000px",
-          marginTop: "10px",
-          borderCollapse: "collapse",
-        }}
-      >
-        <thead style={{ backgroundColor: "#1f1f1f", color: "#f9f9f9" }}></thead>
-        <tbody>
-          <tr>
-            <td
-              className="season-cell"
-              style={{
-                ...cellStyle,
-                minWidth: "112px",
-                width: "112px",
-                maxWidth: "112px",
-                fontWeight: "bold", // Make the font bold
-              }}
-            >
-              {lastStat.season === "N/A" ? "" : lastStat.season}{" "}
-              {/* Remove 'N/A' */}
-            </td>
-            <td className="team-cell team-cell-custom" style={cellStyle}>
-              {lastStat.team === "N/A" ? "" : lastStat.team}{" "}
-              {/* Remove 'N/A' */}
-            </td>
-            {statKeys.map((key, idx) => (
-              <td key={idx} className="stats-cell" style={cellStyle}>
-                {lastStat.season === "Career" && key === "gamesPlayed"
-                  ? totalGamesPlayed
-                  : lastStat.season === "Career" && key === "gamesStarted"
-                  ? totalGamesStarted
-                  : lastStat[key]}
+        <table
+          id="lastStatTable"
+          className="table table-striped table-bordered"
+          style={{
+            minWidth: "1000px",
+            marginTop: "10px",
+            borderCollapse: "collapse",
+          }}
+        >
+          <thead
+            style={{ backgroundColor: "#1f1f1f", color: "#f9f9f9" }}
+          ></thead>
+          <tbody>
+            <tr>
+              <td
+                className="season-cell"
+                style={{
+                  ...cellStyle,
+                  minWidth: "112px",
+                  width: "112px",
+                  maxWidth: "112px",
+                  fontWeight: "bold", // Make the font bold
+                }}
+              >
+                {lastStat.season === "N/A" ? "" : lastStat.season}{" "}
+                {/* Remove 'N/A' */}
               </td>
-            ))}
-          </tr>
-        </tbody>
-      </table>
+              <td className="team-cell team-cell-custom" style={cellStyle}>
+                {lastStat.team === "N/A" ? "" : lastStat.team}{" "}
+                {/* Remove 'N/A' */}
+              </td>
+              {statKeys.map((key, idx) => (
+                <td key={idx} className="stats-cell" style={cellStyle}>
+                  {lastStat.season === "Career" && key === "gamesPlayed"
+                    ? totalGamesPlayed
+                    : lastStat.season === "Career" && key === "gamesStarted"
+                    ? totalGamesStarted
+                    : lastStat[key]}
+                </td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
 
-      <style>{`
+        <style>{`
         .highlight {
           background-color: #444 !important;
+          font-weight: 700 !important;
         }
         .highlight-column {
           background-color: #444 !important;
+          font-weight: 700 !important;
+        }
+        .selected-row {
+          font-weight: 700 !important; /* Bold text for selected row */
         }
         span.dt-column-order {
           display: none;
         }
-        table.table.dataTable.table-striped>tbody>tr:nth-of-type(2n+1).selected>*,
+        table.table.dataTable.table-striped > tbody > tr:nth-of-type(2n+1).selected > *,
         table.table.dataTable>tbody>tr.selected>* {
           box-shadow: inset 0 0 0 9999px #444;
+          font-weight:700!important;
         }
 
         /* Apply styles to the stats-cell class */
@@ -346,8 +361,10 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
           width: 75px;
           max-width: 75px;
         }
+          
       `}</style>
-    </Box>
+      </Box>
+    </>
   );
 };
 

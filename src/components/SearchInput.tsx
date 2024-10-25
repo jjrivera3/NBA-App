@@ -101,9 +101,9 @@ const SearchInput = () => {
           top="100%"
           left={0}
           width="100%"
-          zIndex={1000}
+          zIndex={999999}
           mt={2}
-          bgColor="rgba(0, 0, 0, 0.7)"
+          bgColor="rgba(0, 0, 0, 0.9)"
           border="1px solid gray"
           borderRadius="md"
           maxHeight="200px"

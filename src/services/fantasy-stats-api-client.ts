@@ -11,6 +11,12 @@ export interface FetchResponse<T> {
     arg0: (team: import("../entities/TeamInfo").default) => boolean
   ): unknown;
   body: {
+    wins: number;
+    loss: string;
+    conference: string;
+    teamName: string;
+    teamCity: string;
+    schedule: any;
     forEach(arg0: (team: any) => void): unknown;
     teamId: string;
     seasonId: string;
