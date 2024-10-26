@@ -59,7 +59,7 @@ const TodaysGames = () => {
         mb={4}
         direction={{ base: "column", md: "row" }}
       >
-        <Flex alignItems="center" mb={{ base: 2, md: 0 }}>
+        <Flex alignItems="center" mb={{ base: 0, md: 0 }}>
           <Text
             fontSize={{ base: "18px", md: "2xl" }}
             fontWeight={500}
@@ -85,7 +85,7 @@ const TodaysGames = () => {
           _hover={{ background: "transparent", color: "#f8991d" }}
           fontWeight={500}
           fontSize={14}
-          mt={{ base: 2, md: 0 }}
+          mt={{ base: 0, md: 0 }}
         >
           View All Games
         </Button>

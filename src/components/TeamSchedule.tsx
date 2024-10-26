@@ -50,6 +50,8 @@ const TeamSchedule = () => {
     useTeamScheduleScores(teamId);
   const scheduleScores = scheduleScoresData?.body?.schedule || [];
 
+  console.log(scheduleScores);
+
   const selectedTeam = Array.isArray(teamInfo?.body)
     ? teamInfo.body.find(
         (team: { teamID: string | null }) => team.teamID === teamId

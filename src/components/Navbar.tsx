@@ -45,8 +45,8 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
 
   const handleSelectTeam = (teamId: string, teamAbv: string) => {
     onTeamSelect(teamId, teamAbv);
-    onClose(); // Close the navigation drawer
-    onSearchClose(); // Close the search drawer
+    onClose();
+    onSearchClose();
   };
 
   return (
@@ -86,7 +86,7 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
 
       {!isMobile && (
         <Box flex="1" marginX={4} overflow="visible">
-          <SearchInput />
+          <SearchInput onSearchClose={onSearchClose} />
         </Box>
       )}
 
@@ -199,7 +199,7 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
           <DrawerHeader>Search</DrawerHeader>
           <DrawerBody overflow="visible">
             <Box overflow="visible">
-              <SearchInput />
+              <SearchInput onSearchClose={onSearchClose} />
             </Box>
           </DrawerBody>
         </DrawerContent>

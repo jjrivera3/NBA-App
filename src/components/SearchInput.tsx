@@ -5,26 +5,32 @@ import {
   InputLeftElement,
   List,
   ListItem,
+  Image,
+  HStack,
+  Text,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import usePlayerSearch from "../hooks/usePlayerSearch"; // Use the renamed hook
+import usePlayerSearch from "../hooks/usePlayerSearch";
 import Player from "../entities/Player";
-import usePlayerRatings from "../hooks/usePlayerRatings"; // Import the usePlayerRatings hook
+import usePlayerRatings from "../hooks/usePlayerRatings";
 
-const SearchInput = () => {
+interface SearchInputProps {
+  onSearchClose: () => void;
+}
+
+const SearchInput: React.FC<SearchInputProps> = ({ onSearchClose }) => {
   const ref = useRef<HTMLInputElement>(null);
   const [filteredPlayers, setFilteredPlayers] = useState<Player[]>([]);
   const [searchText, setSearchText] = useState("");
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [selectedPlayerName, setSelectedPlayerName] = useState<string | null>(
     null
-  ); // State to store selected player name
+  );
   const navigate = useNavigate();
-  const { players, handleSelectPlayer, isError } = usePlayerSearch(); // No need to pass setSearchText
+  const { players, handleSelectPlayer, isError } = usePlayerSearch();
 
-  // Use the playerRatings hook to update ratings based on selected player name
   usePlayerRatings(selectedPlayerName);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,12 +66,10 @@ const SearchInput = () => {
           navigate
         );
 
-        // Set selected player name for usePlayerRatings hook
         setSelectedPlayerName(espnName);
-
-        // Clear the search bar and reset the filtered players
         setSearchText("");
         setFilteredPlayers([]);
+        onSearchClose(); // Call onClose after selection
       }
     }
   };
@@ -126,18 +130,27 @@ const SearchInput = () => {
                     navigate
                   );
 
-                  // Set selected player name for usePlayerRatings hook
                   setSelectedPlayerName(espnName);
-
                   setSearchText("");
                   setFilteredPlayers([]);
+                  onSearchClose(); // Call onClose after selection
                 }}
                 px={3}
                 py={2}
                 color="white"
                 bg={selectedIndex === index ? "#f8991d" : "transparent"}
               >
-                {player.longName}
+                <HStack spacing={2}>
+                  <Image
+                    src={player.espnHeadshot} // Assuming each player has a headshot URL
+                    alt={player.longName}
+                    boxSize="30px" // Adjust size as needed
+                    borderRadius="full"
+                    objectFit="cover" // Maintain aspect ratio
+                  />
+                  <Text>{player.longName}</Text>{" "}
+                  {/* Ensure text is displayed */}
+                </HStack>
               </ListItem>
             ))}
           </List>

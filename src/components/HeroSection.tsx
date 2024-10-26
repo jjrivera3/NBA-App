@@ -38,7 +38,7 @@ function HeroSection() {
             bgSize="cover"
             bgPosition="center"
             color="white"
-            p={[3, 10]} // Reduced padding for mobile
+            p={[5, 10]} // Reduced padding for mobile
             mb={5}
             borderRadius="md"
             boxShadow="xl"
