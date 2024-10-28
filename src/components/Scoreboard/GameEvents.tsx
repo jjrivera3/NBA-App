@@ -2,9 +2,9 @@ import { Box, Flex, Text, VStack } from "@chakra-ui/react";
 import GameEvent from "../../entities/GameEvent";
 import ScoreboardScoreCardSkeleton from "../skeletons/ScoreboardScoreCardSkeleton";
 import ScheduledGameDetails from "./ScheduledGameDetails";
-import ScoreboardGameCardScheduled from "./ScoreboardGameCardScheduled";
 import ScoreboardScoreCard from "./ScoreboardScoreCard";
 import TopPerformers from "./TopPerformers";
+import ScoreboardGameCardScheduled from "./ScheduledGameCard";
 
 interface GameEventsProps {
   events: GameEvent[];
@@ -41,7 +41,7 @@ const GameEvents: React.FC<GameEventsProps> = ({
     // Move STATUS_FINAL to the bottom
     if (statusA === "STATUS_FINAL" && statusB !== "STATUS_FINAL") return 1;
     if (statusB === "STATUS_FINAL" && statusA !== "STATUS_FINAL") return -1;
-    return 0; // Keep the order for other statuses
+    return 0;
   });
 
   return (
@@ -58,7 +58,7 @@ const GameEvents: React.FC<GameEventsProps> = ({
           const isScheduled =
             competition.status.type.name === "STATUS_SCHEDULED";
 
-          // Ensure we extract the correct records from the array
+          // Helper function to get team record
           const getRecordSummary = (team: any) => {
             const overallRecord = team?.records?.find(
               (record: { name: string }) => record.name === "overall"
@@ -66,24 +66,25 @@ const GameEvents: React.FC<GameEventsProps> = ({
             return overallRecord?.summary || "Record N/A";
           };
 
-          // Log the home and away team records
           const awayRecord = getRecordSummary(awayTeam);
           const homeRecord = getRecordSummary(homeTeam);
 
           return (
             <Flex
               key={competition.id}
-              mb={5}
+              mb={{ base: 10, md: 5 }}
               width="100%"
               mx="auto"
               borderRadius="md"
               boxShadow="md"
               alignItems="center"
               background="#464646"
+              pb={{ base: 5, md: 0 }}
+              flexDirection={{ base: "column", md: "row" }} // Stack on mobile
             >
               {/* Use GameCard if the game is scheduled */}
-              {isScheduled ? (
-                <Box width="68%">
+              <Box width={{ base: "100%", md: "68%" }} mb={{ base: 4, md: 0 }}>
+                {isScheduled ? (
                   <ScoreboardGameCardScheduled
                     game={{
                       gameID: competition.id,
@@ -104,9 +105,8 @@ const GameEvents: React.FC<GameEventsProps> = ({
                       odds: competition.odds?.[0] ?? null,
                     }}
                   />
-                </Box>
-              ) : (
-                <Box width="68%">
+                ) : (
+                  // GameEvents.tsx
                   <ScoreboardScoreCard
                     game={{
                       gameID: competition.id,
@@ -130,26 +130,15 @@ const GameEvents: React.FC<GameEventsProps> = ({
                       ) || [0, 0, 0, 0],
                       awayRecord: awayRecord,
                       homeRecord: homeRecord,
+                      awayAbbreviation: awayTeam?.team.abbreviation ?? "N/A", // Pass abbreviation
+                      homeAbbreviation: homeTeam?.team.abbreviation ?? "N/A", // Pass abbreviation
                     }}
                   />
-                </Box>
-              )}
+                )}
+              </Box>
 
-              {!isScheduled && (
-                <TopPerformers
-                  awayTeam={{
-                    ...awayTeam?.team,
-                    leaders: awayTeam?.leaders,
-                  }}
-                  homeTeam={{
-                    ...homeTeam?.team,
-                    leaders: homeTeam?.leaders,
-                  }}
-                  getTopPerformerDisplayValue={getTopPerformerDisplayValue}
-                />
-              )}
-
-              {isScheduled && (
+              {/* Display Top Performers or Scheduled Game Details */}
+              {isScheduled ? (
                 <ScheduledGameDetails
                   venue={{
                     fullName: competition.venue.fullName,
@@ -174,6 +163,18 @@ const GameEvents: React.FC<GameEventsProps> = ({
                         (link: { href: any }) => link.href
                       ) ?? [],
                   }}
+                />
+              ) : (
+                <TopPerformers
+                  awayTeam={{
+                    ...awayTeam?.team,
+                    leaders: awayTeam?.leaders,
+                  }}
+                  homeTeam={{
+                    ...homeTeam?.team,
+                    leaders: homeTeam?.leaders,
+                  }}
+                  getTopPerformerDisplayValue={getTopPerformerDisplayValue}
                 />
               )}
             </Flex>

@@ -16,7 +16,7 @@ interface ScheduledGameDetailsProps {
   } | null;
   tickets: {
     summary: string;
-    numberAvailable: number; // Added this property
+    numberAvailable: number;
     links: string[];
   } | null;
 }
@@ -33,7 +33,6 @@ const ScheduledGameDetails: React.FC<ScheduledGameDetailsProps> = ({
         <Box>
           <Flex>
             <Text fontSize="15px">{venue.fullName}</Text>
-
             <Text fontSize="15px" color="gray.400" ml={2}>
               {venue.address.city}, {venue.address.state}
             </Text>
@@ -45,11 +44,17 @@ const ScheduledGameDetails: React.FC<ScheduledGameDetailsProps> = ({
         {/* Odds Details */}
         {odds ? (
           <Box>
-            <Text fontSize="sm" color="gray.400">
-              Spread: {odds.details ?? "N/A"}
+            <Text fontSize="sm" color="white" fontWeight="500">
+              Spread:{" "}
+              <Text as="span" color="#f8991d" fontWeight="normal">
+                {odds.details ?? "N/A"}
+              </Text>
             </Text>
-            <Text fontSize="sm" color="gray.400">
-              Over/Under: {odds.overUnder ?? "N/A"}
+            <Text fontSize="sm" color="white" fontWeight="500">
+              Over/Under:{" "}
+              <Text as="span" color="#f8991d" fontWeight="normal">
+                {odds.overUnder ?? "N/A"}
+              </Text>
             </Text>
           </Box>
         ) : (
@@ -64,10 +69,9 @@ const ScheduledGameDetails: React.FC<ScheduledGameDetailsProps> = ({
         {tickets ? (
           <Box>
             <Text fontSize="md">{tickets.summary}</Text>
-
             {tickets.links.length > 0 ? (
               <Link
-                href={tickets.links[0]} // Only the first link is used
+                href={tickets.links[0]}
                 color="#f8991d"
                 fontSize="sm"
                 isExternal

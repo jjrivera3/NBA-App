@@ -1,52 +1,33 @@
-import { Box, Flex, Grid, Image, Text, keyframes } from "@chakra-ui/react";
+import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import React from "react";
-import { FaCaretLeft, FaEye } from "react-icons/fa"; // Import the FaEye icon
+import { FaCaretLeft, FaEye } from "react-icons/fa";
 import ScoreboardScoreCardProps from "../../entities/ScoreboardScoreCardProps";
+import {
+  formatDateTime,
+  getTeamOnlyName,
+  fillScores,
+} from "../../utils/scoreboardUtils";
+import { useGameStatus, useWinnerStatus } from "../../hooks/useGameStatus";
 
-// Define keyframes for the animated green line
-const lineAnimation = keyframes`
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-`;
+// // Define keyframes for the animated green line
+// const lineAnimation = keyframes`
+//   0% { transform: translateX(-100%); }
+//   100% { transform: translateX(100%); }
+// `;
 
 const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
   const { awayLinescores = [0, 0, 0, 0], homeLinescores = [0, 0, 0, 0] } = game;
 
-  const filledAwayScores = awayLinescores
-    .map((score) => (score === 0 ? "-" : score))
-    .concat(["-", "-", "-", "-"])
-    .slice(0, 4);
-  const filledHomeScores = homeLinescores
-    .map((score) => (score === 0 ? "-" : score))
-    .concat(["-", "-", "-", "-"])
-    .slice(0, 4);
-
-  const getTeamOnlyName = (teamName: string) =>
-    teamName.split(" ").slice(-1)[0];
-
-  const isScheduled = game.statusType === "STATUS_SCHEDULED";
-  const isFinal = game.statusType === "STATUS_FINAL";
-  const isInProgress =
-    game.statusType === "STATUS_IN_PROGRESS" ||
-    game.statusType === "STATUS_HALFTIME" ||
-    game.statusType === "STATUS_END_PERIOD";
-
-  const isAwayWinner =
-    isFinal && parseInt(game.awayScore) > parseInt(game.homeScore);
-  const isHomeWinner =
-    isFinal && parseInt(game.homeScore) > parseInt(game.awayScore);
-
-  const formatDateTime = (isoString: string) => {
-    const date = new Date(isoString);
-    if (isNaN(date.getTime())) return "Time Unavailable";
-
-    return date.toLocaleString("en-US", {
-      hour: "numeric",
-      minute: "numeric",
-    });
-  };
-
+  const filledAwayScores = fillScores(awayLinescores);
+  const filledHomeScores = fillScores(homeLinescores);
   const formattedTime = formatDateTime(game.date);
+
+  const { isScheduled, isFinal, isInProgress } = useGameStatus(game.statusType);
+  const { isAwayWinner, isHomeWinner } = useWinnerStatus(
+    isFinal,
+    game.awayScore,
+    game.homeScore
+  );
 
   return (
     <Box
@@ -54,13 +35,13 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
       color="white"
       position="relative"
       overflow="hidden"
-      px={8}
+      px={{ base: 4, md: 8 }}
       py={5}
-      borderRight="1px solid #545454"
+      borderRight={{ base: "none", md: "1px solid #545454" }}
+      borderBottom={{ base: "1px solid #545454", md: "none" }}
       background="linear-gradient(180deg, #484848 0%, #2e2e2e 100%, #353535 100%)"
     >
       <Flex justifyContent="space-between" alignItems="center">
-        {/* Game Status or Time */}
         <Box maxW="220px" display="flex" alignItems="center">
           <Text
             fontWeight={600}
@@ -77,7 +58,7 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
 
         {!isScheduled && (
           <Grid
-            templateColumns="repeat(5, 50px)"
+            templateColumns={{ base: "repeat(5, 40px)", md: "repeat(5, 50px)" }}
             gap={0}
             textAlign="center"
             color="gray.200"
@@ -92,25 +73,6 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
           </Grid>
         )}
       </Flex>
-
-      {/* Progress Bar for In-Progress Games */}
-      {isInProgress && (
-        <Box
-          width="8%"
-          height="2px"
-          overflow="hidden"
-          position="relative"
-          mt={1}
-        >
-          <Box
-            width="150%"
-            height="2px"
-            backgroundColor="#20da77"
-            position="absolute"
-            animation={`${lineAnimation} 1.7s infinite alternate cubic-bezier(0.21, 0.85, 0.34, 0.98)`}
-          />
-        </Box>
-      )}
 
       <Flex justifyContent="space-between" alignItems="center" mt={6} mb={4}>
         <Flex alignItems="center" width="250px" mr={5}>
@@ -130,24 +92,39 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
                   : "600"
               }
               color={game.awayTeamColor}
-              fontSize="lg"
+              fontSize={{ base: "sm", md: "lg" }}
             >
-              {getTeamOnlyName(game.awayTeam)}
               <Text
+                display={{ base: "inline", md: "none" }}
                 as="span"
-                fontSize="sm"
-                color={isAwayWinner ? "white" : "gray.100"} // Make record white for winners
-                ml={2}
+                fontSize={{ base: "sm", md: "lg" }}
               >
-                ( {game.awayRecord} )
+                {game.awayAbbreviation}
               </Text>
+              <Text
+                display={{ base: "none", md: "inline" }}
+                as="span"
+                fontSize={{ base: "sm", md: "lg" }}
+              >
+                {getTeamOnlyName(game.awayTeam)}
+              </Text>
+              <Box as="span" display={{ base: "none", md: "inline" }}>
+                <Text
+                  as="span"
+                  fontSize="sm"
+                  color={isAwayWinner ? "white" : "gray.100"}
+                  ml={2}
+                >
+                  ( {game.awayRecord} )
+                </Text>
+              </Box>
             </Text>
           </Box>
         </Flex>
 
         {!isScheduled && (
           <Grid
-            templateColumns="repeat(5, 50px)"
+            templateColumns={{ base: "repeat(5, 40px)", md: "repeat(5, 50px)" }}
             gap={0}
             textAlign="center"
             alignItems="center"
@@ -173,7 +150,7 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
                   as={FaCaretLeft}
                   color={game.awayTeamColor}
                   position="absolute"
-                  left="40px"
+                  left={{ base: "35px", md: "40px" }}
                   top="50%"
                   transform="translateY(-50%)"
                   fontSize="20px"
@@ -202,24 +179,39 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
                   : "600"
               }
               color={game.homeTeamColor}
-              fontSize="lg"
+              fontSize={{ base: "sm", md: "lg" }}
             >
-              {getTeamOnlyName(game.homeTeam)}
               <Text
+                display={{ base: "inline", md: "none" }}
                 as="span"
-                fontSize="sm"
-                color={isHomeWinner ? "white" : "gray.100"} // Make record white for winners
-                ml={2}
+                fontSize={{ base: "sm", md: "lg" }}
               >
-                ( {game.homeRecord} )
+                {game.homeAbbreviation}
               </Text>
+              <Text
+                display={{ base: "none", md: "inline" }}
+                as="span"
+                fontSize={{ base: "sm", md: "lg" }}
+              >
+                {getTeamOnlyName(game.homeTeam)}
+              </Text>
+              <Box as="span" display={{ base: "none", md: "inline" }}>
+                <Text
+                  as="span"
+                  fontSize="sm"
+                  color={isHomeWinner ? "white" : "gray.100"}
+                  ml={2}
+                >
+                  ( {game.homeRecord} )
+                </Text>
+              </Box>
             </Text>
           </Box>
         </Flex>
 
         {!isScheduled && (
           <Grid
-            templateColumns="repeat(5, 50px)"
+            templateColumns={{ base: "repeat(5, 40px)", md: "repeat(5, 50px)" }}
             gap={0}
             textAlign="center"
             alignItems="center"
@@ -242,7 +234,7 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
                   as={FaCaretLeft}
                   color={game.homeTeamColor}
                   position="absolute"
-                  left="40px"
+                  left={{ base: "35px", md: "40px" }}
                   top="50%"
                   transform="translateY(-50%)"
                   fontSize="20px"

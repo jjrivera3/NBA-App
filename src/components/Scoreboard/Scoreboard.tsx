@@ -53,7 +53,7 @@ const Scoreboard: React.FC = () => {
   };
 
   return (
-    <VStack spacing={6} p={4} align="left" width="100%">
+    <VStack spacing={6} p={{ base: 0, md: 4 }} align="left" width="100%">
       <DateNavigation
         selectedDate={selectedDate}
         handleDateChange={handleDateChange}
@@ -68,9 +68,7 @@ const Scoreboard: React.FC = () => {
           bg="white"
           borderRadius="md"
           boxShadow="lg"
-        >
-          {/* Date Picker Component Logic */}
-        </Box>
+        ></Box>
       )}
 
       <Heading as="h2" size="md" color="#f8991d">
