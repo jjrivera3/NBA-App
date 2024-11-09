@@ -1,21 +1,17 @@
 import { Box, Flex, Grid, Image, Text } from "@chakra-ui/react";
 import React from "react";
 import { FaCaretLeft, FaEye } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import ScoreboardScoreCardProps from "../../entities/ScoreboardScoreCardProps";
+import { useGameStatus, useWinnerStatus } from "../../hooks/useGameStatus";
 import {
+  fillScores,
   formatDateTime,
   getTeamOnlyName,
-  fillScores,
 } from "../../utils/scoreboardUtils";
-import { useGameStatus, useWinnerStatus } from "../../hooks/useGameStatus";
-
-// // Define keyframes for the animated green line
-// const lineAnimation = keyframes`
-//   0% { transform: translateX(-100%); }
-//   100% { transform: translateX(100%); }
-// `;
 
 const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
+  const navigate = useNavigate();
   const { awayLinescores = [0, 0, 0, 0], homeLinescores = [0, 0, 0, 0] } = game;
 
   const filledAwayScores = fillScores(awayLinescores);
@@ -32,17 +28,24 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
   return (
     <Box
       borderLeftRadius="5px"
+      borderRightRadius={{ base: "5px", md: "0" }}
       color="white"
       position="relative"
       overflow="hidden"
       px={{ base: 4, md: 8 }}
-      py={5}
+      py={6}
       borderRight={{ base: "none", md: "1px solid #545454" }}
       borderBottom={{ base: "1px solid #545454", md: "none" }}
       background="linear-gradient(180deg, #484848 0%, #2e2e2e 100%, #353535 100%)"
     >
       <Flex justifyContent="space-between" alignItems="center">
-        <Box maxW="220px" display="flex" alignItems="center">
+        <Box
+          maxW="220px"
+          display="flex"
+          alignItems="center"
+          flexDirection="column"
+          whiteSpace="nowrap"
+        >
           <Text
             fontWeight={600}
             fontSize="14px"
@@ -54,6 +57,23 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
               ? formattedTime
               : "Status Unavailable"}
           </Text>
+          {isInProgress && (
+            <Box
+              width="100%"
+              height="2px"
+              overflow="hidden"
+              position="relative"
+              mt={1}
+            >
+              <Box
+                width="100%"
+                height="2px"
+                backgroundColor="#20da77"
+                position="absolute"
+                animation="animation-ariwm7 1.4s infinite alternate cubic-bezier(0.21, 0.85, 0.34, 0.98)"
+              />
+            </Box>
+          )}
         </Box>
 
         {!isScheduled && (
@@ -253,9 +273,7 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
             color="#f8991d"
             fontSize="14px"
             cursor="pointer"
-            onClick={() => {
-              console.log("View Box Score clicked!");
-            }}
+            onClick={() => navigate(`/boxscore/${game.gameID}`)}
             ml={2}
             _hover={{ textDecoration: "underline" }}
           >

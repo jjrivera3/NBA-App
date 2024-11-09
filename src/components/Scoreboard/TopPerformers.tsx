@@ -17,7 +17,12 @@ const TopPerformers: React.FC<{
 
   return (
     <Box flex="1" textAlign="left" color="white" borderRadius={0} px={5}>
-      <Text fontWeight={500} mb={2} fontSize="14px">
+      <Text
+        fontWeight={500}
+        mb={2}
+        fontSize="14px"
+        textAlign={{ base: "center", md: "left" }}
+      >
         Top Performers
       </Text>
       <VStack align="flex-start" spacing={4}>

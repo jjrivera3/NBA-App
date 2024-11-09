@@ -54,7 +54,7 @@ const DateNavigation: React.FC<DateNavigationProps> = ({
       <Box
         width="100%"
         bg="#333"
-        p={{ base: 2, md: 4 }}
+        p={{ base: 0, md: 4 }}
         borderRadius="md"
         mb={4}
         position="relative"
@@ -67,6 +67,7 @@ const DateNavigation: React.FC<DateNavigationProps> = ({
             color="gray.300"
             p={1}
             mx={1} // Minimized padding for the arrow buttons
+            minWidth={{ base: 5, md: 10 }}
           >
             <FaChevronLeft size={18} />
           </Button>
@@ -132,6 +133,7 @@ const DateNavigation: React.FC<DateNavigationProps> = ({
             color="gray.300"
             p={1}
             mx={1} // Minimized padding for the arrow buttons
+            minWidth={{ base: 5, md: 10 }}
           >
             <FaChevronRight size={18} />
           </Button>

@@ -42,15 +42,26 @@ const TeamSchedule = () => {
   );
   const teamId = selectedAbv ? selectedAbv.teamId : null;
 
+  console.log(selectedAbv?.abbreviation);
+
   const teamColor = useTeamColor(teamId);
   const { data: teamInfo, isLoading: isTeamInfoLoading } = useTeamInfo(teamId, {
     schedules: "true",
   });
-  const { data: scheduleScoresData, isLoading: isScheduleLoading } =
-    useTeamScheduleScores(teamId);
-  const scheduleScores = scheduleScoresData?.body?.schedule || [];
 
-  console.log(scheduleScores);
+  const teamAbv1 = selectedAbv?.abbreviation;
+
+  // Change "SA" to "SAS"
+  const adjustedTeamAbv1 =
+    teamAbv1 === "SAS" ? "SA" : teamAbv1 === "GSW" ? "GS" : teamAbv1;
+
+  // Conditional hook call based on adjustedTeamAbv1
+  const { data: scheduleScoresData, isLoading: isScheduleLoading } =
+    adjustedTeamAbv1
+      ? useTeamScheduleScores(adjustedTeamAbv1)
+      : { data: null, isLoading: false };
+
+  const scheduleScores = scheduleScoresData?.body?.schedule || [];
 
   const selectedTeam = Array.isArray(teamInfo?.body)
     ? teamInfo.body.find(
@@ -286,6 +297,8 @@ const TeamSchedule = () => {
                           const result = score
                             ? `${resultPrefix}   ${score.awayPts} - ${score.homePts}`
                             : resultPrefix;
+
+                          console.log(score);
 
                           return (
                             <Tr

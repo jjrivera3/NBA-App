@@ -6,6 +6,7 @@ import PlayerDetailPage from "./pages/PlayerDetailPage";
 import TeamSchedule from "./components/TeamSchedule";
 import DepthChart from "./components/DepthChart";
 import Scoreboard from "./components/Scoreboard/Scoreboard";
+import BoxScore from "./components/BoxScore";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: ":teamAbv/:playerName", // This route must be here for player details
         element: <PlayerDetailPage />,
+      },
+      {
+        path: "boxscore/:gameId", // This route must be here for player details
+        element: <BoxScore />,
       },
     ],
   },

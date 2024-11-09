@@ -33,6 +33,8 @@ const GameEvents: React.FC<GameEventsProps> = ({
     return <Text color="red.300">Error loading data</Text>;
   }
 
+  console.log("These are the events", events);
+
   // Sort events by game status
   const sortedEvents = events.sort((a, b) => {
     const statusA = a.competitions[0].status.type.name;

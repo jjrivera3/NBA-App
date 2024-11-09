@@ -32,8 +32,6 @@ const Scoreboard: React.FC = () => {
     staleTime: 10 * 60 * 1000,
   });
 
-  console.log(data);
-
   // Explicitly cast `data` to GameData
   const todayData = data as GameData | undefined;
 
@@ -54,6 +52,14 @@ const Scoreboard: React.FC = () => {
 
   return (
     <VStack spacing={6} p={{ base: 0, md: 4 }} align="left" width="100%">
+      <Heading
+        fontSize={{ base: "18px", md: "3xl" }}
+        fontWeight={500}
+        color="#f8991d"
+        mr={{ base: 0, md: 4 }}
+      >
+        Scoreboard
+      </Heading>
       <DateNavigation
         selectedDate={selectedDate}
         handleDateChange={handleDateChange}
@@ -71,7 +77,7 @@ const Scoreboard: React.FC = () => {
         ></Box>
       )}
 
-      <Heading as="h2" size="md" color="#f8991d">
+      <Heading as="h2" fontSize="18px" color="#f8991d" fontWeight={600}>
         {format(selectedDate, "MMMM d, yyyy")}
       </Heading>
 

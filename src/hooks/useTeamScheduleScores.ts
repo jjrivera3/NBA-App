@@ -1,23 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
 import APIClient from "../services/fantasy-stats-api-client";
 
-const useTeamScheduleScores = (teamId: string | null) => {
+const useTeamScheduleScores = (teamAbv1: string) => {
   const apiClient = new APIClient("/getNBATeamSchedule");
 
   return useQuery({
-    queryKey: ["teamScheduleResults", teamId],
+    queryKey: ["teamScheduleResults", teamAbv1],
     queryFn: async () => {
-      if (!teamId) {
+      if (!teamAbv1) {
         throw new Error("No teamID provided"); // Handle case when teamId is null
       }
       const params = {
-        teamID: teamId,
+        teamAbv: teamAbv1,
         season: "2025", // Use the desired season here
       };
       const data = await apiClient.getAll({ params });
       return data;
     },
-    enabled: !!teamId, // Ensure the query only runs if teamId is available
+    enabled: !!teamAbv1, // Ensure the query only runs if teamId is available
   });
 };
 

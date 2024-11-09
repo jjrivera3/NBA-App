@@ -32,6 +32,7 @@ const ScoreboardGameCardScheduled: React.FC<GameProps> = ({ game }) => {
   return (
     <Box
       borderLeftRadius="5px"
+      borderRightRadius={{ base: "5px", md: "0" }}
       color="white"
       position="relative"
       overflow="hidden"
@@ -39,7 +40,8 @@ const ScoreboardGameCardScheduled: React.FC<GameProps> = ({ game }) => {
       pt={5}
       pb={7}
       boxShadow="md"
-      borderRight="1px solid #545454"
+      borderRight={{ base: "none", md: "1px solid #545454" }}
+      borderBottom={{ base: "1px solid #545454", md: "none" }}
       px={7}
     >
       {/* Game Details */}
