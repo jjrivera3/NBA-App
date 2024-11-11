@@ -39,11 +39,14 @@ interface Player {
     names: string[];
     athletes: {
       athlete: {
+        shortName: string;
         id: string;
         displayName: string;
         headshot?: { href: string };
       };
       stats: string[];
+      didNotPlay: boolean;
+      reason?: string;
     }[];
     totals: string[]; // totals can be an empty array or undefined
   }[];
@@ -135,7 +138,7 @@ const BoxScore = () => {
                 <Flex align="center">
                   <Text
                     fontWeight={isAwayWinner ? "bold" : "normal"}
-                    fontSize="4xl"
+                    fontSize={{ base: "2xl", md: "4xl" }}
                     color="white"
                     mr={isAwayWinner ? 2 : 0}
                     ml={25}
@@ -148,7 +151,6 @@ const BoxScore = () => {
                 </Flex>
               </Flex>
 
-              {/* Separator with "vs" */}
               <Text
                 fontSize={{ base: "md", md: "2xl" }}
                 fontWeight="bold"
@@ -169,7 +171,7 @@ const BoxScore = () => {
                   )}
                   <Text
                     fontWeight={isHomeWinner ? "bold" : "normal"}
-                    fontSize="4xl"
+                    fontSize={{ base: "2xl", md: "4xl" }}
                     color="white"
                     ml={isHomeWinner ? 0 : 2}
                     mr={25}
@@ -213,9 +215,9 @@ const BoxScore = () => {
         padding="var(--chakra-space-4)"
         borderRadius="var(--chakra-radii-md)"
         overflow="hidden"
-        border="1px solid #282828"
         mt="50px"
         borderTop={`4px solid ${formatColor(team.color)}`}
+        boxShadow="2xl"
       >
         {/* Team Logo and Team Name */}
         <Flex align="center" mb={4}>
@@ -231,7 +233,6 @@ const BoxScore = () => {
         </Flex>
 
         <Box overflowX="auto">
-          {/* Enable horizontal scroll */}
           <Table variant="simple" size="sm" minWidth="600px">
             <Thead>
               <Tr>
@@ -242,14 +243,19 @@ const BoxScore = () => {
                   background="#2a2a2a"
                   zIndex="docked"
                   minWidth="150px"
+                  padding="5px!important"
+                  borderColor="#3a3a3a!important"
                 >
-                  {/* Player Stats Heading */}
                   <Text fontWeight="bold" textAlign="left" color="#a0a0a0">
                     Player
                   </Text>
                 </Th>
                 {names.map((name, index) => (
-                  <Th key={index} whiteSpace="nowrap">
+                  <Th
+                    key={index}
+                    whiteSpace="nowrap"
+                    borderColor="#3a3a3a!important"
+                  >
                     {name}
                   </Th>
                 ))}
@@ -257,15 +263,31 @@ const BoxScore = () => {
             </Thead>
             <Tbody>
               {athletes.map((athlete, index) => (
-                <Tr key={athlete.athlete.id || index}>
+                // Apply border to all rows except the last one (Totals row)
+                <Box
+                  as="tr"
+                  role="group"
+                  key={athlete.athlete.id || index}
+                  borderBottom="1px solid #3a3a3a"
+                  borderColor="#3a3a3a!important"
+                  padding="5px!important"
+                >
                   <Td
                     whiteSpace="nowrap"
                     position="sticky"
                     left="0"
                     background="#2a2a2a"
                     zIndex="docked"
+                    width={{ base: "120px", md: "180px" }}
+                    borderColor="#3a3a3a!important"
+                    padding="5px!important"
+                    _groupHover={{ bg: "#444" }}
                   >
-                    <div style={{ minWidth: "185px" }}>
+                    <div
+                      style={{
+                        minWidth: window.innerWidth >= 768 ? "250px" : "175px",
+                      }}
+                    >
                       <Flex align="center">
                         <Image
                           src={athlete.athlete.headshot?.href}
@@ -276,24 +298,42 @@ const BoxScore = () => {
                           objectFit="contain"
                         />
                         <Text fontWeight="600" whiteSpace="nowrap">
-                          {athlete.athlete.displayName}
+                          {athlete.athlete.shortName}
                         </Text>
                       </Flex>
                     </div>
                   </Td>
-                  {athlete.stats.map((stat, i) => (
-                    <Td key={i} whiteSpace="nowrap">
-                      {stat}
+                  {athlete.didNotPlay ? (
+                    <Td
+                      colSpan={names.length}
+                      textAlign="center"
+                      color="gray.400"
+                      borderColor="#3a3a3a!important"
+                      _groupHover={{ bg: "#444" }}
+                    >
+                      {athlete.reason}
                     </Td>
-                  ))}
-                </Tr>
+                  ) : (
+                    athlete.stats.map((stat, i) => (
+                      <Td
+                        key={i}
+                        whiteSpace="nowrap"
+                        borderColor="#3a3a3a!important"
+                        _groupHover={{ bg: "#444" }}
+                      >
+                        {stat}
+                      </Td>
+                    ))
+                  )}
+                </Box>
               ))}
-              {/* Render Totals Row */}
+              {/* Render Totals Row without border */}
               <Tr fontWeight="bold">
-                <Td whiteSpace="nowrap">Totals</Td>
-                {/* Ensure totals is either an array or fallback to empty array */}
+                <Td whiteSpace="nowrap" borderBottom="none">
+                  Totals
+                </Td>
                 {(totals ?? []).map((total, i) => (
-                  <Td key={i} whiteSpace="nowrap">
+                  <Td key={i} whiteSpace="nowrap" borderBottom="none">
                     {total}
                   </Td>
                 ))}
@@ -306,7 +346,7 @@ const BoxScore = () => {
   };
 
   return (
-    <Box p={4}>
+    <Box p={{ base: 1, md: 4 }}>
       {renderBoxScoreHeader()}
       {data?.players?.map((playerData, index) => (
         <Box key={index}>{renderPlayerStats(playerData)}</Box>
