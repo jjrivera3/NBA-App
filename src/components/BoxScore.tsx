@@ -122,7 +122,8 @@ const BoxScore = () => {
                   <Image
                     src={awayTeam?.team.logo}
                     alt={`${awayTeam?.team.abbreviation} logo`}
-                    boxSize={{ base: "60px", md: "80px" }}
+                    boxSize={{ base: "50px", md: "80px" }}
+                    objectFit="contain"
                   />
                   <Text
                     fontSize={{ base: "md", md: "xl" }}
@@ -141,7 +142,7 @@ const BoxScore = () => {
                     fontSize={{ base: "2xl", md: "4xl" }}
                     color="white"
                     mr={isAwayWinner ? 2 : 0}
-                    ml={25}
+                    ml={{ base: 15, md: 25 }}
                   >
                     {awayScore}
                   </Text>
@@ -183,7 +184,8 @@ const BoxScore = () => {
                   <Image
                     src={homeTeam?.team.logo}
                     alt={`${homeTeam?.team.abbreviation} logo`}
-                    boxSize={{ base: "60px", md: "80px" }}
+                    boxSize={{ base: "50px", md: "80px" }}
+                    objectFit="contain"
                   />
                   <Text
                     fontSize={{ base: "md", md: "xl" }}
@@ -292,7 +294,7 @@ const BoxScore = () => {
                         <Image
                           src={athlete.athlete.headshot?.href}
                           alt={athlete.athlete.displayName}
-                          boxSize="40px"
+                          boxSize={{ base: "30px", md: "40px" }}
                           mr={2}
                           borderRadius="full"
                           objectFit="contain"
