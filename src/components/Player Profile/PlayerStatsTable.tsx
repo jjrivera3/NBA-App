@@ -281,8 +281,6 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
           </tbody>
         </table>
 
-        {/* Second Table for Last Stat */}
-
         <table
           id="lastStatTable"
           className="table table-striped table-bordered"
