@@ -19,7 +19,7 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: "scoreboard",
+        path: "scoreboard/:dateParam?",
         element: <Scoreboard />,
       },
       {
@@ -35,11 +35,11 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: ":teamAbv/:playerName", // This route must be here for player details
+        path: ":teamAbv/:playerName",
         element: <PlayerDetailPage />,
       },
       {
-        path: "boxscore/:gameId", // This route must be here for player details
+        path: "boxscore/:gameId",
         element: <BoxScore />,
       },
     ],

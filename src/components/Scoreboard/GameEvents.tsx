@@ -11,6 +11,7 @@ interface GameEventsProps {
   isLoading: boolean;
   error: any;
   getTopPerformerDisplayValue: (team: any) => string;
+  selectedDate: string;
 }
 
 const GameEvents: React.FC<GameEventsProps> = ({
@@ -18,6 +19,7 @@ const GameEvents: React.FC<GameEventsProps> = ({
   isLoading,
   error,
   getTopPerformerDisplayValue,
+  selectedDate,
 }) => {
   if (isLoading) {
     return (
@@ -32,8 +34,6 @@ const GameEvents: React.FC<GameEventsProps> = ({
   if (error) {
     return <Text color="red.300">Error loading data</Text>;
   }
-
-  console.log("These are the events", events);
 
   // Sort events by game status
   const sortedEvents = events.sort((a, b) => {
@@ -74,13 +74,28 @@ const GameEvents: React.FC<GameEventsProps> = ({
           return (
             <Flex
               key={competition.id}
-              mb={{ base: 10, md: 5 }}
+              mb={{
+                base: competition.status.type.name === "STATUS_FINAL" ? 0 : 10,
+                md: 5,
+              }}
               width="100%"
               mx="auto"
               borderRadius="md"
-              boxShadow="md"
+              boxShadow={{
+                base:
+                  competition.status.type.name === "STATUS_FINAL"
+                    ? "none"
+                    : "md",
+                md: "md",
+              }}
               alignItems="center"
-              background="#464646"
+              background={{
+                base:
+                  competition.status.type.name === "STATUS_FINAL"
+                    ? "none"
+                    : "#464646",
+                md: "#464646",
+              }}
               pb={{ base: 5, md: 0 }}
               flexDirection={{ base: "column", md: "row" }} // Stack on mobile
             >
@@ -135,6 +150,7 @@ const GameEvents: React.FC<GameEventsProps> = ({
                       awayAbbreviation: awayTeam?.team.abbreviation ?? "N/A", // Pass abbreviation
                       homeAbbreviation: homeTeam?.team.abbreviation ?? "N/A", // Pass abbreviation
                     }}
+                    selectedDate={selectedDate}
                   />
                 )}
               </Box>
@@ -168,6 +184,7 @@ const GameEvents: React.FC<GameEventsProps> = ({
                 />
               ) : (
                 <TopPerformers
+                  display={{ base: "none", md: "block" }}
                   awayTeam={{
                     ...awayTeam?.team,
                     leaders: awayTeam?.leaders,

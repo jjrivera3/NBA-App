@@ -1,11 +1,11 @@
-import { VStack, Box, Heading } from "@chakra-ui/react";
-import React, { useRef, useState } from "react";
-import { format } from "date-fns"; // Add this import
+import { Box, Heading, VStack } from "@chakra-ui/react";
+import { format, parse } from "date-fns";
+import React, { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useTodaysGame from "../../hooks/useTodaysGame";
 import DateNavigation from "./DateNavigation";
 import GameEvents from "./GameEvents";
 
-// Define the interface for GameData
 interface GameData {
   events: GameEvent[];
 }
@@ -13,11 +13,21 @@ interface GameData {
 interface GameEvent {
   id: string;
   date: string;
-  competitions: any[]; // Add details to your GameEvent structure here
+  competitions: any[];
+  selectedDate: string;
 }
 
 const Scoreboard: React.FC = () => {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { dateParam } = useParams(); // Get date from URL
+  const [selectedDate, setSelectedDate] = useState<Date>(
+    dateParam
+      ? parse(dateParam, "MM-dd-yy", new Date())
+      : location.state?.selectedDate
+      ? new Date(location.state.selectedDate)
+      : new Date()
+  );
   const [showCalendar, setShowCalendar] = useState(false);
   const calendarRef = useRef<HTMLDivElement>(null);
 
@@ -32,7 +42,7 @@ const Scoreboard: React.FC = () => {
     staleTime: 10 * 60 * 1000,
   });
 
-  // Explicitly cast `data` to GameData
+  // Cast `data` to GameData
   const todayData = data as GameData | undefined;
 
   const handleDateChange = (date: Date | null) => {
@@ -40,8 +50,18 @@ const Scoreboard: React.FC = () => {
       setSelectedDate(date);
       setShowCalendar(false);
       refetch();
+
+      // Update URL with selected date
+      navigate(`/scoreboard/${format(date, "MM-dd-yy")}`);
     }
   };
+
+  // Update `selectedDate` if navigating back with a specific date in `location.state`
+  useEffect(() => {
+    if (location.state?.selectedDate) {
+      setSelectedDate(new Date(location.state.selectedDate));
+    }
+  }, [location.state?.selectedDate]);
 
   const getTopPerformerDisplayValue = (team: any) => {
     const ratingLeader = team?.leaders?.find(
@@ -86,6 +106,7 @@ const Scoreboard: React.FC = () => {
         isLoading={isLoading}
         error={error}
         getTopPerformerDisplayValue={getTopPerformerDisplayValue}
+        selectedDate={format(selectedDate, "yyyy-MM-dd")}
       />
     </VStack>
   );

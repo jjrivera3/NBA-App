@@ -19,4 +19,5 @@ export default interface ScoreboardScoreCardProps {
     awayAbbreviation: string; // New property for abbreviation
     homeAbbreviation: string; // New property for abbreviation
   };
+  selectedDate: string;
 }

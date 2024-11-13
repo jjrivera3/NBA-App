@@ -1,6 +1,7 @@
 export default interface GameEvent {
   id: string;
   date: string;
+  selectedDate: string;
   competitions: {
     odds: any;
     tickets: any;

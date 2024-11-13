@@ -1,17 +1,18 @@
-import React, { useState } from "react";
 import {
   Box,
   Button,
+  Divider,
   Flex,
   IconButton,
   Text,
-  Divider,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { FaChevronLeft, FaChevronRight, FaCalendarAlt } from "react-icons/fa";
-import { addDays, format, subDays } from "date-fns";
+import { addDays, format } from "date-fns";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { FaCalendarAlt, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
 interface DateNavigationProps {
   selectedDate: Date;
@@ -24,6 +25,14 @@ const DateNavigation: React.FC<DateNavigationProps> = ({
 }) => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const datesToShow = useBreakpointValue({ base: 3, md: 7 }) ?? 3;
+  const location = useLocation();
+
+  // Use the date from location state if available
+  useEffect(() => {
+    if (location.state?.selectedDate) {
+      handleDateChange(location.state.selectedDate);
+    }
+  }, [location.state?.selectedDate, handleDateChange]);
 
   const toggleCalendar = () => {
     setIsCalendarOpen((prev) => !prev);
@@ -34,6 +43,10 @@ const DateNavigation: React.FC<DateNavigationProps> = ({
       handleDateChange(date);
       toggleCalendar();
     }
+  };
+
+  const getDateForIndex = (index: number) => {
+    return addDays(selectedDate, index - Math.floor(datesToShow / 2));
   };
 
   return (
@@ -54,7 +67,7 @@ const DateNavigation: React.FC<DateNavigationProps> = ({
       <Box
         width="100%"
         bg="#333"
-        p={{ base: 0, md: 4 }}
+        p={{ base: 2, md: 4 }}
         borderRadius="md"
         mb={4}
         position="relative"
@@ -62,11 +75,11 @@ const DateNavigation: React.FC<DateNavigationProps> = ({
       >
         <Flex alignItems="center" justifyContent="center" width="100%">
           <Button
-            onClick={() => handleDateChange(subDays(selectedDate, 1))}
+            onClick={() => handleDateChange(addDays(selectedDate, -1))}
             variant="ghost"
             color="gray.300"
             p={1}
-            mx={1} // Minimized padding for the arrow buttons
+            mx={1}
             minWidth={{ base: 5, md: 10 }}
           >
             <FaChevronLeft size={18} />
@@ -78,53 +91,33 @@ const DateNavigation: React.FC<DateNavigationProps> = ({
             width="100%"
             px={{ base: 1, md: 4 }}
           >
-            {Array.from({ length: datesToShow }, (_, index) => (
-              <Box
-                key={index}
-                textAlign="center"
-                flex="1"
-                py={2}
-                cursor="pointer"
-                borderRadius="md"
-                mx={1} // Reduced margin for each date box
-                bg={
-                  selectedDate.toDateString() ===
-                  addDays(
-                    selectedDate,
-                    index - Math.floor(datesToShow / 2)
-                  ).toDateString()
-                    ? "#f8991d"
-                    : "transparent"
-                }
-                color={
-                  selectedDate.toDateString() ===
-                  addDays(
-                    selectedDate,
-                    index - Math.floor(datesToShow / 2)
-                  ).toDateString()
-                    ? "black"
-                    : "gray.300"
-                }
-                onClick={() =>
-                  handleDateChange(
-                    addDays(selectedDate, index - Math.floor(datesToShow / 2))
-                  )
-                }
-              >
-                <Text fontSize="xs" mb={1}>
-                  {format(
-                    addDays(selectedDate, index - Math.floor(datesToShow / 2)),
-                    "EEE"
-                  )}
-                </Text>
-                <Text fontSize="sm" fontWeight="bold">
-                  {format(
-                    addDays(selectedDate, index - Math.floor(datesToShow / 2)),
-                    "MMM d"
-                  )}
-                </Text>
-              </Box>
-            ))}
+            {Array.from({ length: datesToShow }, (_, index) => {
+              const date = getDateForIndex(index);
+              const isSelected =
+                selectedDate.toDateString() === date.toDateString();
+
+              return (
+                <Box
+                  key={index}
+                  textAlign="center"
+                  flex="1"
+                  py={2}
+                  cursor="pointer"
+                  borderRadius="md"
+                  mx={1}
+                  bg={isSelected ? "#f8991d" : "transparent"}
+                  color={isSelected ? "black" : "gray.300"}
+                  onClick={() => handleDateChange(date)}
+                >
+                  <Text fontSize="xs" mb={1}>
+                    {format(date, "EEE")}
+                  </Text>
+                  <Text fontSize="sm" fontWeight="bold">
+                    {format(date, "MMM d")}
+                  </Text>
+                </Box>
+              );
+            })}
           </Flex>
 
           <Button
@@ -132,20 +125,21 @@ const DateNavigation: React.FC<DateNavigationProps> = ({
             variant="ghost"
             color="gray.300"
             p={1}
-            mx={1} // Minimized padding for the arrow buttons
+            mx={1}
             minWidth={{ base: 5, md: 10 }}
           >
             <FaChevronRight size={18} />
           </Button>
 
           <Divider orientation="vertical" mx={2} height="24px" />
+
           <IconButton
             aria-label="Calendar"
             icon={<FaCalendarAlt />}
             variant="ghost"
             color="white"
             p={1}
-            mx={1} // Minimized padding for the calendar icon button
+            mx={1}
             onClick={toggleCalendar}
           />
         </Flex>

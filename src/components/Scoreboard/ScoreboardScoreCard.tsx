@@ -10,7 +10,10 @@ import {
   getTeamOnlyName,
 } from "../../utils/scoreboardUtils";
 
-const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
+const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({
+  game,
+  selectedDate,
+}) => {
   const navigate = useNavigate();
   const { awayLinescores = [0, 0, 0, 0], homeLinescores = [0, 0, 0, 0] } = game;
 
@@ -35,7 +38,7 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
       px={{ base: 4, md: 8 }}
       py={6}
       borderRight={{ base: "none", md: "1px solid #545454" }}
-      borderBottom={{ base: "1px solid #545454", md: "none" }}
+      borderBottom={{ base: "none", md: "none" }}
       background="linear-gradient(180deg, #484848 0%, #2e2e2e 100%, #353535 100%)"
     >
       <Flex justifyContent="space-between" alignItems="center">
@@ -159,7 +162,7 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
             ))}
             <Box position="relative">
               <Text
-                fontSize="lg"
+                fontSize={{ base: "md", md: "lg" }}
                 fontWeight={isAwayWinner ? "bold" : "400"}
                 color={isAwayWinner ? "white" : "gray.200"}
               >
@@ -168,7 +171,7 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
               {isAwayWinner && (
                 <Box
                   as={FaCaretLeft}
-                  color={game.awayTeamColor}
+                  color="#f8991d"
                   position="absolute"
                   left={{ base: "35px", md: "40px" }}
                   top="50%"
@@ -243,7 +246,7 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
             ))}
             <Box position="relative">
               <Text
-                fontSize="lg"
+                fontSize={{ base: "md", md: "lg" }}
                 fontWeight={isHomeWinner ? "bold" : "400"}
                 color={isHomeWinner ? "white" : "gray.200"}
               >
@@ -252,7 +255,7 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
               {isHomeWinner && (
                 <Box
                   as={FaCaretLeft}
-                  color={game.homeTeamColor}
+                  color="#f8991d"
                   position="absolute"
                   left={{ base: "35px", md: "40px" }}
                   top="50%"
@@ -273,7 +276,9 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({ game }) => {
             color="#f8991d"
             fontSize="14px"
             cursor="pointer"
-            onClick={() => navigate(`/boxscore/${game.gameID}`)}
+            onClick={() =>
+              navigate(`/boxscore/${game.gameID}`, { state: { selectedDate } })
+            }
             ml={2}
             _hover={{ textDecoration: "underline" }}
           >

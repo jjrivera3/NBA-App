@@ -1,5 +1,8 @@
 import {
   Box,
+  Flex,
+  Image,
+  Spinner,
   Table,
   Tbody,
   Td,
@@ -7,58 +10,16 @@ import {
   Th,
   Thead,
   Tr,
-  Spinner,
-  Image,
-  Flex,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
-import useBoxScore from "../hooks/useBoxScore";
-import { useParams } from "react-router-dom";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa";
-
-interface Team {
-  team: {
-    displayName: string;
-    logo: string;
-    abbreviation: string;
-    color: string; // Change this to a string, instead of a function
-    id: string;
-  };
-  homeAway: "home" | "away";
-  statistics: { displayValue: string; label: string }[];
-}
-
-interface Player {
-  team: {
-    color: string;
-    abbreviation: any;
-    logo: string | undefined;
-    displayName: string;
-  };
-  statistics: {
-    names: string[];
-    athletes: {
-      athlete: {
-        shortName: string;
-        id: string;
-        displayName: string;
-        headshot?: { href: string };
-      };
-      stats: string[];
-      didNotPlay: boolean;
-      reason?: string;
-    }[];
-    totals: string[]; // totals can be an empty array or undefined
-  }[];
-}
-
-interface BoxScoreData {
-  teams: Team[];
-  players: Player[];
-}
+import { BoxScoreData, Player } from "../entities/BoxScoreTypes";
+import useBoxScore from "../hooks/useBoxScore";
+import { useParams, useLocation } from "react-router-dom";
 
 const BoxScore = () => {
   const { gameId } = useParams<{ gameId: string }>();
+  const location = useLocation();
+  const selectedDate = location.state?.selectedDate;
 
   const options = {
     refetchOnWindowFocus: true,
@@ -71,11 +32,7 @@ const BoxScore = () => {
     isError: boolean;
   };
 
-  useEffect(() => {
-    if (data) {
-      console.log("Box Score Data:", data);
-    }
-  }, [data]);
+  console.log("Selected Date:", selectedDate);
 
   if (isLoading) return <Spinner />;
 
@@ -86,8 +43,8 @@ const BoxScore = () => {
   const homeTeam = data?.teams?.find((team) => team.homeAway === "home");
 
   const getFinalScore = (teamData: Player) => {
-    const lastTotal = teamData.statistics[0].totals.at(-1); // Get the last item from the totals array
-    return lastTotal ? parseInt(lastTotal, 10) : 0; // If it's defined, parse it; otherwise, return 0
+    const lastTotal = teamData.statistics[0].totals.at(-1);
+    return lastTotal ? parseInt(lastTotal, 10) : 0;
   };
 
   const awayScore = data && getFinalScore(data.players[0]);
@@ -299,7 +256,11 @@ const BoxScore = () => {
                           borderRadius="full"
                           objectFit="contain"
                         />
-                        <Text fontWeight="600" whiteSpace="nowrap">
+                        <Text
+                          fontWeight="600"
+                          whiteSpace="nowrap"
+                          fontSize={{ base: "13px", md: "14px" }}
+                        >
                           {athlete.athlete.shortName}
                         </Text>
                       </Flex>

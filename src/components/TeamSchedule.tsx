@@ -12,6 +12,7 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Utah_Jazz from "../assets/Utah_Jazz.png";
 import nbaTeams from "../data/nbateams";
 import GameSchedule from "../entities/GameSchedule";
@@ -25,6 +26,8 @@ import UpcomingGame from "./UpcomingGame";
 import TeamHeadingSkeleton from "./skeletons/TeamHeadSkeleton";
 import UpcomingGameSkeleton from "./skeletons/UpcomingGameSkeleton";
 import useTeamScheduleScores from "../hooks/useTeamScheduleScores";
+import useGetGameID from "../hooks/useGetGameId";
+import nbaTeamBoxScoreId from "../data/nbaTeamBoxScoreId";
 
 const formatTime = (epoch: string | number) => {
   const timeInSeconds = typeof epoch === "string" ? Number(epoch) : epoch;
@@ -36,13 +39,12 @@ const TeamSchedule = () => {
   const { teamAbv } = useParams<{ teamAbv: string }>();
   const lowercasedTeamAbv = teamAbv?.toLowerCase();
   const isMobile = useBreakpointValue({ base: true, md: false });
+  const navigate = useNavigate();
 
   const selectedAbv = nbaTeams.find(
     (team) => team.info.abbrev.toLowerCase() === lowercasedTeamAbv
   );
   const teamId = selectedAbv ? selectedAbv.teamId : null;
-
-  console.log(selectedAbv?.abbreviation);
 
   const teamColor = useTeamColor(teamId);
   const { data: teamInfo, isLoading: isTeamInfoLoading } = useTeamInfo(teamId, {
@@ -54,6 +56,11 @@ const TeamSchedule = () => {
   // Change "SA" to "SAS"
   const adjustedTeamAbv1 =
     teamAbv1 === "SAS" ? "SA" : teamAbv1 === "GSW" ? "GS" : teamAbv1;
+
+  // Check for a matching team in nbaTeamBoxScoreId
+  const matchingTeam = nbaTeamBoxScoreId.find(
+    (team) => team.abbreviation === selectedAbv?.abbreviation
+  );
 
   // Conditional hook call based on adjustedTeamAbv1
   const { data: scheduleScoresData, isLoading: isScheduleLoading } =
@@ -68,6 +75,11 @@ const TeamSchedule = () => {
         (team: { teamID: string | null }) => team.teamID === teamId
       )
     : undefined;
+
+  const { data: gameIdData } = useGetGameID(matchingTeam?.teamId, "2025", {
+    refetchOnWindowFocus: false,
+    staleTime: 10 * 60 * 1000,
+  });
 
   const espnLogo1 =
     selectedTeam?.teamID === "29" ? Utah_Jazz : selectedTeam?.espnLogo1;
@@ -275,6 +287,7 @@ const TeamSchedule = () => {
                           const gameTime = formatTime(game.gameTime_epoch);
                           const formattedDate = formatDate(game.gameDate);
 
+                          // Check if the game has a completed score (box score availability)
                           const score = scheduleScores.find(
                             (score: { gameID: string; gameStatus: string }) =>
                               score.gameID === game.gameID &&
@@ -295,16 +308,39 @@ const TeamSchedule = () => {
                               : "L"
                             : "-";
                           const result = score
-                            ? `${resultPrefix}   ${score.awayPts} - ${score.homePts}`
+                            ? `${resultPrefix} ${score.awayPts} - ${score.homePts}`
                             : resultPrefix;
-
-                          console.log(score);
 
                           return (
                             <Tr
                               key={game.gameID}
                               borderBottom="1px solid #2d2d2d"
                               bg={index % 2 === 0 ? "#232323" : "#2A2A2A"}
+                              cursor={score ? "pointer" : "default"} // Only show pointer cursor if score (box score) exists
+                              onClick={() => {
+                                if (score) {
+                                  // Only navigate if the game has a completed score (box score)
+                                  const selectedEvent =
+                                    gameIdData?.events?.[index];
+                                  const selectedGameId = selectedEvent?.id;
+                                  if (selectedGameId) {
+                                    navigate(`/boxscore/${selectedGameId}`);
+                                  } else {
+                                    console.log(
+                                      "Game ID not found for the selected index."
+                                    );
+                                  }
+                                }
+                              }}
+                              sx={{
+                                transition: "background-color 0.3s",
+                                _hover: {
+                                  backgroundColor: score
+                                    ? "#3a3a3a"
+                                    : "inherit", // No hover effect if no box score
+                                  cursor: score ? "pointer" : "default", // No pointer cursor if no box score
+                                },
+                              }}
                             >
                               <Td fontSize="14px" fontWeight={500}>
                                 {formattedDate}

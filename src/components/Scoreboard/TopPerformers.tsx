@@ -5,7 +5,8 @@ const TopPerformers: React.FC<{
   awayTeam: any;
   homeTeam: any;
   getTopPerformerDisplayValue: any;
-}> = ({ awayTeam, homeTeam, getTopPerformerDisplayValue }) => {
+  display?: any; // Add display prop as optional
+}> = ({ awayTeam, homeTeam, getTopPerformerDisplayValue, display }) => {
   const getRatingLeader = (team: any) => {
     return team?.leaders?.find(
       (leader: { name: string }) => leader.name === "rating"
@@ -16,13 +17,15 @@ const TopPerformers: React.FC<{
   const homeRatingLeader = getRatingLeader(homeTeam);
 
   return (
-    <Box flex="1" textAlign="left" color="white" borderRadius={0} px={5}>
-      <Text
-        fontWeight={500}
-        mb={2}
-        fontSize="14px"
-        textAlign={{ base: "center", md: "left" }}
-      >
+    <Box
+      flex="1"
+      textAlign="left"
+      color="white"
+      borderRadius={0}
+      px={5}
+      display={display}
+    >
+      <Text fontWeight={500} mb={2} fontSize="14px" textAlign="left">
         Top Performers
       </Text>
       <VStack align="flex-start" spacing={4}>
@@ -31,17 +34,17 @@ const TopPerformers: React.FC<{
             <Image
               src={awayRatingLeader.athlete?.headshot}
               alt={awayRatingLeader.athlete?.shortName}
-              boxSize="40px"
+              boxSize={{ base: "30px", md: "40px" }}
               borderRadius="full"
               objectFit="cover"
               mr={3}
             />
             <Box>
-              <Text fontSize="md" fontWeight="500">
+              <Text fontWeight="500" fontSize={{ base: "sm", md: "md" }}>
                 {awayRatingLeader.athlete?.shortName}
                 <Text
                   as="span"
-                  fontSize="sm"
+                  fontSize={{ base: "xs", md: "sm" }}
                   color="gray.400"
                   ml={2}
                   fontWeight={400}
@@ -61,17 +64,17 @@ const TopPerformers: React.FC<{
             <Image
               src={homeRatingLeader.athlete?.headshot}
               alt={homeRatingLeader.athlete?.shortName}
-              boxSize="40px"
+              boxSize={{ base: "30px", md: "40px" }}
               borderRadius="full"
               objectFit="cover"
               mr={3}
             />
             <Box>
-              <Text fontSize="md" fontWeight="500">
+              <Text fontWeight="500" fontSize={{ base: "sm", md: "md" }}>
                 {homeRatingLeader.athlete?.shortName}
                 <Text
                   as="span"
-                  fontSize="sm"
+                  fontSize={{ base: "xs", md: "sm" }}
                   color="gray.400"
                   ml={2}
                   fontWeight={400}

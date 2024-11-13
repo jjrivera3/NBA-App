@@ -9,6 +9,7 @@ import {
   keyframes,
 } from "@chakra-ui/react";
 import { FaCaretRight, FaCaretLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 interface GameProps {
   game: {
@@ -39,11 +40,17 @@ const lineAnimation = keyframes`
 `;
 
 const GameCard: React.FC<GameProps> = ({ game }) => {
+  const navigate = useNavigate(); // Initialize useNavigate
   const awayScore = parseInt(game.awayScore || "0");
   const homeScore = parseInt(game.homeScore || "0");
 
   const isAwayWinner = awayScore > homeScore;
   const isHomeWinner = homeScore > awayScore;
+
+  // Function to handle navigation to the box score page
+  const handleViewBoxScore = () => {
+    navigate(`/boxscore/${game.gameID}`);
+  };
 
   return (
     <Box
@@ -249,8 +256,9 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
               fontWeight={500}
               variant="unstyled"
               _hover={{ color: "#f8991d" }}
+              onClick={handleViewBoxScore} // Attach the navigation function
             >
-              Box Score
+              View Box Score
             </Button>
           </Box>
         )}
