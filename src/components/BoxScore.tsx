@@ -10,16 +10,20 @@ import {
   Th,
   Thead,
   Tr,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import { BoxScoreData, Player } from "../entities/BoxScoreTypes";
 import useBoxScore from "../hooks/useBoxScore";
 import { useParams, useLocation } from "react-router-dom";
+import { formatDateTime } from "../utils/scoreboardUtils";
 
 const BoxScore = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const location = useLocation();
-  const selectedDate = location.state?.selectedDate;
+  const { game } = location.state || {}; // Retrieve game and selectedDate from state
+
+  console.log("This is the game data", game);
 
   const options = {
     refetchOnWindowFocus: true,
@@ -32,7 +36,7 @@ const BoxScore = () => {
     isError: boolean;
   };
 
-  console.log("Selected Date:", selectedDate);
+  const showImage = useBreakpointValue({ base: false, md: true });
 
   if (isLoading) return <Spinner />;
 
@@ -58,6 +62,11 @@ const BoxScore = () => {
   };
 
   const renderBoxScoreHeader = () => {
+    const isFinal = game?.statusType === "STATUS_FINAL";
+    const isScheduled = game?.statusType === "Scheduled";
+    const isInProgress = game?.statusType === "In Progress";
+    const formattedTime = formatDateTime(game?.date);
+
     return (
       <Box mt={7} borderRadius="md" boxShadow="2xl" overflow="hidden">
         <Flex height="6px" overflow="hidden">
@@ -66,10 +75,11 @@ const BoxScore = () => {
         </Flex>
 
         <Box
-          p={5}
+          padding="35px"
           textAlign="center"
           background="linear-gradient(180deg, #484848 0%, #2e2e2e 100%, #353535 100%)"
           border="0px 1px 1px 1px solid #000"
+          position="relative"
         >
           <Box mt={4} mb={2}>
             <Flex align="center" justify="space-evenly">
@@ -98,12 +108,13 @@ const BoxScore = () => {
                     fontWeight={isAwayWinner ? "bold" : "normal"}
                     fontSize={{ base: "2xl", md: "4xl" }}
                     color="white"
-                    mr={isAwayWinner ? 2 : 0}
+                    mr={isAwayWinner && isFinal ? 2 : 0}
                     ml={{ base: 15, md: 25 }}
                   >
-                    {awayScore}
+                    {game.awayScore}
                   </Text>
-                  {isAwayWinner && (
+                  {/* Show caret only if the game is final and the away team is the winner */}
+                  {isAwayWinner && isFinal && (
                     <FaCaretLeft fontSize="24px" style={{ color: "white" }} />
                   )}
                 </Flex>
@@ -121,7 +132,8 @@ const BoxScore = () => {
               {/* Home Team */}
               <Flex direction="row" align="center">
                 <Flex align="center">
-                  {isHomeWinner && (
+                  {/* Show caret only if the game is final and the home team is the winner */}
+                  {isHomeWinner && isFinal && (
                     <FaCaretRight
                       fontSize="24px"
                       style={{ color: "white", marginLeft: "4px" }}
@@ -131,10 +143,10 @@ const BoxScore = () => {
                     fontWeight={isHomeWinner ? "bold" : "normal"}
                     fontSize={{ base: "2xl", md: "4xl" }}
                     color="white"
-                    ml={isHomeWinner ? 0 : 2}
+                    ml={isHomeWinner && isFinal ? 0 : 2}
                     mr={25}
                   >
-                    {homeScore}
+                    {game.homeScore}
                   </Text>
                 </Flex>
                 <Flex direction="column" align="center" mx={2}>
@@ -158,6 +170,47 @@ const BoxScore = () => {
               </Flex>
             </Flex>
           </Box>
+
+          {/* New Top-Right Box */}
+          <Box
+            maxW="220px"
+            display="flex"
+            alignItems="center"
+            flexDirection="column"
+            whiteSpace="nowrap"
+            position="absolute"
+            top={5}
+            left={5}
+          >
+            <Text
+              fontWeight={600}
+              fontSize="14px"
+              color={isFinal ? "white" : "#20da77"}
+            >
+              {game?.shortDetail
+                ? game.shortDetail
+                : isScheduled
+                ? formattedTime
+                : "Status Unavailable"}
+            </Text>
+            {isInProgress && (
+              <Box
+                width="100%"
+                height="2px"
+                overflow="hidden"
+                position="relative"
+                mt={1}
+              >
+                <Box
+                  width="100%"
+                  height="2px"
+                  backgroundColor="#20da77"
+                  position="absolute"
+                  animation="animation-ariwm7 1.4s infinite alternate cubic-bezier(0.21, 0.85, 0.34, 0.98)"
+                />
+              </Box>
+            )}
+          </Box>
         </Box>
       </Box>
     );
@@ -178,7 +231,6 @@ const BoxScore = () => {
         borderTop={`4px solid ${formatColor(team.color)}`}
         boxShadow="2xl"
       >
-        {/* Team Logo and Team Name */}
         <Flex align="center" mb={4}>
           <Image
             src={team.logo}
@@ -192,7 +244,7 @@ const BoxScore = () => {
         </Flex>
 
         <Box overflowX="auto">
-          <Table variant="simple" size="sm" minWidth="600px">
+          <Table variant="simple" size="sm">
             <Thead>
               <Tr>
                 <Th
@@ -201,7 +253,6 @@ const BoxScore = () => {
                   left="0"
                   background="#2a2a2a"
                   zIndex="docked"
-                  minWidth="150px"
                   padding="5px!important"
                   borderColor="#3a3a3a!important"
                 >
@@ -222,7 +273,6 @@ const BoxScore = () => {
             </Thead>
             <Tbody>
               {athletes.map((athlete, index) => (
-                // Apply border to all rows except the last one (Totals row)
                 <Box
                   as="tr"
                   role="group"
@@ -237,25 +287,27 @@ const BoxScore = () => {
                     left="0"
                     background="#2a2a2a"
                     zIndex="docked"
-                    width={{ base: "120px", md: "180px" }}
+                    width={{ base: "80px", md: "180px" }}
                     borderColor="#3a3a3a!important"
-                    padding="5px!important"
+                    padding={{ base: "15px", md: "5px!important" }}
                     _groupHover={{ bg: "#444" }}
                   >
                     <div
                       style={{
-                        minWidth: window.innerWidth >= 768 ? "250px" : "175px",
+                        minWidth: window.innerWidth >= 768 ? "250px" : "125px",
                       }}
                     >
                       <Flex align="center">
-                        <Image
-                          src={athlete.athlete.headshot?.href}
-                          alt={athlete.athlete.displayName}
-                          boxSize={{ base: "30px", md: "40px" }}
-                          mr={2}
-                          borderRadius="full"
-                          objectFit="contain"
-                        />
+                        {showImage && (
+                          <Image
+                            src={athlete.athlete.headshot?.href}
+                            alt={athlete.athlete.displayName}
+                            boxSize={{ base: "30px", md: "40px" }}
+                            mr={2}
+                            borderRadius="full"
+                            objectFit="contain"
+                          />
+                        )}
                         <Text
                           fontWeight="600"
                           whiteSpace="nowrap"
@@ -290,7 +342,6 @@ const BoxScore = () => {
                   )}
                 </Box>
               ))}
-              {/* Render Totals Row without border */}
               <Tr fontWeight="bold">
                 <Td whiteSpace="nowrap" borderBottom="none">
                   Totals

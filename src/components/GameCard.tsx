@@ -49,7 +49,9 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
 
   // Function to handle navigation to the box score page
   const handleViewBoxScore = () => {
-    navigate(`/boxscore/${game.gameID}`);
+    navigate(`/boxscore/${game.gameID}`, {
+      state: { game }, // Pass the game object here
+    });
   };
 
   return (

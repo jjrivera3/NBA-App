@@ -277,7 +277,9 @@ const ScoreboardScoreCard: React.FC<ScoreboardScoreCardProps> = ({
             fontSize="14px"
             cursor="pointer"
             onClick={() =>
-              navigate(`/boxscore/${game.gameID}`, { state: { selectedDate } })
+              navigate(`/boxscore/${game.gameID}`, {
+                state: { game, selectedDate },
+              })
             }
             ml={2}
             _hover={{ textDecoration: "underline" }}
