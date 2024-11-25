@@ -22,8 +22,7 @@ const BoxScore = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const location = useLocation();
   const { game } = location.state || {}; // Retrieve game and selectedDate from state
-
-  console.log("This is the game data", game);
+  const { selectedEvent } = location.state || {}; // Retrieve the passed selectedEvent
 
   const options = {
     refetchOnWindowFocus: true,
@@ -61,8 +60,12 @@ const BoxScore = () => {
     return color && !color.startsWith("#") ? `#${color}` : color || "gray";
   };
 
+  console.log(selectedEvent);
+
   const renderBoxScoreHeader = () => {
-    const isFinal = game?.statusType === "STATUS_FINAL";
+    const isFinal =
+      game?.statusType ||
+      selectedEvent.competitions[0].status.type.name === "STATUS_FINAL";
     const isScheduled = game?.statusType === "Scheduled";
     const isInProgress = game?.statusType === "In Progress";
     const formattedTime = formatDateTime(game?.date);
@@ -111,11 +114,11 @@ const BoxScore = () => {
                     mr={isAwayWinner && isFinal ? 2 : 0}
                     ml={{ base: 15, md: 25 }}
                   >
-                    {game.awayScore}
+                    {awayScore}
                   </Text>
                   {/* Show caret only if the game is final and the away team is the winner */}
                   {isAwayWinner && isFinal && (
-                    <FaCaretLeft fontSize="24px" style={{ color: "white" }} />
+                    <FaCaretLeft fontSize="24px" style={{ color: "#f8991d" }} />
                   )}
                 </Flex>
               </Flex>
@@ -136,7 +139,7 @@ const BoxScore = () => {
                   {isHomeWinner && isFinal && (
                     <FaCaretRight
                       fontSize="24px"
-                      style={{ color: "white", marginLeft: "4px" }}
+                      style={{ color: "#f8991d", marginLeft: "4px" }}
                     />
                   )}
                   <Text
@@ -146,7 +149,7 @@ const BoxScore = () => {
                     ml={isHomeWinner && isFinal ? 0 : 2}
                     mr={25}
                   >
-                    {game.homeScore}
+                    {homeScore}
                   </Text>
                 </Flex>
                 <Flex direction="column" align="center" mx={2}>
@@ -188,11 +191,27 @@ const BoxScore = () => {
               color={isFinal ? "white" : "#20da77"}
             >
               {game?.shortDetail
-                ? game.shortDetail
+                ? `${game.shortDetail} - ${new Date(
+                    game.date
+                  ).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  })}`
+                : selectedEvent?.competitions?.[0]?.status?.type?.shortDetail
+                ? `${
+                    selectedEvent.competitions[0].status.type.shortDetail
+                  } - ${new Date(selectedEvent.date).toLocaleDateString(
+                    "en-US",
+                    {
+                      month: "short",
+                      day: "numeric",
+                    }
+                  )}`
                 : isScheduled
                 ? formattedTime
                 : "Status Unavailable"}
             </Text>
+
             {isInProgress && (
               <Box
                 width="100%"
@@ -227,7 +246,7 @@ const BoxScore = () => {
         padding="var(--chakra-space-4)"
         borderRadius="var(--chakra-radii-md)"
         overflow="hidden"
-        mt="50px"
+        mt="30px"
         borderTop={`4px solid ${formatColor(team.color)}`}
         boxShadow="2xl"
       >
@@ -253,8 +272,9 @@ const BoxScore = () => {
                   left="0"
                   background="#2a2a2a"
                   zIndex="docked"
-                  padding="5px!important"
+                  padding="0px!important"
                   borderColor="#3a3a3a!important"
+                  fontSize={{ base: "11px", md: "13px" }}
                 >
                   <Text fontWeight="bold" textAlign="left" color="#a0a0a0">
                     Player
@@ -265,6 +285,8 @@ const BoxScore = () => {
                     key={index}
                     whiteSpace="nowrap"
                     borderColor="#3a3a3a!important"
+                    textAlign="center"
+                    fontSize={{ base: "11px", md: "13px" }}
                   >
                     {name}
                   </Th>
@@ -289,7 +311,7 @@ const BoxScore = () => {
                     zIndex="docked"
                     width={{ base: "80px", md: "180px" }}
                     borderColor="#3a3a3a!important"
-                    padding={{ base: "15px", md: "5px!important" }}
+                    padding={{ base: "0px", md: "5px!important" }}
                     _groupHover={{ bg: "#444" }}
                   >
                     <div
@@ -311,7 +333,7 @@ const BoxScore = () => {
                         <Text
                           fontWeight="600"
                           whiteSpace="nowrap"
-                          fontSize={{ base: "13px", md: "14px" }}
+                          fontSize={{ base: "12px", md: "14px" }}
                         >
                           {athlete.athlete.shortName}
                         </Text>
@@ -334,6 +356,8 @@ const BoxScore = () => {
                         key={i}
                         whiteSpace="nowrap"
                         borderColor="#3a3a3a!important"
+                        textAlign="center"
+                        fontSize={{ base: "12px", md: "14px" }}
                         _groupHover={{ bg: "#444" }}
                       >
                         {stat}
@@ -343,7 +367,16 @@ const BoxScore = () => {
                 </Box>
               ))}
               <Tr fontWeight="bold">
-                <Td whiteSpace="nowrap" borderBottom="none">
+                <Td
+                  whiteSpace="nowrap"
+                  position="sticky"
+                  left="0"
+                  background="#2a2a2a"
+                  zIndex="docked"
+                  borderColor="#3a3a3a!important"
+                  textAlign="left"
+                  padding={{ base: 0, md: 4 }}
+                >
                   Totals
                 </Td>
                 {(totals ?? []).map((total, i) => (
@@ -360,7 +393,7 @@ const BoxScore = () => {
   };
 
   return (
-    <Box p={{ base: 1, md: 4 }}>
+    <Box p={{ base: 0, md: 4 }}>
       {renderBoxScoreHeader()}
       {data?.players?.map((playerData, index) => (
         <Box key={index}>{renderPlayerStats(playerData)}</Box>

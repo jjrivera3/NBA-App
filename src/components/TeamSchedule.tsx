@@ -319,15 +319,16 @@ const TeamSchedule = () => {
                               cursor={score ? "pointer" : "default"} // Only show pointer cursor if score (box score) exists
                               onClick={() => {
                                 if (score) {
-                                  // Only navigate if the game has a completed score (box score)
                                   const selectedEvent =
-                                    gameIdData?.events?.[index];
-                                  const selectedGameId = selectedEvent?.id;
-                                  if (selectedGameId) {
-                                    navigate(`/boxscore/${selectedGameId}`);
+                                    gameIdData?.events?.[index]; // Retrieve the selected event
+                                  if (selectedEvent) {
+                                    navigate(`/boxscore/${selectedEvent.id}`, {
+                                      state: { selectedEvent }, // Pass only the selectedEvent to BoxScore
+                                    });
                                   } else {
                                     console.log(
-                                      "Game ID not found for the selected index."
+                                      "Selected event not found for the index:",
+                                      index
                                     );
                                   }
                                 }

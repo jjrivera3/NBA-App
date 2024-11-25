@@ -39,4 +39,5 @@ export interface Player {
 export interface BoxScoreData {
   teams: Team[];
   players: Player[];
+  id: string;
 }
