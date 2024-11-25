@@ -85,7 +85,10 @@ const BoxScore = () => {
           position="relative"
         >
           <Box mt={4} mb={2}>
-            <Flex align="center" justify="space-evenly">
+            <Flex
+              align="center"
+              justify={{ base: "center", md: "space-evenly" }}
+            >
               {/* Away Team */}
               <Flex direction="row" align="center">
                 <Flex direction="column" align="center" mx={2}>
@@ -239,8 +242,6 @@ const BoxScore = () => {
     const team = playerData.team;
     const { names, athletes, totals } = playerData.statistics[0];
 
-    console.log(playerData);
-
     return (
       <Box
         mb={8}
@@ -259,12 +260,12 @@ const BoxScore = () => {
             boxSize="30px"
             mr={2}
           />
-          <Text fontSize="xl" fontWeight="bold">
+          <Text fontSize={{ base: "md", md: "xl" }} fontWeight="bold">
             {team.displayName}
           </Text>
         </Flex>
 
-        <Box overflowX="auto">
+        <Box overflowX="auto" position="relative" zIndex={10}>
           <Table variant="simple" size="sm">
             <Thead>
               <Tr>
@@ -348,6 +349,7 @@ const BoxScore = () => {
                       textAlign={{ base: "left", md: "center" }}
                       color="gray.400"
                       borderColor="#3a3a3a!important"
+                      fontSize={{ base: "12px", md: "14px" }}
                       _groupHover={{ bg: "#444" }}
                     >
                       {athlete.reason}
