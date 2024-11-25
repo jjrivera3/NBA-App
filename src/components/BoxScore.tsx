@@ -102,7 +102,7 @@ const BoxScore = () => {
                   >
                     {awayTeam?.team.abbreviation}
                   </Text>
-                  <Text fontSize="sm" color="gray.300">
+                  <Text fontSize="12px" color="gray.300">
                     Away
                   </Text>
                 </Flex>
@@ -166,7 +166,7 @@ const BoxScore = () => {
                   >
                     {homeTeam?.team.abbreviation}
                   </Text>
-                  <Text fontSize="sm" color="gray.300">
+                  <Text fontSize="12px" color="gray.300">
                     Home
                   </Text>
                 </Flex>
@@ -245,7 +245,7 @@ const BoxScore = () => {
       <Box
         mb={8}
         background="#2a2a2a"
-        padding="var(--chakra-space-4)"
+        padding="var(--chakra-space-3)"
         borderRadius="var(--chakra-radii-md)"
         overflow="hidden"
         mt="30px"
