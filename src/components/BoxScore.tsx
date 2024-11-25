@@ -239,6 +239,8 @@ const BoxScore = () => {
     const team = playerData.team;
     const { names, athletes, totals } = playerData.statistics[0];
 
+    console.log(playerData);
+
     return (
       <Box
         mb={8}
@@ -343,7 +345,7 @@ const BoxScore = () => {
                   {athlete.didNotPlay ? (
                     <Td
                       colSpan={names.length}
-                      textAlign="center"
+                      textAlign={{ base: "left", md: "center" }}
                       color="gray.400"
                       borderColor="#3a3a3a!important"
                       _groupHover={{ bg: "#444" }}
@@ -373,14 +375,18 @@ const BoxScore = () => {
                   left="0"
                   background="#2a2a2a"
                   zIndex="docked"
-                  borderColor="#3a3a3a!important"
                   textAlign="left"
                   padding={{ base: 0, md: 4 }}
                 >
                   Totals
                 </Td>
                 {(totals ?? []).map((total, i) => (
-                  <Td key={i} whiteSpace="nowrap" borderBottom="none">
+                  <Td
+                    key={i}
+                    whiteSpace="nowrap"
+                    borderBottom="none"
+                    textAlign="center"
+                  >
                     {total}
                   </Td>
                 ))}
