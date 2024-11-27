@@ -152,7 +152,7 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
               </ChakraLink>
               <ChakraLink
                 as={Link}
-                to="/Page2"
+                to="/scoreboard"
                 fontSize="lg"
                 _hover={{ color: "#f37021" }}
                 onClick={onClose}
@@ -161,21 +161,12 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
               </ChakraLink>
               <ChakraLink
                 as={Link}
-                to="/Page3"
+                to="/compare-players"
                 fontSize="lg"
                 _hover={{ color: "#f37021" }}
                 onClick={onClose}
               >
-                Standings
-              </ChakraLink>
-              <ChakraLink
-                as={Link}
-                to="/Page4"
-                fontSize="lg"
-                _hover={{ color: "#f37021" }}
-                onClick={onClose}
-              >
-                News
+                Compare Players
               </ChakraLink>
 
               {isMobile && (

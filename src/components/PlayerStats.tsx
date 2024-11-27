@@ -12,8 +12,6 @@ const PlayerStats = ({
   // Get the player from the PlayerStore
   const player = usePlayerStore((state) => state.player);
 
-  console.log(player);
-
   // Check if player and player.stats exist, and safely handle missing stats
   const stats =
     player && player.stats

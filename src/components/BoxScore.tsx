@@ -2,7 +2,6 @@ import {
   Box,
   Flex,
   Image,
-  Spinner,
   Table,
   Tbody,
   Td,
@@ -17,12 +16,22 @@ import { BoxScoreData, Player } from "../entities/BoxScoreTypes";
 import useBoxScore from "../hooks/useBoxScore";
 import { useParams, useLocation } from "react-router-dom";
 import { formatDateTime } from "../utils/scoreboardUtils";
+import BoxScoreSkeleton from "./skeletons/BoxScoreSkeleton";
+import { useEffect } from "react"; // Import useEffect
 
 const BoxScore = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const location = useLocation();
   const { game } = location.state || {}; // Retrieve game and selectedDate from state
   const { selectedEvent } = location.state || {}; // Retrieve the passed selectedEvent
+
+  // console.log(game.statusType);
+  console.log(selectedEvent);
+
+  useEffect(() => {
+    // Scroll to the top of the page when the component loads
+    window.scrollTo(0, 0);
+  }, []); // Empty dependency array ensures this runs only on mount
 
   const options = {
     refetchOnWindowFocus: true,
@@ -37,7 +46,7 @@ const BoxScore = () => {
 
   const showImage = useBreakpointValue({ base: false, md: true });
 
-  if (isLoading) return <Spinner />;
+  if (isLoading) return <BoxScoreSkeleton />;
 
   if (isError)
     return <Text color="red.500">Error loading box score data.</Text>;

@@ -1,4 +1,3 @@
-// src/stores/usePlayerStore.ts
 import { create } from "zustand";
 import { mountStoreDevtool } from "simple-zustand-devtools";
 import Player from "./entities/Player";
@@ -56,29 +55,43 @@ interface PlayerState {
     espnLogo1: string;
     teamCity: string;
     teamName: string;
-    playerRating: PlayerState["playerRating"]; // Add playerRating
+    playerRating: PlayerState["playerRating"];
   }) => void;
 }
 
-export const usePlayerStore = create<PlayerState>((set) => ({
-  player: null,
-  firstColor: null,
-  teamID: null,
-  espnLogo1: null,
-  teamCity: null,
-  teamName: null,
-  playerRating: null, // Initial player rating is null
-  setPlayerData: (data) =>
-    set(() => ({
-      player: data.player,
-      firstColor: data.firstColor,
-      teamID: data.teamID,
-      espnLogo1: data.espnLogo1,
-      teamCity: data.teamCity,
-      teamName: data.teamName,
-      playerRating: data.playerRating, // Set player rating from data
-    })),
-}));
+export const usePlayerStore = create<PlayerState>((set) => {
+  // Load initial state from localStorage
+  const storedState = localStorage.getItem("playerStore");
+  const initialState = storedState
+    ? JSON.parse(storedState)
+    : {
+        player: null,
+        firstColor: null,
+        teamID: null,
+        espnLogo1: null,
+        teamCity: null,
+        teamName: null,
+        playerRating: null,
+      };
+
+  return {
+    ...initialState,
+    setPlayerData: (data) => {
+      const newState = {
+        player: data.player,
+        firstColor: data.firstColor,
+        teamID: data.teamID,
+        espnLogo1: data.espnLogo1,
+        teamCity: data.teamCity,
+        teamName: data.teamName,
+        playerRating: data.playerRating,
+      };
+      // Update localStorage
+      localStorage.setItem("playerStore", JSON.stringify(newState));
+      set(newState);
+    },
+  };
+});
 
 if (process.env.NODE_ENV === "development")
   mountStoreDevtool("Player Store", usePlayerStore);

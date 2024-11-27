@@ -75,7 +75,11 @@ const GameEvents: React.FC<GameEventsProps> = ({
             <Flex
               key={competition.id}
               mb={{
-                base: competition.status.type.name === "STATUS_FINAL" ? 0 : 10,
+                base:
+                  competition.status.type.name === "STATUS_FINAL" ||
+                  competition.status.type.name === "STATUS_IN_PROGRESS"
+                    ? 0
+                    : 10,
                 md: 5,
               }}
               width="100%"
@@ -83,7 +87,8 @@ const GameEvents: React.FC<GameEventsProps> = ({
               borderRadius="md"
               boxShadow={{
                 base:
-                  competition.status.type.name === "STATUS_FINAL"
+                  competition.status.type.name === "STATUS_FINAL" ||
+                  competition.status.type.name === "STATUS_IN_PROGRESS"
                     ? "none"
                     : "md",
                 md: "md",
@@ -91,7 +96,8 @@ const GameEvents: React.FC<GameEventsProps> = ({
               alignItems="center"
               background={{
                 base:
-                  competition.status.type.name === "STATUS_FINAL"
+                  competition.status.type.name === "STATUS_FINAL" ||
+                  competition.status.type.name === "STATUS_IN_PROGRESS"
                     ? "none"
                     : "#464646",
                 md: "#464646",

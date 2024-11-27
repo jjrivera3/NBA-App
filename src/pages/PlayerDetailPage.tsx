@@ -13,6 +13,7 @@ import PlayerStats from "../components/PlayerStats";
 import PlayerAdditionalInfo from "../components/Player Profile/PlayerAdditionalInfo";
 import { usePlayerStore } from "../usePlayerStore";
 import { usePlayerAttributesStore } from "../usePlayerAttributesStore";
+import PlayerCurrentSeasonStatsTable from "../components/Player Profile/PlayerCurrentSeasonStatsTable";
 
 const PlayerDetailPage = () => {
   const { player, firstColor, teamID } = usePlayerStore((state) => state);
@@ -90,6 +91,32 @@ const PlayerDetailPage = () => {
           firstColor={firstColor || "#000"}
           lightValue={lightValue}
         />
+      </Box>
+
+      <Box
+        as="section"
+        padding="20px"
+        borderRadius="md"
+        w="full"
+        mt={5}
+        bg="#26262640"
+        boxShadow="lg"
+        rounded="md"
+        border="1px solid #000"
+      >
+        {isLoading ? (
+          <Box>
+            <Skeleton height="30px" mb={2} />
+            <SkeletonText noOfLines={10} spacing={4} skeletonHeight="20px" />
+          </Box>
+        ) : (
+          playerStatsData?.playerStats.body && (
+            <PlayerCurrentSeasonStatsTable
+              stats={playerStatsData.playerStats.body}
+              nbateams={nbateams}
+            />
+          )
+        )}
       </Box>
 
       <Box

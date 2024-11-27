@@ -33,6 +33,8 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearchClose }) => {
 
   usePlayerRatings(selectedPlayerName);
 
+  console.log(players);
+
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const text = event.target.value;
     setSearchText(text);

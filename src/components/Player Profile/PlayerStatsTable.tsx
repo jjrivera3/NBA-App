@@ -5,6 +5,7 @@ import "datatables.net-bs5";
 import "datatables.net-select";
 import { Box, Text } from "@chakra-ui/react";
 import { lighten } from "polished";
+import { usePlayerStore } from "../../usePlayerStore";
 
 interface Stat {
   season: string;
@@ -76,6 +77,8 @@ const statKeys: StatKeys[] = [
 ];
 
 const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
+  const player = usePlayerStore((state) => state.player);
+
   useEffect(() => {
     const table = $("#statsTable").DataTable({
       paging: false,
@@ -159,7 +162,7 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
   return (
     <>
       <Text
-        fontSize="2xl"
+        fontSize="xl"
         fontWeight={500}
         mb="2"
         textAlign="left"
@@ -204,6 +207,7 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
               <th style={thStyle}>PF</th>
             </tr>
           </thead>
+
           <tbody>
             {stats.slice(0, -1).map((row, index) => {
               const teamData = nbateams.find((team) => {

@@ -7,6 +7,7 @@ import TeamSchedule from "./components/TeamSchedule";
 import DepthChart from "./components/DepthChart";
 import Scoreboard from "./components/Scoreboard/Scoreboard";
 import BoxScore from "./components/BoxScore";
+import ComparePlayers from "./pages/ComparePlayers";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
       {
         path: "boxscore/:gameId",
         element: <BoxScore />,
+      },
+      {
+        path: "/compare-players",
+        element: <ComparePlayers />,
       },
     ],
   },

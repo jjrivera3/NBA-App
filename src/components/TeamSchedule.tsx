@@ -10,6 +10,8 @@ import {
   Thead,
   Tr,
   useBreakpointValue,
+  Tooltip,
+  Button,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +30,7 @@ import UpcomingGameSkeleton from "./skeletons/UpcomingGameSkeleton";
 import useTeamScheduleScores from "../hooks/useTeamScheduleScores";
 import useGetGameID from "../hooks/useGetGameId";
 import nbaTeamBoxScoreId from "../data/nbaTeamBoxScoreId";
+import BoxScoreSkeleton from "./skeletons/BoxScoreSkeleton";
 
 const formatTime = (epoch: string | number) => {
   const timeInSeconds = typeof epoch === "string" ? Number(epoch) : epoch;
@@ -55,7 +58,13 @@ const TeamSchedule = () => {
 
   // Change "SA" to "SAS"
   const adjustedTeamAbv1 =
-    teamAbv1 === "SAS" ? "SA" : teamAbv1 === "GSW" ? "GS" : teamAbv1;
+    teamAbv1 === "SAS"
+      ? "SA"
+      : teamAbv1 === "GSW"
+      ? "GS"
+      : teamAbv1 === "NOP"
+      ? "NO"
+      : teamAbv1;
 
   // Check for a matching team in nbaTeamBoxScoreId
   const matchingTeam = nbaTeamBoxScoreId.find(
@@ -141,7 +150,7 @@ const TeamSchedule = () => {
                   {selectedTeam?.teamSchedule &&
                     Object.values(selectedTeam.teamSchedule as GameSchedule[])
                       .sort((a, b) => a.gameDate.localeCompare(b.gameDate))
-                      .map((game) => {
+                      .map((game, index) => {
                         const isHomeGame =
                           selectedTeam.teamID === game.teamIDHome;
                         const opponentId = isHomeGame
@@ -240,13 +249,53 @@ const TeamSchedule = () => {
                               {gameTime}
                             </Box>
                             {result ? (
-                              <Text
-                                fontSize="lg"
-                                fontWeight="bold"
-                                color={resultColor}
-                              >
-                                {result}
-                              </Text>
+                              <>
+                                <Text
+                                  fontSize="lg"
+                                  fontWeight="bold"
+                                  color={resultColor}
+                                >
+                                  {result}
+                                </Text>
+                                {isMobile && score && (
+                                  <Box
+                                    mt={2}
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    borderRadius="md"
+                                    backgroundColor="#3a3a3a"
+                                    borderTopRadius="md"
+                                    boxShadow="md"
+                                    border="1px solid #3a3a3a"
+                                  >
+                                    <Button
+                                      size="xs"
+                                      color="#cccccc"
+                                      fontSize="12px"
+                                      fontWeight={500}
+                                      variant="unstyled"
+                                      _hover={{ color: "#f8991d" }}
+                                      onClick={() => {
+                                        if (score) {
+                                          const selectedEvent =
+                                            gameIdData?.events?.[index];
+                                          if (selectedEvent) {
+                                            navigate(
+                                              `/boxscore/${selectedEvent.id}`,
+                                              {
+                                                state: { selectedEvent },
+                                              }
+                                            );
+                                          }
+                                        }
+                                      }}
+                                    >
+                                      View Box Score
+                                    </Button>
+                                  </Box>
+                                )}
+                              </>
                             ) : null}
                             {!score && (
                               <Text fontSize="xs" color="gray.400">
@@ -287,12 +336,13 @@ const TeamSchedule = () => {
                           const gameTime = formatTime(game.gameTime_epoch);
                           const formattedDate = formatDate(game.gameDate);
 
-                          // Check if the game has a completed score (box score availability)
+                          // Check if the game has a completed score
                           const score = scheduleScores.find(
                             (score: { gameID: string; gameStatus: string }) =>
                               score.gameID === game.gameID &&
                               score.gameStatus === "Completed"
                           );
+
                           const isSelectedTeamWinner =
                             score &&
                             ((isHomeGame && score.homeResult === "W") ||
@@ -312,71 +362,83 @@ const TeamSchedule = () => {
                             : resultPrefix;
 
                           return (
-                            <Tr
-                              key={game.gameID}
-                              borderBottom="1px solid #2d2d2d"
-                              bg={index % 2 === 0 ? "#232323" : "#2A2A2A"}
-                              cursor={score ? "pointer" : "default"} // Only show pointer cursor if score (box score) exists
-                              onClick={() => {
-                                if (score) {
-                                  const selectedEvent =
-                                    gameIdData?.events?.[index]; // Retrieve the selected event
-                                  if (selectedEvent) {
-                                    navigate(`/boxscore/${selectedEvent.id}`, {
-                                      state: { selectedEvent }, // Pass only the selectedEvent to BoxScore
-                                    });
-                                  } else {
-                                    console.log(
-                                      "Selected event not found for the index:",
-                                      index
-                                    );
-                                  }
-                                }
-                              }}
-                              sx={{
-                                transition: "background-color 0.3s",
-                                _hover: {
-                                  backgroundColor: score
-                                    ? "#3a3a3a"
-                                    : "inherit", // No hover effect if no box score
-                                  cursor: score ? "pointer" : "default", // No pointer cursor if no box score
-                                },
-                              }}
+                            <Tooltip
+                              label="Click to view box score"
+                              fontSize="sm"
+                              placement="top"
+                              bg="gray.700"
+                              color="white"
+                              hasArrow
+                              isDisabled={!score} // Tooltip only enabled if score exists
                             >
-                              <Td fontSize="14px" fontWeight={500}>
-                                {formattedDate}
-                              </Td>
-                              <Td fontSize="14px">
-                                <Flex align="center">
-                                  <Text mr={1}>{isHomeGame ? "vs" : "@"}</Text>
-                                  {opponentLogo && (
-                                    <Image
-                                      src={opponentLogo}
-                                      alt={`${opponentName} logo`}
-                                      boxSize="25px"
-                                      mr={2}
-                                    />
-                                  )}
-                                  <Text
-                                    fontWeight={500}
-                                    fontSize="14px"
-                                    color="white"
-                                  >
-                                    {isMobile ? opponentAbbrev : opponentName}
-                                  </Text>
-                                </Flex>
-                              </Td>
-                              <Td fontSize="16px" fontWeight={500}>
-                                {gameTime}
-                              </Td>
-                              <Td
-                                fontSize="15px"
-                                fontWeight={700}
-                                color={resultColor}
+                              <Tr
+                                key={game.gameID}
+                                borderBottom="1px solid #2d2d2d"
+                                bg={index % 2 === 0 ? "#232323" : "#2A2A2A"}
+                                cursor={score ? "pointer" : "default"} // Only pointer cursor if score exists
+                                sx={
+                                  score
+                                    ? {
+                                        transition: "background-color 0.3s",
+                                        _hover: {
+                                          backgroundColor: "#3a3a3a",
+                                          cursor: "pointer",
+                                        },
+                                      }
+                                    : {} /* No hover effect for rows without a score */
+                                }
+                                onClick={() => {
+                                  if (score) {
+                                    const selectedEvent =
+                                      gameIdData?.events?.[index];
+                                    if (selectedEvent) {
+                                      navigate(
+                                        `/boxscore/${selectedEvent.id}`,
+                                        {
+                                          state: { selectedEvent },
+                                        }
+                                      );
+                                    }
+                                  }
+                                }}
                               >
-                                {result}
-                              </Td>
-                            </Tr>
+                                <Td fontSize="14px" fontWeight={500}>
+                                  {formattedDate}
+                                </Td>
+                                <Td fontSize="14px">
+                                  <Flex align="center">
+                                    <Text mr={1}>
+                                      {isHomeGame ? "vs" : "@"}
+                                    </Text>
+                                    {opponentLogo && (
+                                      <Image
+                                        src={opponentLogo}
+                                        alt={`${opponentName} logo`}
+                                        boxSize="25px"
+                                        mr={2}
+                                      />
+                                    )}
+                                    <Text
+                                      fontWeight={500}
+                                      fontSize="14px"
+                                      color="white"
+                                    >
+                                      {isMobile ? opponentAbbrev : opponentName}
+                                    </Text>
+                                  </Flex>
+                                </Td>
+                                <Td fontSize="16px" fontWeight={500}>
+                                  {gameTime}
+                                </Td>
+                                <Td
+                                  fontSize="15px"
+                                  fontWeight={700}
+                                  color={resultColor}
+                                >
+                                  {result}
+                                </Td>
+                              </Tr>
+                            </Tooltip>
                           );
                         })}
                   </Tbody>
