@@ -5,7 +5,6 @@ import "datatables.net-bs5";
 import "datatables.net-select";
 import { Box, Text } from "@chakra-ui/react";
 import { lighten } from "polished";
-import { usePlayerStore } from "../../usePlayerStore";
 
 interface Stat {
   season: string;
