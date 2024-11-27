@@ -77,8 +77,6 @@ const statKeys: StatKeys[] = [
 ];
 
 const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
-  const player = usePlayerStore((state) => state.player);
-
   useEffect(() => {
     const table = $("#statsTable").DataTable({
       paging: false,

@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Flex,
   Image,
   Table,
@@ -8,29 +9,26 @@ import {
   Text,
   Th,
   Thead,
+  Tooltip,
   Tr,
   useBreakpointValue,
-  Tooltip,
-  Button,
 } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Utah_Jazz from "../assets/Utah_Jazz.png";
+import nbaTeamBoxScoreId from "../data/nbaTeamBoxScoreId";
 import nbaTeams from "../data/nbateams";
 import GameSchedule from "../entities/GameSchedule";
+import useGetGameID from "../hooks/useGetGameId";
 import useNextGame from "../hooks/useNextGame";
 import useTeamColor from "../hooks/useTeamColor";
 import useTeamDetails from "../hooks/useTeamDetails";
 import useTeamInfo from "../hooks/useTeamInfo";
+import useTeamScheduleScores from "../hooks/useTeamScheduleScores";
 import { formatDate } from "../utils/teamHelper";
 import TeamHeading from "./TeamHeading";
 import UpcomingGame from "./UpcomingGame";
 import TeamHeadingSkeleton from "./skeletons/TeamHeadSkeleton";
 import UpcomingGameSkeleton from "./skeletons/UpcomingGameSkeleton";
-import useTeamScheduleScores from "../hooks/useTeamScheduleScores";
-import useGetGameID from "../hooks/useGetGameId";
-import nbaTeamBoxScoreId from "../data/nbaTeamBoxScoreId";
-import BoxScoreSkeleton from "./skeletons/BoxScoreSkeleton";
 
 const formatTime = (epoch: string | number) => {
   const timeInSeconds = typeof epoch === "string" ? Number(epoch) : epoch;
