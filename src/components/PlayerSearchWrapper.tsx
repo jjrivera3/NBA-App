@@ -15,16 +15,15 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
   const { players } = usePlayerSearch();
   const [filteredPlayers, setFilteredPlayers] = useState<any[]>([]);
   const [searchText, setSearchText] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [selectedPlayer, setSelectedPlayer] = useState<any | null>(null);
   const [playerRating, setPlayerRating] = useState<any | null>(null);
 
-  // Average calculation function for ratings
   const calculateAverage = (attributes: number[]) =>
     Math.round(
       attributes.reduce((acc, curr) => acc + curr, 0) / attributes.length
     );
 
-  // Calculate various ratings
   const insideScoringAverage = playerRating
     ? calculateAverage([
         playerRating.layup || 0,
@@ -80,7 +79,23 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
       ])
     : 0;
 
-  // Handle search input
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "ArrowDown") {
+      setSelectedIndex((prev) =>
+        prev === null ? 0 : prev < filteredPlayers.length - 1 ? prev + 1 : prev
+      );
+    } else if (event.key === "ArrowUp") {
+      setSelectedIndex((prev) =>
+        prev === null || prev === 0 ? null : prev - 1
+      );
+    } else if (event.key === "Enter" && selectedIndex !== null) {
+      const selectedPlayer = filteredPlayers[selectedIndex];
+      if (selectedPlayer) {
+        handlePlayerSelect(selectedPlayer);
+      }
+    }
+  };
+
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const text = event.target.value;
     setSearchText(text);
@@ -90,22 +105,21 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
         player.longName.toLowerCase().includes(text.toLowerCase())
       );
       setFilteredPlayers(filtered);
+      setSelectedIndex(null); // Reset selection when search text changes
     } else {
       setFilteredPlayers([]);
+      setSelectedIndex(null);
     }
   };
 
-  // Handle player selection
   const handlePlayerSelect = (player: any) => {
     setSelectedPlayer(player);
     setSearchText(""); // Clear search text after selection
     setFilteredPlayers([]); // Clear filtered list
 
-    // Find player rating from ratings data
     const rating = ratings.find((rating) => rating.name === player.longName);
     setPlayerRating(rating || null); // Update rating state
 
-    // Pass player and rating data to parent component
     if (rating) {
       onPlayerSelect(player, rating);
     }
@@ -119,6 +133,7 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
       <input
         value={searchText}
         onChange={handleSearch}
+        onKeyDown={handleKeyDown} // Add the keydown event listener here
         placeholder="Search players..."
         style={{
           padding: "8px",
@@ -135,10 +150,9 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
           mt={2}
           maxHeight="200px"
           overflowY="auto"
-          position="relative"
           zIndex={10}
         >
-          {filteredPlayers.map((player) => (
+          {filteredPlayers.map((player, index) => (
             <Box
               key={player.playerID}
               padding="8px"
@@ -146,6 +160,8 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
               _hover={{ backgroundColor: "#f8991d", color: "white" }}
               onClick={() => handlePlayerSelect(player)}
               cursor="pointer"
+              backgroundColor={selectedIndex === index ? "#f8991d" : "#000"}
+              color={selectedIndex === index ? "white" : "white"}
             >
               {player.longName}
             </Box>
@@ -157,8 +173,9 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
           <Image
             src={selectedPlayer.espnHeadshot}
             alt={selectedPlayer.longName}
-            boxSize="80px"
+            boxSize="150px"
             borderRadius="full"
+            objectFit="contain"
           />
           <Text fontWeight="bold">{selectedPlayer.longName}</Text>
           <Text>{selectedPlayer.team}</Text>

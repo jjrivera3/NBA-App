@@ -9,6 +9,9 @@ const ComparePlayers = () => {
   const [rating1, setRating1] = useState<any | null>(null);
   const [rating2, setRating2] = useState<any | null>(null);
 
+  console.log(player1);
+  console.log(player2);
+
   // Callback for when Player 1 is selected
   const handlePlayer1Select = (player: any, rating: any) => {
     setPlayer1(player);
