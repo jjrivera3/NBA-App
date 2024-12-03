@@ -35,7 +35,7 @@ const ComparePlayers = () => {
       </Text>
       <Flex justify="space-between" gap={5}>
         {/* Player 1 Search */}
-        <Box flex={1}>
+        <Box flex={1} position="relative">
           <PlayerSearchWrapper
             label="Search Player 1"
             onPlayerSelect={handlePlayer1Select}
@@ -44,7 +44,7 @@ const ComparePlayers = () => {
         </Box>
 
         {/* Player 2 Search */}
-        <Box flex={1}>
+        <Box flex={1} position="relative">
           <PlayerSearchWrapper
             label="Search Player 2"
             onPlayerSelect={handlePlayer2Select}
@@ -54,7 +54,7 @@ const ComparePlayers = () => {
       </Flex>
 
       {rating1 && rating2 && (
-        <Box mt={5} bg="gray.800" p={4} borderRadius="md" width="100%">
+        <Box mt={5} bg="gray.800" borderRadius="md" width="100%">
           <CompareRadarChart player1={rating1} player2={rating2} />
         </Box>
       )}

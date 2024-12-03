@@ -153,12 +153,8 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
           maxHeight="200px"
           overflowY="auto"
           zIndex={10}
-          sx={{
-            "&.css-0": {
-              position: "relative",
-            },
-          }}
-          className="css-0" // Add the class name
+          position={areBothPlayersSelected ? "absolute" : "relative"} // Dynamically set position
+          width={areBothPlayersSelected ? "100%" : "auto"} // Dynamically set width
         >
           {filteredPlayers.map((player, index) => (
             <Box
