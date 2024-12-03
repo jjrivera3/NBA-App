@@ -2,6 +2,7 @@ import { Box, Text, VStack, Image } from "@chakra-ui/react";
 import { useState } from "react";
 import usePlayerSearch from "../hooks/usePlayerSearch"; // Assume custom hook for fetching players
 import ratings from "../data/ratings"; // Assume ratings data is imported here
+import RatingTeamScore from "./RatingTeamScore"; // Import the RatingTeamScore component
 
 interface PlayerSearchWrapperProps {
   label: string;
@@ -173,7 +174,7 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
         </Box>
       )}
       {selectedPlayer && playerRating && (
-        <VStack spacing={3} mt={5} bg="gray.800" p={4} borderRadius="md">
+        <VStack spacing={3} mt={5} bg="#2a2a2a" p={4} borderRadius="md">
           <Image
             src={selectedPlayer.espnHeadshot}
             alt={selectedPlayer.longName}
@@ -182,18 +183,12 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
             objectFit="contain"
           />
           <Text fontWeight="bold">{selectedPlayer.longName}</Text>
-          <Text>{selectedPlayer.team}</Text>
 
-          <Box bg="gray.700" p={4} borderRadius="md" width="100%">
-            <Text fontWeight="bold" color="orange.400">
-              Player Rating:
-            </Text>
-            <Text>Overall: {playerRating.overallAttribute}</Text>
-            <Text>Inside Scoring Overall: {insideScoringAverage}</Text>
-            <Text>Outside Scoring Overall: {outsideScoringAverage}</Text>
-            <Text>Rebounding Overall: {reboundingAverage}</Text>
-            <Text>Athleticism Overall: {athleticismAverage}</Text>
-            <Text>Defensive Overall: {defenseAverage}</Text>
+          <Box borderRadius="md" width="100%" textAlign="center">
+            <RatingTeamScore
+              playerRating={playerRating.overallAttribute}
+              fontSize="16px"
+            />
           </Box>
         </VStack>
       )}
