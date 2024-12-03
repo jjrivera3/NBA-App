@@ -35,19 +35,24 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
       : playerAvatar
   );
 
-  // Function to get team info based on team abbreviation
-  const getTeamInfo = (abbreviation: string) => {
+  // Function to get team logo based on team abbreviation
+  const getTeamLogo = (abbreviation: string) => {
+    // Change abbreviation "GS" to "GSW"
+    if (abbreviation === "GS") {
+      abbreviation = "GSW";
+    }
+
+    // Change abbreviation "SA" to "SAS"
+    if (abbreviation === "SA") {
+      abbreviation = "SAS";
+    }
+
     const team = nbaTeams.find((team) => team.abbreviation === abbreviation);
-    return team
-      ? { name: team.name, city: team.info.city || "Unknown City" }
-      : { name: "Unknown Team", city: "Unknown City" };
+    return team ? team.info.logoImage : ""; // Return the logo image URL or an empty string if not found
   };
 
-  // Retrieve team info based on player.team abbreviation
-  const teamInfo = getTeamInfo(player.team || ""); // Adjust player.team if necessary
-
-  // Break up the team name into city and team name
-  const [finalTeamCity] = teamInfo.name.split(" ");
+  // Retrieve team logo based on player.team abbreviation
+  const teamLogo = getTeamLogo(player.team || ""); // Adjust player.team if necessary
 
   // Update avatarSrc whenever player changes (i.e., when a new player is selected)
   useEffect(() => {
@@ -70,9 +75,9 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
       player,
       firstColor: firstColor || "#000000",
       teamID: player.teamID || "unknown",
-      espnLogo1: avatarSrc || "defaultLogo.png",
-      teamCity: finalTeamCity,
-      teamName: teamInfo.name,
+      espnLogo1: teamLogo || "defaultLogo.png",
+      teamCity: player.rating.team,
+      teamName: player.rating.team,
       playerRating: playerRating,
     });
   };
@@ -85,6 +90,8 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
     .replace(/\s+/g, "-")}/${player?.espnName
     .toLowerCase()
     .replace(/\s+/g, "-")}`;
+
+  console.log(stats);
 
   return (
     <Center mt={5} py={{ base: 1, md: 2 }}>
@@ -120,10 +127,13 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
 
         <Box p={6}>
           <Stack spacing={0} align={"center"} mb={5}>
-            <Heading fontSize={"16px"} fontWeight={500} fontFamily={"body"}>
-              {player?.espnName}
-            </Heading>
-            <HStack mt={2} mb={2}>
+            <HStack>
+              <Image src={teamLogo} h={"25px"} />
+              <Heading fontSize={"16px"} fontWeight={500} fontFamily={"body"}>
+                {player?.espnName}
+              </Heading>
+            </HStack>
+            <HStack mt={3} mb={3}>
               <RatingTeamScore playerRating={playerOverallRating} />
             </HStack>
             <Text fontSize={"15px"} color={"gray.400"}>
@@ -138,7 +148,7 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
             ) : (
               <Stack direction={"row"} justify={"center"} spacing={10}>
                 <Stack spacing={0} align={"center"}>
-                  <Text fontSize="lg" fontWeight={600}>
+                  <Text fontSize="16px" fontWeight={600}>
                     {stats.pts}
                   </Text>
                   <Text fontSize={"sm"} color={"gray.400"}>
@@ -147,7 +157,7 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
                 </Stack>
 
                 <Stack spacing={0} align={"center"}>
-                  <Text fontSize="lg" fontWeight={600}>
+                  <Text fontSize="16px" fontWeight={600}>
                     {stats.reb}
                   </Text>
                   <Text fontSize={"sm"} color={"gray.400"}>
@@ -156,11 +166,36 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
                 </Stack>
 
                 <Stack spacing={0} align={"center"}>
-                  <Text fontSize="lg" fontWeight={600}>
+                  <Text fontSize="16px" fontWeight={600}>
                     {stats.ast}
                   </Text>
                   <Text fontSize={"sm"} color={"gray.400"}>
                     APG
+                  </Text>
+                </Stack>
+
+                <Stack spacing={0} align={"center"}>
+                  <Text fontSize="16px" fontWeight={600}>
+                    {player.stats.fgp}%
+                  </Text>
+                  <Text fontSize={"sm"} color={"gray.400"}>
+                    FG%
+                  </Text>
+                </Stack>
+                <Stack spacing={0} align={"center"}>
+                  <Text fontSize="16px" fontWeight={600}>
+                    {player.stats.tptfgp}%
+                  </Text>
+                  <Text fontSize={"sm"} color={"gray.400"}>
+                    3PT%
+                  </Text>
+                </Stack>
+                <Stack spacing={0} align={"center"}>
+                  <Text fontSize="16px" fontWeight={600}>
+                    {player.stats.ftp}%
+                  </Text>
+                  <Text fontSize={"sm"} color={"gray.400"}>
+                    FTP%
                   </Text>
                 </Stack>
               </Stack>

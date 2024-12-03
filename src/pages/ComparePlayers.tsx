@@ -1,11 +1,104 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { Box, Flex, HStack, Text } from "@chakra-ui/react";
+import { useState } from "react";
 import PlayerSearchWrapper from "../components/PlayerSearchWrapper";
 import CompareRadarChart from "../components/CompareRadarChart";
-import {
-  calculateScoringAverages,
-  ScoringAverages,
-} from "../utils/playerRatingUtilty";
+import { calculateScoringAverages } from "../utils/playerRatingUtilty";
+
+// Reusable AttributeComparison Component
+const AttributeComparison = ({
+  label,
+  player1Value,
+  player2Value,
+  getColor,
+}: {
+  label: string;
+  player1Value: number;
+  player2Value: number;
+  getColor: (value: number) => string;
+}) => {
+  const difference = player1Value - player2Value;
+  return (
+    <Flex
+      justify="space-evenly"
+      p={2}
+      borderBottom="1px solid #636363"
+      alignItems="center"
+    >
+      <HStack>
+        <Text
+          color={difference > 0 ? "green.500" : "red.500"}
+          textAlign="center"
+          fontSize="14px"
+          fontWeight="600"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="45px"
+          minWidth="45px"
+        >
+          {difference > 0 ? `+${difference}` : difference}
+        </Text>
+        <Text
+          color="white"
+          textAlign="right"
+          bg={getColor(player1Value)}
+          p={2}
+          borderRadius="md"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="45px"
+          minWidth="45px"
+          fontWeight="600"
+        >
+          {player1Value}
+        </Text>
+      </HStack>
+      <Text
+        color="white"
+        textAlign="center"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="45px"
+        minWidth="120px"
+        fontWeight="600"
+        fontSize="15px"
+      >
+        {label}
+      </Text>
+      <HStack>
+        <Text
+          color="white"
+          textAlign="left"
+          bg={getColor(player2Value)}
+          p={2}
+          borderRadius="md"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="45px"
+          minWidth="45px"
+          fontWeight="600"
+        >
+          {player2Value}
+        </Text>
+        <Text
+          color={-difference > 0 ? "green.500" : "red.500"}
+          fontWeight="600"
+          fontSize="14px"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="45px"
+          minWidth="45px"
+        >
+          {-difference > 0 ? `+${-difference}` : -difference}
+        </Text>
+      </HStack>
+    </Flex>
+  );
+};
 
 const ComparePlayers = () => {
   const [player1, setPlayer1] = useState<any | null>(null);
@@ -13,7 +106,6 @@ const ComparePlayers = () => {
   const [rating1, setRating1] = useState<any | null>(null);
   const [rating2, setRating2] = useState<any | null>(null);
 
-  // Check if both players are selected and have ratings
   const areBothPlayersSelected =
     player1 !== null &&
     player2 !== null &&
@@ -21,27 +113,24 @@ const ComparePlayers = () => {
     rating2 !== null;
 
   const getColor = (value: number) => {
-    if (value >= 90) return "#0a0"; // Highest: 90-100
-    if (value >= 80) return "#070"; // High: 80-89
-    if (value >= 70) return "#c90"; // Medium: 70-79
-    if (value >= 60) return "#d40"; // Low: 60-69
-    return "#900"; // Lowest: < 60
+    if (value >= 90) return "#0a0";
+    if (value >= 80) return "#070";
+    if (value >= 70) return "#c90";
+    if (value >= 60) return "#d40";
+    return "#900";
   };
 
-  // Callback for when Player 1 is selected
   const handlePlayer1Select = (player: any, rating: any) => {
     setPlayer1(player);
     setRating1(rating);
   };
 
-  // Callback for when Player 2 is selected
   const handlePlayer2Select = (player: any, rating: any) => {
     setPlayer2(player);
     setRating2(rating);
   };
 
-  // Calculate averages for both players
-  const player1Averages: ScoringAverages = rating1
+  const player1Averages = rating1
     ? calculateScoringAverages(rating1)
     : {
         insideScoring: 0,
@@ -51,7 +140,7 @@ const ComparePlayers = () => {
         defense: 0,
       };
 
-  const player2Averages: ScoringAverages = rating2
+  const player2Averages = rating2
     ? calculateScoringAverages(rating2)
     : {
         insideScoring: 0,
@@ -61,23 +150,9 @@ const ComparePlayers = () => {
         defense: 0,
       };
 
-  // Log the difference between the outside scoring
-  useEffect(() => {
-    if (areBothPlayersSelected) {
-      const difference =
-        player1Averages.outsideScoring - player2Averages.outsideScoring;
-      console.log(`Difference in Outside Scoring: ${difference}`);
-    }
-  }, [
-    player1Averages.outsideScoring,
-    player2Averages.outsideScoring,
-    areBothPlayersSelected,
-  ]);
-
   return (
-    <Box p={3}>
+    <Box p={5}>
       <Flex justify="space-between" gap={5} pb={5}>
-        {/* Player 1 Search */}
         <Box flex={1} position="relative">
           <PlayerSearchWrapper
             label="Search Player 1"
@@ -85,8 +160,6 @@ const ComparePlayers = () => {
             areBothPlayersSelected={areBothPlayersSelected}
           />
         </Box>
-
-        {/* Player 2 Search */}
         <Box flex={1} position="relative">
           <PlayerSearchWrapper
             label="Search Player 2"
@@ -96,7 +169,6 @@ const ComparePlayers = () => {
         </Box>
       </Flex>
 
-      {/* Render Attribute Names and Values in a New Row */}
       {areBothPlayersSelected && (
         <Box
           p={4}
@@ -115,272 +187,46 @@ const ComparePlayers = () => {
             Overall Attributes
           </Text>
           <Box border="1px solid #636363" borderRadius="md">
-            {/* Inside Scoring */}
-            <Flex
-              justify="space-evenly"
-              p={2}
-              borderBottom="1px solid #636363"
-              alignItems="center"
-            >
-              <Text
-                color="white"
-                textAlign="right"
-                bg={getColor(player1Averages.insideScoring)}
-                p={2}
-                borderRadius="md"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="45px"
-                minWidth="45px"
-                fontWeight="600"
-              >
-                {player1Averages.insideScoring}
-              </Text>
-              <Text
-                color="white"
-                textAlign="center"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="45px"
-                minWidth="120px"
-                fontWeight="600"
-                fontSize="15px"
-              >
-                Inside Scoring
-              </Text>
-              <Text
-                color="white"
-                textAlign="left"
-                bg={getColor(player2Averages.insideScoring)}
-                p={2}
-                borderRadius="md"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="45px"
-                minWidth="45px"
-                fontWeight="600"
-              >
-                {player2Averages.insideScoring}
-              </Text>
-            </Flex>
-
-            {/* Outside Scoring */}
-            <Flex
-              justify="space-evenly"
-              p={2}
-              borderBottom="1px solid #636363"
-              alignItems="center"
-            >
-              <Text
-                color="white"
-                textAlign="right"
-                bg={getColor(player1Averages.outsideScoring)}
-                p={2}
-                borderRadius="md"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="45px"
-                minWidth="45px"
-                fontWeight="600"
-              >
-                {player1Averages.outsideScoring}
-              </Text>
-              <Text
-                color="white"
-                textAlign="center"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="45px"
-                minWidth="120px"
-                fontWeight="600"
-                fontSize="15px"
-              >
-                Outside Scoring
-              </Text>
-              <Text
-                color="white"
-                textAlign="left"
-                bg={getColor(player2Averages.outsideScoring)}
-                p={2}
-                borderRadius="md"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="45px"
-                minWidth="45px"
-                fontWeight="600"
-              >
-                {player2Averages.outsideScoring}
-              </Text>
-            </Flex>
-
-            {/* Rebounding */}
-            <Flex
-              justify="space-evenly"
-              p={2}
-              borderBottom="1px solid #636363"
-              alignItems="center"
-            >
-              <Text
-                color="white"
-                textAlign="right"
-                bg={getColor(player1Averages.rebounding)}
-                p={2}
-                borderRadius="md"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="45px"
-                minWidth="45px"
-                fontWeight="600"
-              >
-                {player1Averages.rebounding}
-              </Text>
-              <Text
-                color="white"
-                textAlign="center"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="45px"
-                minWidth="120px"
-                fontWeight="600"
-                fontSize="15px"
-              >
-                Rebounding
-              </Text>
-              <Text
-                color="white"
-                textAlign="left"
-                bg={getColor(player2Averages.rebounding)}
-                p={2}
-                borderRadius="md"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="45px"
-                minWidth="45px"
-                fontWeight="600"
-              >
-                {player2Averages.rebounding}
-              </Text>
-            </Flex>
-
-            {/* Athleticism */}
-            <Flex
-              justify="space-evenly"
-              p={2}
-              borderBottom="1px solid #636363"
-              alignItems="center"
-            >
-              <Text
-                color="white"
-                textAlign="right"
-                bg={getColor(player1Averages.athleticism)}
-                p={2}
-                borderRadius="md"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="45px"
-                minWidth="45px"
-                fontWeight="600"
-              >
-                {player1Averages.athleticism}
-              </Text>
-              <Text
-                color="white"
-                textAlign="center"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="45px"
-                minWidth="120px"
-                fontWeight="600"
-                fontSize="15px"
-              >
-                Athleticism
-              </Text>
-              <Text
-                color="white"
-                textAlign="left"
-                bg={getColor(player2Averages.athleticism)}
-                p={2}
-                borderRadius="md"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="45px"
-                minWidth="45px"
-                fontWeight="600"
-              >
-                {player2Averages.athleticism}
-              </Text>
-            </Flex>
-
-            {/* Defense */}
-            <Flex justify="space-evenly" p={2} alignItems="center">
-              <Text
-                color="white"
-                textAlign="right"
-                bg={getColor(player1Averages.defense)}
-                p={2}
-                borderRadius="md"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="45px"
-                minWidth="45px"
-                fontWeight="600"
-              >
-                {player1Averages.defense}
-              </Text>
-              <Text
-                color="white"
-                textAlign="center"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="45px"
-                minWidth="120px"
-                fontWeight="600"
-                fontSize="15px"
-              >
-                Defense
-              </Text>
-              <Text
-                color="white"
-                textAlign="left"
-                bg={getColor(player2Averages.defense)}
-                p={2}
-                borderRadius="md"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                height="45px"
-                minWidth="45px"
-                fontWeight="600"
-              >
-                {player2Averages.defense}
-              </Text>
-            </Flex>
+            <AttributeComparison
+              label="Inside Scoring"
+              player1Value={player1Averages.insideScoring}
+              player2Value={player2Averages.insideScoring}
+              getColor={getColor}
+            />
+            <AttributeComparison
+              label="Outside Scoring"
+              player1Value={player1Averages.outsideScoring}
+              player2Value={player2Averages.outsideScoring}
+              getColor={getColor}
+            />
+            <AttributeComparison
+              label="Rebounding"
+              player1Value={player1Averages.rebounding}
+              player2Value={player2Averages.rebounding}
+              getColor={getColor}
+            />
+            <AttributeComparison
+              label="Athleticism"
+              player1Value={player1Averages.athleticism}
+              player2Value={player2Averages.athleticism}
+              getColor={getColor}
+            />
+            <AttributeComparison
+              label="Defense"
+              player1Value={player1Averages.defense}
+              player2Value={player2Averages.defense}
+              getColor={getColor}
+            />
           </Box>
         </Box>
       )}
 
-      {/* Render radar chart only if both players are selected */}
       {areBothPlayersSelected && (
-        <Box mt={5} p={4} borderRadius="md" width="100%">
+        <Box mt={5} borderRadius="md" width="100%">
           <CompareRadarChart player1={rating1} player2={rating2} />
         </Box>
       )}
 
-      {/* Optional: Show message if both players aren't selected */}
       {!areBothPlayersSelected && (
         <Text mt={5} textAlign="center" color="gray.500">
           Please select both players to compare.

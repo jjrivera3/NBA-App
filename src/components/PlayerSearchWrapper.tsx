@@ -1,13 +1,13 @@
+import { useEffect, useState } from "react";
 import { Box, Text } from "@chakra-ui/react";
-import { useState } from "react";
-import usePlayerSearch from "../hooks/usePlayerSearch"; // Assume custom hook for fetching players
-import ratings from "../data/ratings"; // Assume ratings data is imported here
+import usePlayerSearch from "../hooks/usePlayerSearch";
+import ratings from "../data/ratings";
 import useTeamColor from "../hooks/useTeamColor";
 import ComparePlayerCard from "./ComparePlayerCard";
 
 interface PlayerSearchWrapperProps {
   label: string;
-  onPlayerSelect: (player: any, rating: any) => void; // Callback to pass selected player and rating to parent
+  onPlayerSelect: (player: any, rating: any) => void;
   areBothPlayersSelected: boolean;
 }
 
@@ -21,9 +21,27 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
   const [searchText, setSearchText] = useState("");
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [selectedPlayer, setSelectedPlayer] = useState<any | null>(null);
-  const [playerRating, setPlayerRating] = useState<any | null>(null);
 
   const teamColor = useTeamColor(selectedPlayer?.teamID);
+  useEffect(() => {
+    if (selectedPlayer && !selectedPlayer.rating) {
+      // Find the rating for the selected player
+      const rating = ratings.find(
+        (rating) => rating.name === selectedPlayer.longName
+      );
+
+      // If a rating is found, merge it with the selectedPlayer object
+      const playerWithRating = { ...selectedPlayer, rating: rating || null };
+
+      // Only update selectedPlayer if the rating is different or missing
+      setSelectedPlayer(playerWithRating);
+
+      // Pass the player with rating to the parent component
+      if (rating) {
+        onPlayerSelect(playerWithRating, rating);
+      }
+    }
+  }, [selectedPlayer, onPlayerSelect]); // Avoid infinite loop by only running when selectedPlayer changes
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "ArrowDown") {
@@ -35,9 +53,17 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
         prev === null || prev === 0 ? null : prev - 1
       );
     } else if (event.key === "Enter" && selectedIndex !== null) {
+      // Get the selected player from the filtered list
       const selectedPlayer = filteredPlayers[selectedIndex];
+
       if (selectedPlayer) {
-        handlePlayerSelect(selectedPlayer);
+        // Set the selected player (this will also trigger the useEffect to add the rating)
+        setSelectedPlayer(selectedPlayer);
+
+        // Clear search text and reset filtered list
+        setSearchText("");
+        setFilteredPlayers([]);
+        setSelectedIndex(null); // Reset index after selection
       }
     }
   };
@@ -59,20 +85,11 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
   };
 
   const handlePlayerSelect = (player: any) => {
+    // Simply set the selected player without worrying about the rating here
     setSelectedPlayer(player);
     setSearchText(""); // Clear search text after selection
     setFilteredPlayers([]); // Clear filtered list
-
-    const rating = ratings.find((rating) => rating.name === player.longName);
-    setPlayerRating(rating || null); // Update rating state
-
-    if (rating) {
-      onPlayerSelect(player, rating);
-    }
   };
-
-  console.log(selectedPlayer);
-  console.log(playerRating);
 
   return (
     <Box>
@@ -120,11 +137,11 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
         </Box>
       )}
 
-      {selectedPlayer && playerRating && (
+      {selectedPlayer && selectedPlayer.rating && (
         <ComparePlayerCard
           player={selectedPlayer}
           firstColor={teamColor || "#000000"}
-          playerRating={playerRating}
+          playerRating={selectedPlayer.rating} // Access the rating from selectedPlayer
         />
       )}
     </Box>
