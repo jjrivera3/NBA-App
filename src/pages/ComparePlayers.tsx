@@ -9,8 +9,12 @@ const ComparePlayers = () => {
   const [rating1, setRating1] = useState<any | null>(null);
   const [rating2, setRating2] = useState<any | null>(null);
 
-  console.log(player1);
-  console.log(player2);
+  // Check if both players are selected and have ratings
+  const areBothPlayersSelected =
+    player1 !== null &&
+    player2 !== null &&
+    rating1 !== null &&
+    rating2 !== null;
 
   // Callback for when Player 1 is selected
   const handlePlayer1Select = (player: any, rating: any) => {
@@ -35,6 +39,7 @@ const ComparePlayers = () => {
           <PlayerSearchWrapper
             label="Search Player 1"
             onPlayerSelect={handlePlayer1Select}
+            areBothPlayersSelected={areBothPlayersSelected}
           />
         </Box>
 
@@ -43,6 +48,7 @@ const ComparePlayers = () => {
           <PlayerSearchWrapper
             label="Search Player 2"
             onPlayerSelect={handlePlayer2Select}
+            areBothPlayersSelected={areBothPlayersSelected}
           />
         </Box>
       </Flex>

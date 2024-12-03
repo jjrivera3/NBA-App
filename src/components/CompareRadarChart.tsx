@@ -97,7 +97,15 @@ const CompareRadarChart: React.FC<PlayerRadarChartProps> = ({
       },
     },
     plugins: {
-      legend: { display: true },
+      legend: {
+        display: true,
+        labels: {
+          color: "#ffffff", // Set the color of the legend text
+          font: {
+            size: 16, // Increase the font size
+          },
+        },
+      },
       tooltip: {
         enabled: true,
         displayColors: false,

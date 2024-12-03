@@ -6,11 +6,13 @@ import ratings from "../data/ratings"; // Assume ratings data is imported here
 interface PlayerSearchWrapperProps {
   label: string;
   onPlayerSelect: (player: any, rating: any) => void; // Callback to pass selected player and rating to parent
+  areBothPlayersSelected: boolean;
 }
 
 const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
   label,
   onPlayerSelect,
+  areBothPlayersSelected,
 }) => {
   const { players } = usePlayerSearch();
   const [filteredPlayers, setFilteredPlayers] = useState<any[]>([]);
@@ -151,6 +153,12 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
           maxHeight="200px"
           overflowY="auto"
           zIndex={10}
+          sx={{
+            "&.css-0": {
+              position: "relative",
+            },
+          }}
+          className="css-0" // Add the class name
         >
           {filteredPlayers.map((player, index) => (
             <Box
