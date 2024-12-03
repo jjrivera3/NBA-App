@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PlayerSearchWrapper from "../components/PlayerSearchWrapper";
 import CompareRadarChart from "../components/CompareRadarChart";
 import {
@@ -19,6 +19,14 @@ const ComparePlayers = () => {
     player2 !== null &&
     rating1 !== null &&
     rating2 !== null;
+
+  const getColor = (value: number) => {
+    if (value >= 90) return "#0a0"; // Highest: 90-100
+    if (value >= 80) return "#070"; // High: 80-89
+    if (value >= 70) return "#c90"; // Medium: 70-79
+    if (value >= 60) return "#d40"; // Low: 60-69
+    return "#900"; // Lowest: < 60
+  };
 
   // Callback for when Player 1 is selected
   const handlePlayer1Select = (player: any, rating: any) => {
@@ -53,13 +61,22 @@ const ComparePlayers = () => {
         defense: 0,
       };
 
-  return (
-    <Box p={5}>
-      <Text fontSize="2xl" fontWeight="bold" mb={5} textAlign="center">
-        Compare Players
-      </Text>
+  // Log the difference between the outside scoring
+  useEffect(() => {
+    if (areBothPlayersSelected) {
+      const difference =
+        player1Averages.outsideScoring - player2Averages.outsideScoring;
+      console.log(`Difference in Outside Scoring: ${difference}`);
+    }
+  }, [
+    player1Averages.outsideScoring,
+    player2Averages.outsideScoring,
+    areBothPlayersSelected,
+  ]);
 
-      <Flex justify="space-between" gap={5} background="#2a2a2a" p={5}>
+  return (
+    <Box p={3}>
+      <Flex justify="space-between" gap={5} pb={5}>
         {/* Player 1 Search */}
         <Box flex={1} position="relative">
           <PlayerSearchWrapper
@@ -91,95 +108,264 @@ const ComparePlayers = () => {
           <Text
             textAlign="center"
             fontSize="xl"
-            fontWeight="bold"
-            color="white"
+            fontWeight="600"
             mb={3}
+            color="#f8991d"
           >
             Overall Attributes
           </Text>
-
           <Box border="1px solid #636363" borderRadius="md">
             {/* Inside Scoring */}
             <Flex
-              justify="space-between"
+              justify="space-evenly"
               p={2}
               borderBottom="1px solid #636363"
               alignItems="center"
             >
-              <Text color="white" flex={1} textAlign="right">
+              <Text
+                color="white"
+                textAlign="right"
+                bg={getColor(player1Averages.insideScoring)}
+                p={2}
+                borderRadius="md"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="45px"
+                minWidth="45px"
+                fontWeight="600"
+              >
                 {player1Averages.insideScoring}
               </Text>
-              <Text color="white" flex={2} textAlign="center">
+              <Text
+                color="white"
+                textAlign="center"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="45px"
+                minWidth="120px"
+                fontWeight="600"
+                fontSize="15px"
+              >
                 Inside Scoring
               </Text>
-              <Text color="white" flex={1} textAlign="left">
+              <Text
+                color="white"
+                textAlign="left"
+                bg={getColor(player2Averages.insideScoring)}
+                p={2}
+                borderRadius="md"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="45px"
+                minWidth="45px"
+                fontWeight="600"
+              >
                 {player2Averages.insideScoring}
               </Text>
             </Flex>
 
             {/* Outside Scoring */}
             <Flex
-              justify="space-between"
+              justify="space-evenly"
               p={2}
               borderBottom="1px solid #636363"
               alignItems="center"
             >
-              <Text color="white" flex={1} textAlign="right">
+              <Text
+                color="white"
+                textAlign="right"
+                bg={getColor(player1Averages.outsideScoring)}
+                p={2}
+                borderRadius="md"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="45px"
+                minWidth="45px"
+                fontWeight="600"
+              >
                 {player1Averages.outsideScoring}
               </Text>
-              <Text color="white" flex={2} textAlign="center">
+              <Text
+                color="white"
+                textAlign="center"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="45px"
+                minWidth="120px"
+                fontWeight="600"
+                fontSize="15px"
+              >
                 Outside Scoring
               </Text>
-              <Text color="white" flex={1} textAlign="left">
+              <Text
+                color="white"
+                textAlign="left"
+                bg={getColor(player2Averages.outsideScoring)}
+                p={2}
+                borderRadius="md"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="45px"
+                minWidth="45px"
+                fontWeight="600"
+              >
                 {player2Averages.outsideScoring}
               </Text>
             </Flex>
 
             {/* Rebounding */}
             <Flex
-              justify="space-between"
+              justify="space-evenly"
               p={2}
               borderBottom="1px solid #636363"
               alignItems="center"
             >
-              <Text color="white" flex={1} textAlign="right">
+              <Text
+                color="white"
+                textAlign="right"
+                bg={getColor(player1Averages.rebounding)}
+                p={2}
+                borderRadius="md"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="45px"
+                minWidth="45px"
+                fontWeight="600"
+              >
                 {player1Averages.rebounding}
               </Text>
-              <Text color="white" flex={2} textAlign="center">
+              <Text
+                color="white"
+                textAlign="center"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="45px"
+                minWidth="120px"
+                fontWeight="600"
+                fontSize="15px"
+              >
                 Rebounding
               </Text>
-              <Text color="white" flex={1} textAlign="left">
+              <Text
+                color="white"
+                textAlign="left"
+                bg={getColor(player2Averages.rebounding)}
+                p={2}
+                borderRadius="md"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="45px"
+                minWidth="45px"
+                fontWeight="600"
+              >
                 {player2Averages.rebounding}
               </Text>
             </Flex>
 
             {/* Athleticism */}
             <Flex
-              justify="space-between"
+              justify="space-evenly"
               p={2}
               borderBottom="1px solid #636363"
               alignItems="center"
             >
-              <Text color="white" flex={1} textAlign="right">
+              <Text
+                color="white"
+                textAlign="right"
+                bg={getColor(player1Averages.athleticism)}
+                p={2}
+                borderRadius="md"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="45px"
+                minWidth="45px"
+                fontWeight="600"
+              >
                 {player1Averages.athleticism}
               </Text>
-              <Text color="white" flex={2} textAlign="center">
+              <Text
+                color="white"
+                textAlign="center"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="45px"
+                minWidth="120px"
+                fontWeight="600"
+                fontSize="15px"
+              >
                 Athleticism
               </Text>
-              <Text color="white" flex={1} textAlign="left">
+              <Text
+                color="white"
+                textAlign="left"
+                bg={getColor(player2Averages.athleticism)}
+                p={2}
+                borderRadius="md"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="45px"
+                minWidth="45px"
+                fontWeight="600"
+              >
                 {player2Averages.athleticism}
               </Text>
             </Flex>
 
             {/* Defense */}
-            <Flex justify="space-between" p={2} alignItems="center">
-              <Text color="white" flex={1} textAlign="right">
+            <Flex justify="space-evenly" p={2} alignItems="center">
+              <Text
+                color="white"
+                textAlign="right"
+                bg={getColor(player1Averages.defense)}
+                p={2}
+                borderRadius="md"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="45px"
+                minWidth="45px"
+                fontWeight="600"
+              >
                 {player1Averages.defense}
               </Text>
-              <Text color="white" flex={2} textAlign="center">
+              <Text
+                color="white"
+                textAlign="center"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="45px"
+                minWidth="120px"
+                fontWeight="600"
+                fontSize="15px"
+              >
                 Defense
               </Text>
-              <Text color="white" flex={1} textAlign="left">
+              <Text
+                color="white"
+                textAlign="left"
+                bg={getColor(player2Averages.defense)}
+                p={2}
+                borderRadius="md"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="45px"
+                minWidth="45px"
+                fontWeight="600"
+              >
                 {player2Averages.defense}
               </Text>
             </Flex>

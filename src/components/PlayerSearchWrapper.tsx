@@ -1,8 +1,9 @@
-import { Box, Text, VStack, Image } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import usePlayerSearch from "../hooks/usePlayerSearch"; // Assume custom hook for fetching players
 import ratings from "../data/ratings"; // Assume ratings data is imported here
-import RatingTeamScore from "./RatingTeamScore"; // Import the RatingTeamScore component
+import useTeamColor from "../hooks/useTeamColor";
+import ComparePlayerCard from "./ComparePlayerCard";
 
 interface PlayerSearchWrapperProps {
   label: string;
@@ -22,65 +23,7 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
   const [selectedPlayer, setSelectedPlayer] = useState<any | null>(null);
   const [playerRating, setPlayerRating] = useState<any | null>(null);
 
-  const calculateAverage = (attributes: number[]) =>
-    Math.round(
-      attributes.reduce((acc, curr) => acc + curr, 0) / attributes.length
-    );
-
-  const insideScoringAverage = playerRating
-    ? calculateAverage([
-        playerRating.layup || 0,
-        playerRating.standingDunk || 0,
-        playerRating.drivingDunk || 0,
-        playerRating.postHook || 0,
-        playerRating.postFade || 0,
-        playerRating.postControl || 0,
-        playerRating.drawFoul || 0,
-        playerRating.hands || 0,
-      ])
-    : 0;
-
-  const outsideScoringAverage = playerRating
-    ? calculateAverage([
-        playerRating.closeShot || 0,
-        playerRating.midRangeShot || 0,
-        playerRating.threePointShot || 0,
-        playerRating.freeThrow || 0,
-        playerRating.shotIQ || 0,
-        playerRating.offensiveConsistency || 0,
-      ])
-    : 0;
-
-  const reboundingAverage = playerRating
-    ? calculateAverage([
-        playerRating.offensiveRebound || 0,
-        playerRating.defensiveRebound || 0,
-      ])
-    : 0;
-
-  const athleticismAverage = playerRating
-    ? calculateAverage([
-        playerRating.speed || 0,
-        playerRating.agility || 0,
-        playerRating.strength || 0,
-        playerRating.vertical || 0,
-        playerRating.stamina || 0,
-        playerRating.hustle || 0,
-        playerRating.overallDurability || 0,
-      ])
-    : 0;
-
-  const defenseAverage = playerRating
-    ? calculateAverage([
-        playerRating.interiorDefense || 0,
-        playerRating.perimeterDefense || 0,
-        playerRating.steal || 0,
-        playerRating.block || 0,
-        playerRating.helpDefenseIQ || 0,
-        playerRating.passPerception || 0,
-        playerRating.defensiveConsistency || 0,
-      ])
-    : 0;
+  const teamColor = useTeamColor(selectedPlayer?.teamID);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "ArrowDown") {
@@ -128,6 +71,9 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
     }
   };
 
+  console.log(selectedPlayer);
+  console.log(playerRating);
+
   return (
     <Box>
       <Text fontSize="lg" fontWeight="bold" mb={2}>
@@ -173,24 +119,13 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
           ))}
         </Box>
       )}
-      {selectedPlayer && playerRating && (
-        <VStack spacing={3} mt={5} bg="#2a2a2a" p={4} borderRadius="md">
-          <Image
-            src={selectedPlayer.espnHeadshot}
-            alt={selectedPlayer.longName}
-            boxSize="150px"
-            borderRadius="full"
-            objectFit="contain"
-          />
-          <Text fontWeight="bold">{selectedPlayer.longName}</Text>
 
-          <Box borderRadius="md" width="100%" textAlign="center">
-            <RatingTeamScore
-              playerRating={playerRating.overallAttribute}
-              fontSize="16px"
-            />
-          </Box>
-        </VStack>
+      {selectedPlayer && playerRating && (
+        <ComparePlayerCard
+          player={selectedPlayer}
+          firstColor={teamColor || "#000000"}
+          playerRating={playerRating}
+        />
       )}
     </Box>
   );

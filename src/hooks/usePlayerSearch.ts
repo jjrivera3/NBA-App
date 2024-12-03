@@ -22,7 +22,6 @@ const usePlayerSearch = () => {
       const allPlayers: Player[] = teams.flatMap((team) => {
         return Object.values(team.Roster).map((player) => ({
           ...player,
-          stats: { pts: "0", reb: "0", ast: "0" },
           espnHeadshot: `https://a.espncdn.com/i/headshots/nba/players/full/${player.espnID}.png`,
         }));
       });

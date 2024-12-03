@@ -21,4 +21,5 @@ export default interface Player {
   rating: Ratings;
   espnID: string;
   bRefID: string;
+  teamID: string;
 }
