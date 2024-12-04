@@ -1,104 +1,9 @@
-import { Box, Flex, HStack, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import PlayerSearchWrapper from "../components/PlayerSearchWrapper";
 import CompareRadarChart from "../components/CompareRadarChart";
+import AttributeComparison from "../components/AttributeComparison"; // Import the new component
 import { calculateScoringAverages } from "../utils/playerRatingUtilty";
-
-// Reusable AttributeComparison Component
-const AttributeComparison = ({
-  label,
-  player1Value,
-  player2Value,
-  getColor,
-}: {
-  label: string;
-  player1Value: number;
-  player2Value: number;
-  getColor: (value: number) => string;
-}) => {
-  const difference = player1Value - player2Value;
-  return (
-    <Flex
-      justify="space-evenly"
-      p={2}
-      borderBottom="1px solid #636363"
-      alignItems="center"
-    >
-      <HStack>
-        <Text
-          color={difference > 0 ? "green.500" : "red.500"}
-          textAlign="center"
-          fontSize="14px"
-          fontWeight="600"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="45px"
-          minWidth="45px"
-        >
-          {difference > 0 ? `+${difference}` : difference}
-        </Text>
-        <Text
-          color="white"
-          textAlign="right"
-          bg={getColor(player1Value)}
-          p={2}
-          borderRadius="md"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="45px"
-          minWidth="45px"
-          fontWeight="600"
-        >
-          {player1Value}
-        </Text>
-      </HStack>
-      <Text
-        color="white"
-        textAlign="center"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="45px"
-        minWidth="120px"
-        fontWeight="600"
-        fontSize="15px"
-      >
-        {label}
-      </Text>
-      <HStack>
-        <Text
-          color="white"
-          textAlign="left"
-          bg={getColor(player2Value)}
-          p={2}
-          borderRadius="md"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="45px"
-          minWidth="45px"
-          fontWeight="600"
-        >
-          {player2Value}
-        </Text>
-        <Text
-          color={-difference > 0 ? "green.500" : "red.500"}
-          fontWeight="600"
-          fontSize="14px"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="45px"
-          minWidth="45px"
-        >
-          {-difference > 0 ? `+${-difference}` : -difference}
-        </Text>
-      </HStack>
-    </Flex>
-  );
-};
 
 const ComparePlayers = () => {
   const [player1, setPlayer1] = useState<any | null>(null);
@@ -170,59 +75,110 @@ const ComparePlayers = () => {
       </Flex>
 
       {areBothPlayersSelected && (
-        <Box
-          p={4}
-          borderTopRadius="md"
-          borderBottomRadius="md"
-          width="100%"
-          background="#2a2a2a"
-        >
-          <Text
-            textAlign="center"
-            fontSize="xl"
-            fontWeight="600"
-            mb={3}
-            color="#f8991d"
+        <>
+          <Box
+            p={4}
+            borderTopRadius="md"
+            borderBottomRadius="md"
+            width="100%"
+            background="#2a2a2a"
           >
-            Overall Attributes
-          </Text>
-          <Box border="1px solid #636363" borderRadius="md">
-            <AttributeComparison
-              label="Inside Scoring"
-              player1Value={player1Averages.insideScoring}
-              player2Value={player2Averages.insideScoring}
-              getColor={getColor}
-            />
-            <AttributeComparison
-              label="Outside Scoring"
-              player1Value={player1Averages.outsideScoring}
-              player2Value={player2Averages.outsideScoring}
-              getColor={getColor}
-            />
-            <AttributeComparison
-              label="Rebounding"
-              player1Value={player1Averages.rebounding}
-              player2Value={player2Averages.rebounding}
-              getColor={getColor}
-            />
-            <AttributeComparison
-              label="Athleticism"
-              player1Value={player1Averages.athleticism}
-              player2Value={player2Averages.athleticism}
-              getColor={getColor}
-            />
-            <AttributeComparison
-              label="Defense"
-              player1Value={player1Averages.defense}
-              player2Value={player2Averages.defense}
-              getColor={getColor}
-            />
+            <Text
+              textAlign="center"
+              fontSize="xl"
+              fontWeight="600"
+              mb={3}
+              color="#f8991d"
+            >
+              2024-2025 Stats
+            </Text>
+            <Box border="1px solid #636363" borderRadius="md">
+              <AttributeComparison
+                label="Points Per Game"
+                player1Value={player1.stats.pts}
+                player2Value={player2.stats.pts}
+                getColor={getColor}
+              />
+              <AttributeComparison
+                label="Outside Scoring"
+                player1Value={player1Averages.outsideScoring}
+                player2Value={player2Averages.outsideScoring}
+                getColor={getColor}
+              />
+              <AttributeComparison
+                label="Rebounding"
+                player1Value={player1Averages.rebounding}
+                player2Value={player2Averages.rebounding}
+                getColor={getColor}
+              />
+              <AttributeComparison
+                label="Athleticism"
+                player1Value={player1Averages.athleticism}
+                player2Value={player2Averages.athleticism}
+                getColor={getColor}
+              />
+              <AttributeComparison
+                label="Defense"
+                player1Value={player1Averages.defense}
+                player2Value={player2Averages.defense}
+                getColor={getColor}
+              />
+            </Box>
           </Box>
-        </Box>
+          <Box
+            p={4}
+            borderTopRadius="md"
+            borderBottomRadius="md"
+            width="100%"
+            background="#2a2a2a"
+          >
+            <Text
+              textAlign="center"
+              fontSize="xl"
+              fontWeight="600"
+              mb={3}
+              color="#f8991d"
+            >
+              Overall Attributes
+            </Text>
+            <Box border="1px solid #636363" borderRadius="md">
+              <AttributeComparison
+                label="Inside Scoring"
+                player1Value={player1Averages.insideScoring}
+                player2Value={player2Averages.insideScoring}
+                getColor={getColor}
+              />
+              <AttributeComparison
+                label="Outside Scoring"
+                player1Value={player1Averages.outsideScoring}
+                player2Value={player2Averages.outsideScoring}
+                getColor={getColor}
+              />
+              <AttributeComparison
+                label="Rebounding"
+                player1Value={player1Averages.rebounding}
+                player2Value={player2Averages.rebounding}
+                getColor={getColor}
+              />
+              <AttributeComparison
+                label="Athleticism"
+                player1Value={player1Averages.athleticism}
+                player2Value={player2Averages.athleticism}
+                getColor={getColor}
+              />
+              <AttributeComparison
+                label="Defense"
+                player1Value={player1Averages.defense}
+                player2Value={player2Averages.defense}
+                getColor={getColor}
+              />
+            </Box>
+          </Box>
+        </>
       )}
 
       {areBothPlayersSelected && (
-        <Box mt={5} borderRadius="md" width="100%">
+        <Box mt={7} borderRadius="md" width="100%">
           <CompareRadarChart player1={rating1} player2={rating2} />
         </Box>
       )}

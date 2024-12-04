@@ -91,8 +91,6 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
     .toLowerCase()
     .replace(/\s+/g, "-")}`;
 
-  console.log(stats);
-
   return (
     <Center mt={5} py={{ base: 1, md: 2 }}>
       <Box
@@ -192,7 +190,7 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
                 </Stack>
                 <Stack spacing={0} align={"center"}>
                   <Text fontSize="16px" fontWeight={600}>
-                    {player.stats.ftp}%
+                    {player.stats.tptfgp}%
                   </Text>
                   <Text fontSize={"sm"} color={"gray.400"}>
                     FTP%

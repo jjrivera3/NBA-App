@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, Text } from "@chakra-ui/react";
 import { Radar } from "react-chartjs-2";
 import { rgba } from "polished";
@@ -8,6 +9,7 @@ import {
   calculateOutsideScoringAverage,
   calculateReboundingAverage,
 } from "../utils/playerRatingUtils";
+import { Chart } from "chart.js";
 
 interface PlayerRadarChartProps {
   player1: any;
@@ -53,11 +55,11 @@ const CompareRadarChart: React.FC<PlayerRadarChartProps> = ({
           player1Defense ?? 0,
         ],
         backgroundColor: rgba("#f8991d", 0.3),
-        borderColor: "#f8991d", // Player 1 color
-        pointBackgroundColor: "#f8991d", // Set point color
-        pointBorderColor: "#f8991d", // Set border color for the points
-        pointRadius: 6, // Adjust the point size (smaller than before to avoid overlap)
-        pointHoverRadius: 8, // Adjust the hover size
+        borderColor: "#f8991d",
+        pointBackgroundColor: "#f8991d",
+        pointBorderColor: "#f8991d",
+        pointRadius: 6,
+        pointHoverRadius: 8,
       },
       {
         label: player2.name,
@@ -70,13 +72,27 @@ const CompareRadarChart: React.FC<PlayerRadarChartProps> = ({
           player2Defense ?? 0,
         ],
         backgroundColor: rgba("#1d90f8", 0.3),
-        borderColor: "#1d90f8", // Player 2 color
-        pointBackgroundColor: "#1d90f8", // Set point color
-        pointBorderColor: "#1d90f8", // Set border color for the points
-        pointRadius: 6, // Adjust the point size (smaller than before to avoid overlap)
-        pointHoverRadius: 8, // Adjust the hover size
+        borderColor: "#1d90f8",
+        pointBackgroundColor: "#1d90f8",
+        pointBorderColor: "#1d90f8",
+        pointRadius: 6,
+        pointHoverRadius: 8,
       },
     ],
+  };
+
+  const legendMargin = {
+    id: "legendMargin",
+    beforeInit(chart: Chart<"radar", (number | null)[], unknown>) {
+      // Ensure chart.legend exists before proceeding
+      if (chart.legend) {
+        const originalFit = chart.legend.fit;
+        chart.legend.fit = function fit() {
+          if (originalFit) originalFit.call(this);
+          this.height += 30; // Adjust the margin (increase or decrease as needed)
+        };
+      }
+    },
   };
 
   const options = {
@@ -89,7 +105,7 @@ const CompareRadarChart: React.FC<PlayerRadarChartProps> = ({
         pointLabels: {
           color: "#ffffff",
           font: { size: window.innerWidth <= 768 ? 8 : 18 },
-          padding: window.innerWidth <= 768 ? 10 : 10,
+          padding: 10,
         },
         ticks: { display: false, backdropColor: "transparent", stepSize: 20 },
         suggestedMin: 0,
@@ -100,10 +116,9 @@ const CompareRadarChart: React.FC<PlayerRadarChartProps> = ({
       legend: {
         display: true,
         labels: {
-          color: "#ffffff", // Set the color of the legend text
-          font: {
-            size: 16, // Increase the font size
-          },
+          color: "#ffffff",
+          font: { size: 16 },
+          padding: 25,
         },
       },
       tooltip: {
@@ -119,9 +134,8 @@ const CompareRadarChart: React.FC<PlayerRadarChartProps> = ({
             `${context.dataset.label}: ${context.parsed.r}`,
         },
       },
-      // Remove datalabels to avoid numbers inside the points
       datalabels: {
-        display: false, // Disable the datalabels to prevent overlapping numbers
+        display: false,
       },
     },
   };
@@ -131,9 +145,9 @@ const CompareRadarChart: React.FC<PlayerRadarChartProps> = ({
       as="section"
       padding={{ base: "0px", lg: "25px" }}
       borderRadius="md"
-      w={"full"}
-      rounded={"md"}
-      overflow={"hidden"}
+      w="full"
+      rounded="md"
+      overflow="hidden"
       mt={0}
       h={["50vh", "900px"]}
       display="flex"
@@ -142,18 +156,12 @@ const CompareRadarChart: React.FC<PlayerRadarChartProps> = ({
       alignItems="center"
       background="#2a2a2a"
     >
-      <Text
-        fontSize={{ base: "xl", md: "3xl" }}
-        color="white"
-        fontWeight="bold"
-        mb={4}
-      >
+      <Text textAlign="center" fontSize="xl" fontWeight="600" color="#f8991d">
         COMPARE PLAYER ATTRIBUTES
       </Text>
 
-      {/* Radar Chart */}
       <Box width="100%" height="100%" minHeight="300px" position="relative">
-        <Radar data={data} options={options} />
+        <Radar data={data} options={options} plugins={[legendMargin]} />
       </Box>
     </Box>
   );
