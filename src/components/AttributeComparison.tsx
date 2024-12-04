@@ -26,8 +26,8 @@ const AttributeComparison: React.FC<AttributeComparisonProps> = ({
         <Text
           color={difference > 0 ? "green.500" : "red.500"}
           textAlign="center"
-          fontSize="14px"
-          fontWeight="600"
+          fontSize="13px"
+          fontWeight="500"
           display="flex"
           justifyContent="center"
           alignItems="center"
@@ -83,8 +83,8 @@ const AttributeComparison: React.FC<AttributeComparisonProps> = ({
         </Text>
         <Text
           color={-difference > 0 ? "green.500" : "red.500"}
-          fontWeight="600"
-          fontSize="14px"
+          fontSize="13px"
+          fontWeight="500"
           display="flex"
           justifyContent="center"
           alignItems="center"

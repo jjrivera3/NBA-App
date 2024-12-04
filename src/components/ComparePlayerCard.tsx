@@ -10,7 +10,6 @@ import {
   Button,
   Image,
   useColorModeValue,
-  Spinner,
   HStack,
 } from "@chakra-ui/react";
 import Player from "../entities/Player";
@@ -82,8 +81,6 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
     });
   };
 
-  const isLoading = !player;
-  const stats = player?.stats || { pts: "0", reb: "0", ast: "0" };
   const teamAbbreviation = player.team === "GS" ? "GSW" : player.team;
   const playerProfileUrl = `/${teamAbbreviation
     .toLowerCase()
@@ -138,67 +135,7 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
               #{player?.jerseyNum} | {player?.pos}
             </Text>
           </Stack>
-          <Center>
-            {isLoading ? (
-              <Center>
-                <Spinner color="blue.500" />
-              </Center>
-            ) : (
-              <Stack direction={"row"} justify={"center"} spacing={10}>
-                <Stack spacing={0} align={"center"}>
-                  <Text fontSize="16px" fontWeight={600}>
-                    {stats.pts}
-                  </Text>
-                  <Text fontSize={"sm"} color={"gray.400"}>
-                    PPG
-                  </Text>
-                </Stack>
 
-                <Stack spacing={0} align={"center"}>
-                  <Text fontSize="16px" fontWeight={600}>
-                    {stats.reb}
-                  </Text>
-                  <Text fontSize={"sm"} color={"gray.400"}>
-                    RPG
-                  </Text>
-                </Stack>
-
-                <Stack spacing={0} align={"center"}>
-                  <Text fontSize="16px" fontWeight={600}>
-                    {stats.ast}
-                  </Text>
-                  <Text fontSize={"sm"} color={"gray.400"}>
-                    APG
-                  </Text>
-                </Stack>
-
-                <Stack spacing={0} align={"center"}>
-                  <Text fontSize="16px" fontWeight={600}>
-                    {player.stats.fgp}%
-                  </Text>
-                  <Text fontSize={"sm"} color={"gray.400"}>
-                    FG%
-                  </Text>
-                </Stack>
-                <Stack spacing={0} align={"center"}>
-                  <Text fontSize="16px" fontWeight={600}>
-                    {player.stats.tptfgp}%
-                  </Text>
-                  <Text fontSize={"sm"} color={"gray.400"}>
-                    3PT%
-                  </Text>
-                </Stack>
-                <Stack spacing={0} align={"center"}>
-                  <Text fontSize="16px" fontWeight={600}>
-                    {player.stats.tptfgp}%
-                  </Text>
-                  <Text fontSize={"sm"} color={"gray.400"}>
-                    FTP%
-                  </Text>
-                </Stack>
-              </Stack>
-            )}
-          </Center>
           <Link to={playerProfileUrl} onClick={handleClick}>
             <Button
               w={"full"}

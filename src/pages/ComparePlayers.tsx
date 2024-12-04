@@ -4,6 +4,7 @@ import PlayerSearchWrapper from "../components/PlayerSearchWrapper";
 import CompareRadarChart from "../components/CompareRadarChart";
 import AttributeComparison from "../components/AttributeComparison"; // Import the new component
 import { calculateScoringAverages } from "../utils/playerRatingUtilty";
+import ComparePlayerStats from "../components/ComparePlayerStats";
 
 const ComparePlayers = () => {
   const [player1, setPlayer1] = useState<any | null>(null);
@@ -57,6 +58,18 @@ const ComparePlayers = () => {
 
   return (
     <Box p={5}>
+      {!areBothPlayersSelected && (
+        <Text
+          mt={5}
+          mb={5}
+          textAlign="center"
+          fontSize="lg"
+          fontWeight="600"
+          color="#f8991d"
+        >
+          Please select both players to compare.
+        </Text>
+      )}
       <Flex justify="space-between" gap={5} pb={5}>
         <Box flex={1} position="relative">
           <PlayerSearchWrapper
@@ -93,35 +106,35 @@ const ComparePlayers = () => {
               2024-2025 Stats
             </Text>
             <Box border="1px solid #636363" borderRadius="md">
-              <AttributeComparison
+              <ComparePlayerStats
                 label="Points Per Game"
                 player1Value={player1.stats.pts}
                 player2Value={player2.stats.pts}
-                getColor={getColor}
               />
-              <AttributeComparison
-                label="Outside Scoring"
-                player1Value={player1Averages.outsideScoring}
-                player2Value={player2Averages.outsideScoring}
-                getColor={getColor}
+              <ComparePlayerStats
+                label="Rebounds Per Game"
+                player1Value={player1.stats.reb}
+                player2Value={player2.stats.reb}
               />
-              <AttributeComparison
-                label="Rebounding"
-                player1Value={player1Averages.rebounding}
-                player2Value={player2Averages.rebounding}
-                getColor={getColor}
+              <ComparePlayerStats
+                label="Assists Per Game"
+                player1Value={player1.stats.ast}
+                player2Value={player2.stats.ast}
               />
-              <AttributeComparison
-                label="Athleticism"
-                player1Value={player1Averages.athleticism}
-                player2Value={player2Averages.athleticism}
-                getColor={getColor}
+              <ComparePlayerStats
+                label="FG%"
+                player1Value={player1.stats.fgp}
+                player2Value={player2.stats.fgp}
               />
-              <AttributeComparison
-                label="Defense"
-                player1Value={player1Averages.defense}
-                player2Value={player2Averages.defense}
-                getColor={getColor}
+              <ComparePlayerStats
+                label="3PT%"
+                player1Value={player1.stats.tptfgp}
+                player2Value={player2.stats.tptfgp}
+              />
+              <ComparePlayerStats
+                label="FTP%"
+                player1Value={player1.stats.ftp}
+                player2Value={player2.stats.ftp}
               />
             </Box>
           </Box>
@@ -131,6 +144,7 @@ const ComparePlayers = () => {
             borderBottomRadius="md"
             width="100%"
             background="#2a2a2a"
+            mt={10}
           >
             <Text
               textAlign="center"
@@ -178,15 +192,9 @@ const ComparePlayers = () => {
       )}
 
       {areBothPlayersSelected && (
-        <Box mt={7} borderRadius="md" width="100%">
+        <Box mt={10} borderRadius="md" width="100%">
           <CompareRadarChart player1={rating1} player2={rating2} />
         </Box>
-      )}
-
-      {!areBothPlayersSelected && (
-        <Text mt={5} textAlign="center" color="gray.500">
-          Please select both players to compare.
-        </Text>
       )}
     </Box>
   );
