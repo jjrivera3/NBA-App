@@ -95,6 +95,7 @@ const ComparePlayers = () => {
             borderBottomRadius="md"
             width="100%"
             background="#2a2a2a"
+            boxShadow={"2xl"}
           >
             <Text
               textAlign="center"
@@ -145,6 +146,7 @@ const ComparePlayers = () => {
             width="100%"
             background="#2a2a2a"
             mt={10}
+            boxShadow={"2xl"}
           >
             <Text
               textAlign="center"
@@ -192,7 +194,7 @@ const ComparePlayers = () => {
       )}
 
       {areBothPlayersSelected && (
-        <Box mt={10} borderRadius="md" width="100%">
+        <Box mt={10} borderRadius="md" width="100%" boxShadow={"2xl"}>
           <CompareRadarChart player1={rating1} player2={rating2} />
         </Box>
       )}

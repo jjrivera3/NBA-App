@@ -59,7 +59,7 @@ const AttributeComparison: React.FC<AttributeComparisonProps> = ({
         justifyContent="center"
         alignItems="center"
         height="45px"
-        minWidth="120px"
+        minWidth="160px"
         fontWeight="600"
         fontSize="15px"
       >

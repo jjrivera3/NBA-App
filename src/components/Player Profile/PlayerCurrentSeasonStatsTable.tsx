@@ -102,8 +102,6 @@ const PlayerCurrentSeasonStatsTable = ({
     });
 
     $("#statsTable tbody").on("click", "tr", function () {
-      const selectedData = table.row(this).data();
-      console.log("Selected Row Data:", selectedData);
       $(this).toggleClass("selected-row"); // Toggle selected class
     });
 
@@ -225,7 +223,7 @@ const PlayerCurrentSeasonStatsTable = ({
 
                     return (
                       <span style={{ color: teamColor, fontWeight: "bold" }}>
-                        {player?.rating.team}
+                        {player?.rating?.team || "N/A"}
                       </span>
                     );
                   })()}

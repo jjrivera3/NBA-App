@@ -4,6 +4,7 @@ import usePlayerSearch from "../hooks/usePlayerSearch";
 import ratings from "../data/ratings";
 import useTeamColor from "../hooks/useTeamColor";
 import ComparePlayerCard from "./ComparePlayerCard";
+import { normalizeName } from "../utils/normalizeName";
 
 interface PlayerSearchWrapperProps {
   label: string;
@@ -23,25 +24,26 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
   const [selectedPlayer, setSelectedPlayer] = useState<any | null>(null);
 
   const teamColor = useTeamColor(selectedPlayer?.teamID);
+
   useEffect(() => {
     if (selectedPlayer && !selectedPlayer.rating) {
-      // Find the rating for the selected player
+      const normalizedPlayerName = normalizeName(selectedPlayer.longName);
+
       const rating = ratings.find(
-        (rating) => rating.name === selectedPlayer.longName
+        (rating) => normalizeName(rating.name) === normalizedPlayerName
       );
 
-      // If a rating is found, merge it with the selectedPlayer object
       const playerWithRating = { ...selectedPlayer, rating: rating || null };
 
-      // Only update selectedPlayer if the rating is different or missing
       setSelectedPlayer(playerWithRating);
 
-      // Pass the player with rating to the parent component
       if (rating) {
         onPlayerSelect(playerWithRating, rating);
+        console.log("playerwithrating", playerWithRating);
+        console.log("rating", rating);
       }
     }
-  }, [selectedPlayer, onPlayerSelect]); // Avoid infinite loop by only running when selectedPlayer changes
+  }, [selectedPlayer, onPlayerSelect]);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "ArrowDown") {
@@ -53,17 +55,13 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
         prev === null || prev === 0 ? null : prev - 1
       );
     } else if (event.key === "Enter" && selectedIndex !== null) {
-      // Get the selected player from the filtered list
-      const selectedPlayer = filteredPlayers[selectedIndex];
+      const selected = filteredPlayers[selectedIndex];
 
-      if (selectedPlayer) {
-        // Set the selected player (this will also trigger the useEffect to add the rating)
-        setSelectedPlayer(selectedPlayer);
-
-        // Clear search text and reset filtered list
+      if (selected) {
+        setSelectedPlayer(selected);
         setSearchText("");
         setFilteredPlayers([]);
-        setSelectedIndex(null); // Reset index after selection
+        setSelectedIndex(null);
       }
     }
   };
@@ -73,11 +71,12 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
     setSearchText(text);
 
     if (text) {
+      const normalizedSearchText = normalizeName(text);
       const filtered = players.filter((player) =>
-        player.longName.toLowerCase().includes(text.toLowerCase())
+        normalizeName(player.longName).includes(normalizedSearchText)
       );
       setFilteredPlayers(filtered);
-      setSelectedIndex(null); // Reset selection when search text changes
+      setSelectedIndex(null);
     } else {
       setFilteredPlayers([]);
       setSelectedIndex(null);
@@ -85,10 +84,9 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
   };
 
   const handlePlayerSelect = (player: any) => {
-    // Simply set the selected player without worrying about the rating here
     setSelectedPlayer(player);
-    setSearchText(""); // Clear search text after selection
-    setFilteredPlayers([]); // Clear filtered list
+    setSearchText("");
+    setFilteredPlayers([]);
   };
 
   return (
@@ -99,7 +97,7 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
       <input
         value={searchText}
         onChange={handleSearch}
-        onKeyDown={handleKeyDown} // Add the keydown event listener here
+        onKeyDown={handleKeyDown}
         placeholder="Search players..."
         style={{
           padding: "8px",
@@ -117,8 +115,8 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
           maxHeight="200px"
           overflowY="auto"
           zIndex={10}
-          position={areBothPlayersSelected ? "absolute" : "relative"} // Dynamically set position
-          width={areBothPlayersSelected ? "100%" : "auto"} // Dynamically set width
+          position={areBothPlayersSelected ? "absolute" : "relative"}
+          width={areBothPlayersSelected ? "100%" : "auto"}
         >
           {filteredPlayers.map((player, index) => (
             <Box
@@ -141,7 +139,7 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
         <ComparePlayerCard
           player={selectedPlayer}
           firstColor={teamColor || "#000000"}
-          playerRating={selectedPlayer.rating} // Access the rating from selectedPlayer
+          playerRating={selectedPlayer.rating}
         />
       )}
     </Box>

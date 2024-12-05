@@ -23,6 +23,8 @@ const PlayerDetailPage = () => {
     player?.bRefID || ""
   );
 
+  console.log("This is player", player);
+
   // Use player safely
   const [avatarSrc] = useAvatarSrc(player);
   const foundTeam = nbateams.find((team) => team.teamId === teamID);

@@ -6,6 +6,7 @@ import TeamStore from "../entities/TeamStore";
 import { usePlayerAttributesStore } from "../usePlayerAttributesStore";
 import { usePlayerStore } from "../usePlayerStore";
 import useTeamInfo from "./useTeamInfo";
+import { normalizeName } from "../utils/normalizeName"; // Import normalizeName
 
 const usePlayerSearch = () => {
   const [players, setPlayers] = useState<Player[]>([]);
@@ -40,12 +41,12 @@ const usePlayerSearch = () => {
         ? "gsw"
         : teamAbbreviation.toLowerCase() === "sa"
         ? "sas"
-        : teamAbbreviation;
+        : teamAbbreviation.toLowerCase() === "pho"
+        ? "phx"
+        : teamAbbreviation.toLowerCase();
 
     const selectedTeam = nbaTeams.find(
-      (team) =>
-        team.info.abbrev.toLowerCase() ===
-        adjustedTeamAbbreviation.toLowerCase()
+      (team) => team.info.abbrev.toLowerCase() === adjustedTeamAbbreviation
     );
 
     if (selectedTeam && teamsData?.body) {
@@ -54,9 +55,12 @@ const usePlayerSearch = () => {
         .find((p) => p.playerID === playerID);
 
       if (playerInfo) {
-        // Find player ratings in the ratings.ts file based on player name
+        // Normalize the player name before searching for it in ratings
+        const normalizedPlayerName = normalizeName(playerName);
+
+        // Find player ratings using normalized name
         const playerRatings = ratings.find(
-          (rating) => rating.name === playerName
+          (rating) => normalizeName(rating.name) === normalizedPlayerName
         );
 
         // Combine player info with player ratings
@@ -86,7 +90,7 @@ const usePlayerSearch = () => {
 
         // Navigate to the player's detail page
         navigate(
-          `/${adjustedTeamAbbreviation}/${playerName
+          `/${adjustedTeamAbbreviation}/${normalizedPlayerName
             .toLowerCase()
             .replace(/\s+/g, "-")}`
         );

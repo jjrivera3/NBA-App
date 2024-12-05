@@ -28,7 +28,6 @@ const usePlayerRatingsMap = (players: any[]) => {
       }
     });
 
-  
     return players.map((player) => {
       const playerWithRating = {
         ...player,

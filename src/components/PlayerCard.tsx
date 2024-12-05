@@ -64,7 +64,6 @@ const PlayerCard = ({ player, firstColor }: Props) => {
     .toLowerCase()
     .replace(/\s+/g, "-")}`;
 
-  // Ensure playerRating defaults to 0 if undefined
   const playerRating = player?.rating?.overallAttribute ?? 0;
 
   return (

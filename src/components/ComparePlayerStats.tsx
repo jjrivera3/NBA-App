@@ -69,6 +69,7 @@ const ComparePlayerStats: React.FC<AttributeComparisonProps> = ({
         <Text
           textAlign="right"
           p={2}
+          background="#0000002b"
           borderRadius="md"
           border="2px solid"
           borderColor={differenceTextColor} // Border color same as text color
@@ -89,7 +90,7 @@ const ComparePlayerStats: React.FC<AttributeComparisonProps> = ({
         justifyContent="center"
         alignItems="center"
         height="45px"
-        minWidth="120px"
+        minWidth="170px"
         fontWeight="600"
         fontSize="15px"
       >
@@ -99,6 +100,7 @@ const ComparePlayerStats: React.FC<AttributeComparisonProps> = ({
         <Text
           textAlign="left"
           p={2}
+          background="#0000002b"
           borderRadius="md"
           border="2px solid"
           borderColor={oppositeDifferenceTextColor} // Border color same as the opposite text color

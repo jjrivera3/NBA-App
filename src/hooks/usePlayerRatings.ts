@@ -1,26 +1,18 @@
-import { useEffect } from "react";
-import { usePlayerAttributesStore } from "../usePlayerAttributesStore";
-import ratings from "../data/ratings"; // Import ratings data
+import { useMemo } from "react";
+import ratings from "../data/ratings"; // Example ratings data
+import { normalizeName } from "../utils/normalizeName";
 
-// Custom hook to match selected player with ratings and update Zustand store
-const usePlayerRatings = (selectedPlayerName: string | null) => {
-  const setPlayerRating = usePlayerAttributesStore(
-    (state) => state.setPlayerRating
-  );
+const usePlayerRatings = (normalizedPlayerName: string | null) => {
+  // Use useMemo to derive the player's rating
+  const playerRating = useMemo(() => {
+    if (!normalizedPlayerName) return null;
 
-  useEffect(() => {
-    if (selectedPlayerName) {
-      // Find the player's ratings based on the selected player's name
-      const playerRatings = ratings.find(
-        (rating) => rating.name === selectedPlayerName
-      );
+    return ratings.find(
+      (rating) => normalizeName(rating.name) === normalizedPlayerName
+    );
+  }, [normalizedPlayerName]);
 
-      if (playerRatings) {
-        // Update Zustand store with the matched player's ratings
-        setPlayerRating(playerRatings);
-      }
-    }
-  }, [selectedPlayerName, setPlayerRating]);
+  return playerRating;
 };
 
 export default usePlayerRatings;

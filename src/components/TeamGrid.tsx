@@ -47,6 +47,8 @@ const TeamGrid = ({ teamAbv }: TeamGridProps) => {
   const playersWithRatings = usePlayerRatingsMap(roster);
   const sortedPlayers = useSortedPlayers(playersWithRatings);
 
+  console.log(playersWithRatings);
+
   const espnLogo1 =
     selectedTeam?.teamID === "29" ? Utah_Jazz : selectedTeam?.espnLogo1;
   const defaultColor = "#000000";

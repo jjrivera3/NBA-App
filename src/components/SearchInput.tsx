@@ -14,7 +14,8 @@ import { BsSearch } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import usePlayerSearch from "../hooks/usePlayerSearch";
 import Player from "../entities/Player";
-import usePlayerRatings from "../hooks/usePlayerRatings";
+import { normalizeName } from "../utils/normalizeName";
+import ratings from "../data/ratings";
 
 interface SearchInputProps {
   onSearchClose: () => void;
@@ -25,21 +26,19 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearchClose }) => {
   const [filteredPlayers, setFilteredPlayers] = useState<Player[]>([]);
   const [searchText, setSearchText] = useState("");
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [selectedPlayerName, setSelectedPlayerName] = useState<string | null>(
-    null
-  );
+
   const navigate = useNavigate();
   const { players, handleSelectPlayer, isError } = usePlayerSearch();
-
-  usePlayerRatings(selectedPlayerName);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const text = event.target.value;
     setSearchText(text);
     setSelectedIndex(null);
+
     if (text) {
+      const normalizedSearchText = normalizeName(text);
       const filtered = players.filter((player) =>
-        player.longName.toLowerCase().includes(text.toLowerCase())
+        normalizeName(player.longName).includes(normalizedSearchText)
       );
       setFilteredPlayers(filtered);
     } else {
@@ -58,18 +57,31 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearchClose }) => {
       );
     } else if (event.key === "Enter" && selectedIndex !== null) {
       const selectedPlayer = filteredPlayers[selectedIndex];
+
       if (selectedPlayer) {
-        const espnName = handleSelectPlayer(
-          selectedPlayer.longName,
-          selectedPlayer.playerID,
-          selectedPlayer.team,
+        const playerRating = ratings.find(
+          (rating) =>
+            normalizeName(rating.name) ===
+            normalizeName(selectedPlayer.longName)
+        );
+
+        const updatedPlayer = {
+          ...selectedPlayer,
+          rating: playerRating || null,
+        };
+
+        // Call handleSelectPlayer to navigate and perform necessary actions
+        handleSelectPlayer(
+          updatedPlayer.longName,
+          updatedPlayer.playerID,
+          updatedPlayer.team,
           navigate
         );
 
-        setSelectedPlayerName(espnName);
+        // Clear the search state and close the search
         setSearchText("");
         setFilteredPlayers([]);
-        onSearchClose(); // Call onClose after selection
+        onSearchClose();
       }
     }
   };
@@ -123,17 +135,22 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearchClose }) => {
                   color: "white",
                 }}
                 onClick={() => {
-                  const espnName = handleSelectPlayer(
-                    player.longName,
-                    player.playerID,
-                    player.team,
-                    navigate
+                  const playerRating = ratings.find(
+                    (rating) =>
+                      normalizeName(rating.name) ===
+                      normalizeName(player.longName)
                   );
 
-                  setSelectedPlayerName(espnName);
+                  const updatedPlayer = {
+                    ...player,
+                    rating: playerRating || null,
+                  };
+
+                  console.log("Selected Player with Rating:", updatedPlayer);
+
                   setSearchText("");
                   setFilteredPlayers([]);
-                  onSearchClose(); // Call onClose after selection
+                  onSearchClose();
                 }}
                 px={3}
                 py={2}
@@ -142,14 +159,13 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearchClose }) => {
               >
                 <HStack spacing={2}>
                   <Image
-                    src={player.espnHeadshot} // Assuming each player has a headshot URL
+                    src={player.espnHeadshot}
                     alt={player.longName}
-                    boxSize="30px" // Adjust size as needed
+                    boxSize="30px"
                     borderRadius="full"
-                    objectFit="cover" // Maintain aspect ratio
+                    objectFit="cover"
                   />
-                  <Text>{player.longName}</Text>{" "}
-                  {/* Ensure text is displayed */}
+                  <Text>{player.longName}</Text>
                 </HStack>
               </ListItem>
             ))}

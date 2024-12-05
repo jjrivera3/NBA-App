@@ -46,6 +46,11 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
       abbreviation = "SAS";
     }
 
+    // Change abbreviation "SA" to "SAS"
+    if (abbreviation === "PHO") {
+      abbreviation = "PHX";
+    }
+
     const team = nbaTeams.find((team) => team.abbreviation === abbreviation);
     return team ? team.info.logoImage : ""; // Return the logo image URL or an empty string if not found
   };
@@ -88,6 +93,8 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
     .toLowerCase()
     .replace(/\s+/g, "-")}`;
 
+  console.log(player);
+
   return (
     <Center mt={5} py={{ base: 1, md: 2 }}>
       <Box
@@ -96,9 +103,9 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
           "white",
           "linear-gradient(360deg, #212121 30%, #2e2e2e 70%, #353535 100%);"
         )}
-        boxShadow={"2xl"}
         rounded={"md"}
         overflow={"hidden"}
+        boxShadow={"2xl"}
         border="1px solid #000"
       >
         <Image
@@ -131,15 +138,21 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
             <HStack mt={3} mb={3}>
               <RatingTeamScore playerRating={playerOverallRating} />
             </HStack>
-            <Text fontSize={"15px"} color={"gray.400"}>
+            <Text fontSize={"16px"} color={"gray.200"}>
               #{player?.jerseyNum} | {player?.pos}
+            </Text>
+            <Text mt={1} fontSize={"16px"} color={"gray.200"}>
+              {player?.height}"
+            </Text>
+            <Text mt={1} fontSize={"16px"} color={"gray.200"}>
+              {player?.weight} lbs
             </Text>
           </Stack>
 
           <Link to={playerProfileUrl} onClick={handleClick}>
             <Button
               w={"full"}
-              mt={8}
+              mt={2}
               bg={firstColor || "#151f21"}
               color={"white"}
               rounded={"md"}
