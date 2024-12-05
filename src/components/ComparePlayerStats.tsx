@@ -77,8 +77,9 @@ const ComparePlayerStats: React.FC<AttributeComparisonProps> = ({
           justifyContent="center"
           alignItems="center"
           height="45px"
-          minWidth="70px"
+          minWidth={{ base: "60px", md: "70px" }}
           fontWeight="600"
+          fontSize={{ base: "13px", md: "16px" }}
         >
           {formattedPlayer1Value}
         </Text>
@@ -90,9 +91,9 @@ const ComparePlayerStats: React.FC<AttributeComparisonProps> = ({
         justifyContent="center"
         alignItems="center"
         height="45px"
-        minWidth="170px"
+        minWidth={{ base: "70px", md: "170px" }}
         fontWeight="600"
-        fontSize="15px"
+        fontSize={{ base: "12px", md: "15px" }}
       >
         {label}
       </Text>
@@ -108,8 +109,9 @@ const ComparePlayerStats: React.FC<AttributeComparisonProps> = ({
           justifyContent="center"
           alignItems="center"
           height="50px"
-          minWidth="70px"
+          minWidth={{ base: "60px", md: "70px" }}
           fontWeight="600"
+          fontSize={{ base: "13px", md: "16px" }}
         >
           {formattedPlayer2Value}
         </Text>

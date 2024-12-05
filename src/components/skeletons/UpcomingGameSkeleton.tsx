@@ -11,11 +11,12 @@ const UpcomingGameSkeleton: React.FC = () => {
       textAlign="center"
       background="linear-gradient(88deg, #1a1a1d 0%, #2d2d30 50%, #333333 100%)"
       border="1px solid #000"
+      borderTop="7px solid #4a4a4a"
     >
-      <Text fontSize="xl" fontWeight="bold">
+      <Text mt={2} fontSize="xl" fontWeight="bold">
         Upcoming Game
       </Text>
-      <Box mt={4} mb={2}>
+      <Box height="180px" mt={4} mb={2}>
         <Flex align="center" justify="space-evenly">
           {/* Left Side - Away Team Placeholder */}
           <Flex align="center">
@@ -28,7 +29,7 @@ const UpcomingGameSkeleton: React.FC = () => {
 
           {/* Center - Placeholder for "@" */}
           <Text fontSize="2xl" fontWeight="bold" color="white">
-            @
+            vs
           </Text>
 
           {/* Right Side - Home Team Placeholder */}

@@ -5,6 +5,7 @@ import CompareRadarChart from "../components/CompareRadarChart";
 import AttributeComparison from "../components/AttributeComparison"; // Import the new component
 import { calculateScoringAverages } from "../utils/playerRatingUtilty";
 import ComparePlayerStats from "../components/ComparePlayerStats";
+import { useBreakpointValue } from "@chakra-ui/react";
 
 const ComparePlayers = () => {
   const [player1, setPlayer1] = useState<any | null>(null);
@@ -56,21 +57,39 @@ const ComparePlayers = () => {
         defense: 0,
       };
 
+  const pointsLabel =
+    useBreakpointValue({
+      base: "PPG",
+      md: "Points Per Game",
+    }) || "Points Per Game";
+
+  const reboundsLabel =
+    useBreakpointValue({
+      base: "RPG",
+      md: "Rebounds Per Game",
+    }) || "Rebounds Per Game";
+
+  const assistLabel =
+    useBreakpointValue({
+      base: "APG",
+      md: "Assists Per Game",
+    }) || "Assists Per Game";
+
   return (
-    <Box p={5}>
+    <Box p={{ base: 0, md: 5 }}>
       {!areBothPlayersSelected && (
         <Text
           mt={5}
           mb={5}
           textAlign="center"
-          fontSize="lg"
+          fontSize={{ base: "sm", md: "lg" }}
           fontWeight="600"
           color="#f8991d"
         >
           Please select both players to compare.
         </Text>
       )}
-      <Flex justify="space-between" gap={5} pb={5}>
+      <Flex justify="space-between" gap={{ base: 1, md: 5 }} pb={5}>
         <Box flex={1} position="relative">
           <PlayerSearchWrapper
             label="Search Player 1"
@@ -90,7 +109,7 @@ const ComparePlayers = () => {
       {areBothPlayersSelected && (
         <>
           <Box
-            p={4}
+            p={{ base: 2, md: 4 }}
             borderTopRadius="md"
             borderBottomRadius="md"
             width="100%"
@@ -108,17 +127,17 @@ const ComparePlayers = () => {
             </Text>
             <Box border="1px solid #636363" borderRadius="md">
               <ComparePlayerStats
-                label="Points Per Game"
+                label={pointsLabel}
                 player1Value={player1.stats.pts}
                 player2Value={player2.stats.pts}
               />
               <ComparePlayerStats
-                label="Rebounds Per Game"
+                label={reboundsLabel}
                 player1Value={player1.stats.reb}
                 player2Value={player2.stats.reb}
               />
               <ComparePlayerStats
-                label="Assists Per Game"
+                label={assistLabel}
                 player1Value={player1.stats.ast}
                 player2Value={player2.stats.ast}
               />
@@ -140,7 +159,7 @@ const ComparePlayers = () => {
             </Box>
           </Box>
           <Box
-            p={4}
+            p={{ base: 2, md: 4 }}
             borderTopRadius="md"
             borderBottomRadius="md"
             width="100%"

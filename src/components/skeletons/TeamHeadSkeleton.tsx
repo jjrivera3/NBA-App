@@ -7,7 +7,7 @@ const TeamHeadingSkeleton = () => {
       padding={5}
       paddingY="20px"
       paddingX="20px"
-      minHeight="120px"
+      minHeight="125px"
       background="linear-gradient(295deg, #555 0%, rgba(0, 0, 0, 0.3) 60%, rgb(12 12 12 / 80%) 100%)"
     >
       <Flex
@@ -38,7 +38,7 @@ const TeamHeadingSkeleton = () => {
 
           {/* Navigation Skeleton Items */}
           <Flex
-            mt={{ base: 3, md: 5 }}
+            mt={{ base: 3, md: 4 }}
             mx={5}
             align="center"
             direction={{ base: "column", md: "row" }}
@@ -46,13 +46,14 @@ const TeamHeadingSkeleton = () => {
             justify={{ base: "center", md: "flex-start" }}
             width={{ base: "100%", md: "auto" }}
           >
-            {Array.from({ length: 5 }).map((_, index) => (
+            {Array.from({ length: 4 }).map((_, index) => (
               <Skeleton
                 key={index}
-                height="16px"
-                width={{ base: "70px", md: "50px" }}
+                height="15px"
+                width={{ base: "70px", md: "60px" }}
                 mr={{ base: 0, md: 10 }}
                 mb={{ base: 2, md: 0 }}
+                ml="-14px"
               />
             ))}
           </Flex>

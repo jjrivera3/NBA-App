@@ -9,7 +9,7 @@ const GameSkeleton = () => {
       position="relative"
       background="#292929"
       p={3}
-      minHeight="135px"
+      minHeight="167px"
     >
       <Skeleton height="6px" width="100%" mb={3} borderRadius="md" />
       <Flex alignItems="center" justifyContent="space-between">

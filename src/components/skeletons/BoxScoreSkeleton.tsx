@@ -3,6 +3,7 @@ import {
   Flex,
   Skeleton,
   SkeletonCircle,
+  SkeletonText,
   Table,
   Tbody,
   Td,
@@ -12,89 +13,98 @@ import {
 } from "@chakra-ui/react";
 
 const BoxScoreSkeleton = () => {
-  return (
-    <Box
-      p={{ base: 4, md: 6 }}
-      mt={7}
-      borderRadius="md"
-      boxShadow="2xl"
-      overflow="hidden"
-    >
-      {/* Header Skeleton */}
-      <Flex height="4px" overflow="hidden">
-        <Box flex="1" backgroundColor="gray.500" />
-        <Box flex="1" backgroundColor="gray.500" />
-      </Flex>
+  const skeletonRows = Array.from({ length: 10 }, (_, i) => i); // Generate 10 placeholder rows
+  const skeletonColumns = Array.from({ length: 8 }, (_, i) => i); // Adjust for player stats columns
 
-      <Box
-        padding="28px"
-        textAlign="center"
-        background="linear-gradient(180deg, #484848 0%, #2e2e2e 100%, #353535 100%)"
-        border="0px 1px 1px 1px solid #000"
-        position="relative"
-      >
-        <Box mt={6} mb={2}>
+  return (
+    <Box p={{ base: 0, md: 4 }} mt={7}>
+      {/* Skeleton Header */}
+      <Box mb={8} borderRadius="md" boxShadow="2xl" overflow="hidden">
+        <Flex height="6px" overflow="hidden">
+          <Box flex="1" backgroundColor="#4a4a4a" />
+          <Box flex="1" backgroundColor="#3a3a3a" />
+        </Flex>
+        <Box
+          padding="40px"
+          textAlign="center"
+          background="linear-gradient(180deg, #484848 0%, #2e2e2e 100%, #353535 100%)"
+          border="0px 1px 1px 1px solid #000"
+          height="222px"
+        >
           <Flex align="center" justify={{ base: "center", md: "space-evenly" }}>
-            {/* Away Team Skeleton */}
+            {/* Away Team */}
             <Flex direction="row" align="center">
-              <Flex direction="column" align="center" mx={2}>
-                <SkeletonCircle size={{ base: "50px", md: "80px" }} />
-                <Skeleton height="20px" width="60px" mt={2} />
-                <Skeleton height="16px" width="40px" mt={1} />
+              <Flex direction="column" align="center" mx={4}>
+                <SkeletonCircle size={{ base: "60px", md: "100px" }} />
+                <SkeletonText mt={2} noOfLines={1} width="50px" />
+                <SkeletonText mt={1} noOfLines={1} width="30px" />
               </Flex>
-              <Flex align="center">
-                <Skeleton height="40px" width="80px" ml={4} />
-              </Flex>
+              <Skeleton height="40px" width="70px" />
             </Flex>
 
-            <Skeleton height="20px" width="30px" mx={4} />
+            <SkeletonText mt={2} noOfLines={1} width="30px" />
 
-            {/* Home Team Skeleton */}
+            {/* Home Team */}
             <Flex direction="row" align="center">
-              <Flex align="center">
-                <Skeleton height="40px" width="80px" mr={4} />
-              </Flex>
-              <Flex direction="column" align="center" mx={2}>
-                <SkeletonCircle size={{ base: "50px", md: "80px" }} />
-                <Skeleton height="20px" width="60px" mt={2} />
-                <Skeleton height="16px" width="40px" mt={1} />
+              <Skeleton height="40px" width="70px" />
+              <Flex direction="column" align="center" mx={4}>
+                <SkeletonCircle size={{ base: "60px", md: "100px" }} />
+                <SkeletonText mt={2} noOfLines={1} width="50px" />
+                <SkeletonText mt={1} noOfLines={1} width="30px" />
               </Flex>
             </Flex>
           </Flex>
         </Box>
       </Box>
 
-      {/* Player Stats Skeleton */}
-      <Box mt={8} background="#2a2a2a">
-        <Table variant="simple" size="sm">
-          <Thead>
-            <Tr>
-              <Th>
-                <Skeleton height="20px" width="80px" />
-              </Th>
-              {[...Array(8)].map((_, index) => (
-                <Th key={index}>
-                  <Skeleton height="20px" width="60px" />
+      {/* Skeleton Player Stats Table */}
+      <Box
+        mb={8}
+        background="#2a2a2a"
+        padding="var(--chakra-space-3)"
+        borderRadius="var(--chakra-radii-md)"
+        overflow="auto"
+        mt="30px"
+        borderTop="4px solid #4a4a4a"
+        boxShadow="2xl"
+      >
+        <Flex align="center" mb={4}>
+          <SkeletonCircle size="40px" mr={3} />
+          <SkeletonText noOfLines={1} width="150px" />
+        </Flex>
+        <Box overflowX="auto">
+          <Table variant="simple" size="sm">
+            <Thead>
+              <Tr>
+                <Th>
+                  <Skeleton height="20px" width="120px" />
                 </Th>
-              ))}
-            </Tr>
-          </Thead>
-          <Tbody>
-            {[...Array(5)].map((_, rowIndex) => (
-              <Tr key={rowIndex}>
-                <Td>
-                  <SkeletonCircle size="40px" mr={2} />
-                  <Skeleton height="20px" width="100px" />
-                </Td>
-                {[...Array(8)].map((_, colIndex) => (
-                  <Td key={colIndex}>
-                    <Skeleton height="16px" width="40px" />
-                  </Td>
+                {skeletonColumns.map((_, i) => (
+                  <Th key={i}>
+                    <Skeleton height="20px" width="60px" />
+                  </Th>
                 ))}
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
+            </Thead>
+            <Tbody>
+              {skeletonRows.map((_, rowIndex) => (
+                <Tr key={rowIndex}>
+                  <Td>
+                    <Flex align="center">
+                      <SkeletonCircle size="40px" mr={3} />
+                      <SkeletonText noOfLines={1} width="150px" />
+                    </Flex>
+                  </Td>
+                  {skeletonColumns.map((_, colIndex) => (
+                    <Td key={colIndex}>
+                      <Skeleton height="20px" width="50px" />
+                    </Td>
+                  ))}
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </Box>
       </Box>
     </Box>
   );

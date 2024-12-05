@@ -31,8 +31,8 @@ const AttributeComparison: React.FC<AttributeComparisonProps> = ({
           display="flex"
           justifyContent="center"
           alignItems="center"
-          height="45px"
-          minWidth="45px"
+          height={{ base: "35px", md: "45px" }}
+          minWidth={{ base: "30px", md: "45px" }}
         >
           {difference > 0 ? `+${difference}` : difference}
         </Text>
@@ -45,9 +45,10 @@ const AttributeComparison: React.FC<AttributeComparisonProps> = ({
           display="flex"
           justifyContent="center"
           alignItems="center"
-          height="45px"
-          minWidth="45px"
+          height={{ base: "35px", md: "45px" }}
+          minWidth={{ base: "30px", md: "45px" }}
           fontWeight="600"
+          fontSize={{ base: "14px", md: "16px" }}
         >
           {player1Value}
         </Text>
@@ -59,9 +60,9 @@ const AttributeComparison: React.FC<AttributeComparisonProps> = ({
         justifyContent="center"
         alignItems="center"
         height="45px"
-        minWidth="160px"
-        fontWeight="600"
-        fontSize="15px"
+        minWidth={{ base: "100px", md: "160px" }}
+        fontSize={{ base: "13px", md: "15px" }}
+        fontWeight={{ base: "500", md: "600" }}
       >
         {label}
       </Text>
@@ -75,9 +76,10 @@ const AttributeComparison: React.FC<AttributeComparisonProps> = ({
           display="flex"
           justifyContent="center"
           alignItems="center"
-          height="45px"
-          minWidth="45px"
+          height={{ base: "35px", md: "45px" }}
+          minWidth={{ base: "30px", md: "45px" }}
           fontWeight="600"
+          fontSize={{ base: "14px", md: "16px" }}
         >
           {player2Value}
         </Text>
@@ -88,8 +90,8 @@ const AttributeComparison: React.FC<AttributeComparisonProps> = ({
           display="flex"
           justifyContent="center"
           alignItems="center"
-          height="45px"
-          minWidth="45px"
+          height={{ base: "35px", md: "45px" }}
+          minWidth={{ base: "30px", md: "45px" }}
         >
           {-difference > 0 ? `+${-difference}` : -difference}
         </Text>

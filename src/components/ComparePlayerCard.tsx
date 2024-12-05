@@ -11,6 +11,7 @@ import {
   Image,
   useColorModeValue,
   HStack,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import Player from "../entities/Player";
 import playerAvatar from "../assets/player_avatar.png";
@@ -19,6 +20,7 @@ import { svgString } from "../services/svgString";
 import { usePlayerStore } from "../usePlayerStore";
 import RatingTeamScore from "./RatingTeamScore";
 import nbaTeams from "../data/nbateams";
+import { Property } from "csstype"; // Import for type safety
 
 interface Props {
   player: Player;
@@ -27,51 +29,35 @@ interface Props {
 }
 
 const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
-  // State to track avatar image source
   const [avatarSrc, setAvatarSrc] = useState(
     player?.espnID
       ? `https://a.espncdn.com/i/headshots/nba/players/full/${player.espnID}.png`
       : playerAvatar
   );
 
-  // Function to get team logo based on team abbreviation
   const getTeamLogo = (abbreviation: string) => {
-    // Change abbreviation "GS" to "GSW"
-    if (abbreviation === "GS") {
-      abbreviation = "GSW";
-    }
-
-    // Change abbreviation "SA" to "SAS"
-    if (abbreviation === "SA") {
-      abbreviation = "SAS";
-    }
-
-    // Change abbreviation "SA" to "SAS"
-    if (abbreviation === "PHO") {
-      abbreviation = "PHX";
-    }
+    if (abbreviation === "GS") abbreviation = "GSW";
+    if (abbreviation === "SA") abbreviation = "SAS";
+    if (abbreviation === "PHO") abbreviation = "PHX";
 
     const team = nbaTeams.find((team) => team.abbreviation === abbreviation);
-    return team ? team.info.logoImage : ""; // Return the logo image URL or an empty string if not found
+    return team ? team.info.logoImage : "";
   };
 
-  // Retrieve team logo based on player.team abbreviation
-  const teamLogo = getTeamLogo(player.team || ""); // Adjust player.team if necessary
+  const teamLogo = getTeamLogo(player.team || "");
 
-  // Update avatarSrc whenever player changes (i.e., when a new player is selected)
   useEffect(() => {
     if (player?.espnID) {
       setAvatarSrc(
         `https://a.espncdn.com/i/headshots/nba/players/full/${player.espnID}.png`
       );
     } else {
-      setAvatarSrc(playerAvatar); // Fallback if espnID is not available
+      setAvatarSrc(playerAvatar);
     }
-  }, [player]); // This effect will run every time the 'player' prop changes
+  }, [player]);
 
   const setPlayerData = usePlayerStore((state) => state.setPlayerData);
 
-  // Ensure playerRating defaults to 0 if undefined
   const playerOverallRating = playerRating.overallAttribute ?? 0;
 
   const handleClick = () => {
@@ -93,15 +79,19 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
     .toLowerCase()
     .replace(/\s+/g, "-")}`;
 
-  console.log(player);
+  // Adjust direction based on breakpoint
+  const layoutDirection = useBreakpointValue<Property.FlexDirection>({
+    base: "column",
+    md: "row",
+  });
 
   return (
-    <Center mt={5} py={{ base: 1, md: 2 }}>
+    <Center mt={5} py={{ base: 0, md: 2 }}>
       <Box
         w={"full"}
         bg={useColorModeValue(
           "white",
-          "linear-gradient(360deg, #212121 30%, #2e2e2e 70%, #353535 100%);"
+          "linear-gradient(360deg, #212121 30%, #2e2e2e 70%, #353535 100%)"
         )}
         rounded={"md"}
         overflow={"hidden"}
@@ -119,7 +109,7 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
         />
         <Flex justify={"center"} mt={-12}>
           <Avatar
-            size={"2xl"}
+            size={{ base: "xl", md: "2xl" }}
             src={avatarSrc}
             onError={() => setAvatarSrc(playerAvatar)}
             css={{ border: "2px solid white" }}
@@ -127,24 +117,36 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
           />
         </Flex>
 
-        <Box p={6}>
+        <Box p={{ base: 3, md: 6 }}>
           <Stack spacing={0} align={"center"} mb={5}>
-            <HStack>
+            <Flex direction={layoutDirection} align="center" gap={2}>
               <Image src={teamLogo} h={"25px"} />
-              <Heading fontSize={"16px"} fontWeight={500} fontFamily={"body"}>
+              <Heading
+                fontSize={{ base: "14px", md: "16px" }}
+                fontWeight={500}
+                fontFamily={"body"}
+              >
                 {player?.espnName}
               </Heading>
-            </HStack>
-            <HStack mt={3} mb={3}>
+            </Flex>
+            <HStack mt={{ base: 0, md: 3 }} mb={3}>
               <RatingTeamScore playerRating={playerOverallRating} />
             </HStack>
-            <Text fontSize={"16px"} color={"gray.200"}>
+            <Text fontSize={{ base: "14px", md: "16px" }} color={"gray.200"}>
               #{player?.jerseyNum} | {player?.pos}
             </Text>
-            <Text mt={1} fontSize={"16px"} color={"gray.200"}>
+            <Text
+              mt={1}
+              fontSize={{ base: "14px", md: "16px" }}
+              color={"gray.200"}
+            >
               {player?.height}"
             </Text>
-            <Text mt={1} fontSize={"16px"} color={"gray.200"}>
+            <Text
+              mt={1}
+              fontSize={{ base: "14px", md: "16px" }}
+              color={"gray.200"}
+            >
               {player?.weight} lbs
             </Text>
           </Stack>

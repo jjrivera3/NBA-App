@@ -5,7 +5,7 @@ const DepthChartSkeleton = () => {
   const depths = ["Starter", "2nd", "3rd", "4th", "5th"];
 
   return (
-    <Box background="#1e1e1e" color="white" py={6} px={4}>
+    <Box background="#1e1e1e" color="white" py={6} px={4} mt={8}>
       <Flex wrap="wrap" justifyContent="space-around" gap={6}>
         {positions.map((position) => (
           <VStack

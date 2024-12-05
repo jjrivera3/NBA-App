@@ -2,7 +2,6 @@ import { Box } from "@chakra-ui/react";
 import "datatables.net-bs5";
 import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 import $ from "jquery";
-import { lighten } from "polished";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Utah_Jazz from "../assets/Utah_Jazz.png";
@@ -48,6 +47,10 @@ const TeamStatsPage = () => {
         {
           orderSequence: ["desc", "asc"],
           targets: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+        },
+        {
+          targets: 1, // Position column index
+          width: "80px", // Set the maximum width
         },
       ],
 
@@ -138,8 +141,9 @@ const TeamStatsPage = () => {
           <thead style={{ backgroundColor: "#1f1f1f", color: "#f9f9f9" }}>
             <tr>
               <th style={thStyle}>Player</th>
-              <th style={thStyle}>Position</th>
+              <th style={thStyle}>Pos</th>
               <th style={thStyle}>GP</th>
+              <th style={thStyle}>MIN</th>
               <th style={thStyle}>PTS</th>
               <th style={thStyle}>REB</th>
               <th style={thStyle}>AST</th>
@@ -148,60 +152,69 @@ const TeamStatsPage = () => {
               <th style={thStyle}>FG%</th>
               <th style={thStyle}>3P%</th>
               <th style={thStyle}>FT%</th>
-              <th style={thStyle}>MIN</th>
             </tr>
           </thead>
           <tbody>
-            {playersWithRatings.map((player) => {
-              const teamColor = lighten(0.1, "#0077ff"); // Example: Adjust with team-specific logic
-              return (
-                <tr key={player.playerID}>
-                  <td
-                    className="player-cell"
+            {playersWithRatings.map((player) => (
+              <tr key={player.playerID}>
+                <td
+                  className="player-cell"
+                  style={{
+                    ...cellStyle,
+                    fontWeight: "bold",
+                    color: "white",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                  }}
+                >
+                  <img
+                    src={player.espnHeadshot}
+                    alt={player.longName || "Player Image"}
                     style={{
-                      ...cellStyle,
-                      fontWeight: "bold",
-                      color: teamColor,
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                      objectFit: "cover",
                     }}
-                  >
-                    {player.longName}
-                  </td>
-                  <td className="position-cell" style={cellStyle}>
-                    {player.pos}
-                  </td>
-                  <td className="gp-cell" style={cellStyle}>
-                    {player.stats?.gamesPlayed || "-"}
-                  </td>
-                  <td className="pts-cell" style={cellStyle}>
-                    {player.stats?.pts || "-"}
-                  </td>
-                  <td className="reb-cell" style={cellStyle}>
-                    {player.stats?.reb || "-"}
-                  </td>
-                  <td className="ast-cell" style={cellStyle}>
-                    {player.stats?.ast || "-"}
-                  </td>
-                  <td className="stl-cell" style={cellStyle}>
-                    {player.stats?.stl || "-"}
-                  </td>
-                  <td className="blk-cell" style={cellStyle}>
-                    {player.stats?.blk || "-"}
-                  </td>
-                  <td className="fgp-cell" style={cellStyle}>
-                    {player.stats?.fgp || "-"}
-                  </td>
-                  <td className="tptfgp-cell" style={cellStyle}>
-                    {player.stats?.tptfgp || "-"}
-                  </td>
-                  <td className="ftp-cell" style={cellStyle}>
-                    {player.stats?.ftp || "-"}
-                  </td>
-                  <td className="mins-cell" style={cellStyle}>
-                    {player.stats?.mins || "-"}
-                  </td>
-                </tr>
-              );
-            })}
+                  />
+                  {player.longName}
+                </td>
+                <td className="position-cell" style={cellStyle}>
+                  {player.pos}
+                </td>
+                <td className="gp-cell" style={cellStyle}>
+                  {player.stats?.gamesPlayed || "-"}
+                </td>
+                <td className="mins-cell" style={cellStyle}>
+                  {player.stats?.mins || "-"}
+                </td>
+                <td className="pts-cell" style={cellStyle}>
+                  {player.stats?.pts || "-"}
+                </td>
+                <td className="reb-cell" style={cellStyle}>
+                  {player.stats?.reb || "-"}
+                </td>
+                <td className="ast-cell" style={cellStyle}>
+                  {player.stats?.ast || "-"}
+                </td>
+                <td className="stl-cell" style={cellStyle}>
+                  {player.stats?.stl || "-"}
+                </td>
+                <td className="blk-cell" style={cellStyle}>
+                  {player.stats?.blk || "-"}
+                </td>
+                <td className="fgp-cell" style={cellStyle}>
+                  {player.stats?.fgp || "-"}
+                </td>
+                <td className="tptfgp-cell" style={cellStyle}>
+                  {player.stats?.tptfgp || "-"}
+                </td>
+                <td className="ftp-cell" style={cellStyle}>
+                  {player.stats?.ftp || "-"}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
 

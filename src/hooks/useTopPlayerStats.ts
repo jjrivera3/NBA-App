@@ -54,7 +54,7 @@ function useTopPlayerStats() {
             parseFloat(a.stats![stat] || "0")
         );
 
-        return sortedPlayers.slice(0, 5); // Get top 10 players
+        return sortedPlayers.slice(0, 10); // Get top 10 players
       };
 
       return {

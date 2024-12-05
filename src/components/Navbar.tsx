@@ -143,7 +143,7 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
             <VStack spacing={6} align="left">
               <ChakraLink
                 as={Link}
-                to="/Page1"
+                to="/"
                 fontSize="lg"
                 _hover={{ color: "#f37021" }}
                 onClick={onClose}
