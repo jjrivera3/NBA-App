@@ -10,9 +10,10 @@ import TeamHeading from "./TeamHeading";
 import Utah_Jazz from "../assets/Utah_Jazz.png";
 import PlayerCardSkeleton from "./skeletons/PlayerCardSkeleton";
 import TeamHeadingSkeleton from "./skeletons/TeamHeadSkeleton";
-import TeamGridProps from "../entities/TeamGriptProps";
+
 import { useTeamStore } from "../useTeamStore";
 import { useEffect } from "react";
+import TeamGridProps from "../entities/TeamGriptProps";
 
 const TeamGrid = ({ teamAbv }: TeamGridProps) => {
   const lowercasedTeamAbv = teamAbv.toLowerCase();
@@ -30,7 +31,10 @@ const TeamGrid = ({ teamAbv }: TeamGridProps) => {
   });
 
   // Zustand store actions
-  const setTeamData = useTeamStore((state) => state.setTeamData); // Use setTeamData from useTeamStore
+  const setTeamData = useTeamStore((state) => state.setTeamData);
+  const setPlayersWithRatings = useTeamStore(
+    (state) => state.setPlayersWithRatings
+  );
 
   // Extract roster directly from teamInfo
   let selectedTeam = null;
@@ -47,13 +51,10 @@ const TeamGrid = ({ teamAbv }: TeamGridProps) => {
   const playersWithRatings = usePlayerRatingsMap(roster);
   const sortedPlayers = useSortedPlayers(playersWithRatings);
 
-  console.log(playersWithRatings);
-
   const espnLogo1 =
     selectedTeam?.teamID === "29" ? Utah_Jazz : selectedTeam?.espnLogo1;
   const defaultColor = "#000000";
 
-  // Update Zustand store with team data when teamInfo is available
   useEffect(() => {
     if (selectedTeam) {
       setTeamData({
@@ -61,10 +62,23 @@ const TeamGrid = ({ teamAbv }: TeamGridProps) => {
         teamID: selectedTeam.teamID,
         espnLogo1: espnLogo1,
         teamCity: selectedTeam.teamCity,
-        teamName: `${selectedTeam.teamCity} ${selectedTeam.teamName}`, // Concatenating teamCity and teamName
+        teamName: `${selectedTeam.teamCity} ${selectedTeam.teamName}`,
+        conference: selectedTeam.conference, // Add conference here
+        wins: selectedTeam.wins,
+        loss: selectedTeam.loss,
       });
     }
-  }, [selectedTeam, setTeamData, teamColor, espnLogo1]);
+    if (playersWithRatings) {
+      setPlayersWithRatings(playersWithRatings);
+    }
+  }, [
+    selectedTeam,
+    setTeamData,
+    teamColor,
+    espnLogo1,
+    playersWithRatings,
+    setPlayersWithRatings,
+  ]);
 
   return (
     <>
@@ -104,7 +118,7 @@ const TeamGrid = ({ teamAbv }: TeamGridProps) => {
                 firstColor={teamColor || defaultColor}
                 espnLogo1={espnLogo1}
                 teamCity={selectedTeam.teamCity}
-                teamName={`${selectedTeam.teamCity} ${selectedTeam.teamName}`} // Concatenating teamCity and teamName
+                teamName={`${selectedTeam.teamCity} ${selectedTeam.teamName}`}
                 teamID={selectedTeam.teamID}
               />
             ))}

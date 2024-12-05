@@ -6,8 +6,8 @@ interface Props {
   teamName: string;
   conference: string;
   espnLogo1: string;
-  wins: number;
-  loss: string;
+  wins: number; // Update to number
+  loss: number; // Update to number
   firstColor: string;
   teamAbv: string;
 }
