@@ -1,25 +1,83 @@
 import { Box, Flex, Skeleton, SkeletonText } from "@chakra-ui/react";
 import { lighten } from "polished";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import PlayerAdditionalInfo from "../components/Player Profile/PlayerAdditionalInfo";
 import PlayerAttributes from "../components/Player Profile/PlayerAttributes";
-import PlayerImage from "../components/PlayerImage";
+import PlayerCurrentSeasonStatsTable from "../components/Player Profile/PlayerCurrentSeasonStatsTable";
+import PlayerInfo from "../components/Player Profile/PlayerInfo";
 import PlayerRadarChart from "../components/Player Profile/PlayerRadarChart";
 import StatsTable from "../components/Player Profile/PlayerStatsTable";
-import nbateams from "../data/nbateams";
-import useAvatarSrc from "../hooks/useAvatarSrc";
-import usePlayerStats from "../hooks/usePlayerStats";
-import PlayerInfo from "../components/Player Profile/PlayerInfo";
+import PlayerImage from "../components/PlayerImage";
 import PlayerStats from "../components/PlayerStats";
-import PlayerAdditionalInfo from "../components/Player Profile/PlayerAdditionalInfo";
-import { usePlayerStore } from "../usePlayerStore";
+import nbateams from "../data/nbateams";
+import ratings from "../data/ratings";
+import useAvatarSrc from "../hooks/useAvatarSrc";
+import useFindPlayerId from "../hooks/useFindPlayerId";
+import usePlayerStats from "../hooks/usePlayerStats";
 import { usePlayerAttributesStore } from "../usePlayerAttributesStore";
-import PlayerCurrentSeasonStatsTable from "../components/Player Profile/PlayerCurrentSeasonStatsTable";
+import { usePlayerStore } from "../usePlayerStore";
+import { normalizeName } from "../utils/normalizeName";
+import PlayerDetailSkeleton from "../components/skeletons/PlayerDetailSkeleton";
 
 const PlayerDetailPage = () => {
-  const { player, firstColor, teamID } = usePlayerStore((state) => state);
+  const { player, firstColor, teamID, setPlayerData } = usePlayerStore(
+    (state) => state
+  );
+  const { playerName } = useParams<{ playerName: string }>(); // Capture playerName from the URL
+  const { data: findPlayer, isLoading: isPlayerLoading } = useFindPlayerId(
+    playerName || ""
+  );
+
+  // Safely access findPlayer data
+  const normalizedPlayerName = findPlayer?.body?.[0]?.espnName
+    ? normalizeName(findPlayer.body[0].espnName)
+    : null;
+
+  // Safely find the rating
+  const rating = normalizedPlayerName
+    ? ratings.find(
+        (rating) => normalizeName(rating.name) === normalizedPlayerName
+      )
+    : null;
+
+  // Create a new object by adding the rating
+  const playerWithRating = findPlayer?.body?.[0]
+    ? { ...findPlayer.body[0], rating }
+    : null;
+  console.log("Player with rating:", playerWithRating?.rating.team);
+
+  useEffect(() => {
+    if (playerWithRating) {
+      // Check if the store already has this player data
+      const isSamePlayer =
+        player?.playerID === playerWithRating.playerID &&
+        player?.rating?.name === playerWithRating?.rating?.name;
+
+      if (!isSamePlayer) {
+        const team = nbateams.find(
+          (team) => team.teamId === playerWithRating.teamID
+        );
+
+        console.log(team?.name);
+
+        setPlayerData({
+          player: playerWithRating,
+          firstColor: team?.info.colors[0] || "#000000",
+          teamID: playerWithRating.teamID || "unknown",
+          espnLogo1: team?.info.logoImage || "defaultLogo.png",
+          teamCity: team?.info.city || "unknown2",
+          teamName: playerWithRating.rating.team || "unknown1",
+          playerRating: playerWithRating.rating,
+        });
+
+        console.log("Updated player store with:", playerWithRating);
+      }
+    }
+  }, [playerWithRating, player, setPlayerData]);
 
   // Safely access bRefID
-  const { data: playerStatsData, isLoading } = usePlayerStats(
+  const { data: playerStatsData, isLoading: isStatsLoading } = usePlayerStats(
     player?.bRefID || ""
   );
 
@@ -40,6 +98,22 @@ const PlayerDetailPage = () => {
     }
   }, [player, setPlayerRating]);
 
+  // Inside PlayerDetailPage component
+  if (isPlayerLoading || isStatsLoading) {
+    return <PlayerDetailSkeleton />;
+  }
+
+  // Loading state for playerStatsData
+  if (isStatsLoading) {
+    return (
+      <Box padding="20px">
+        <Skeleton height="30px" mb={2} />
+        <SkeletonText noOfLines={10} spacing={4} skeletonHeight="20px" />
+      </Box>
+    );
+  }
+
+  // No player data found
   if (!player) {
     return <div>No player data found</div>;
   }
@@ -104,18 +178,11 @@ const PlayerDetailPage = () => {
         rounded="md"
         border="1px solid #000"
       >
-        {isLoading ? (
-          <Box>
-            <Skeleton height="30px" mb={2} />
-            <SkeletonText noOfLines={10} spacing={4} skeletonHeight="20px" />
-          </Box>
-        ) : (
-          playerStatsData?.playerStats.body && (
-            <PlayerCurrentSeasonStatsTable
-              stats={playerStatsData.playerStats.body}
-              nbateams={nbateams}
-            />
-          )
+        {playerStatsData?.playerStats.body && (
+          <PlayerCurrentSeasonStatsTable
+            stats={playerStatsData.playerStats.body}
+            nbateams={nbateams}
+          />
         )}
       </Box>
 
@@ -130,18 +197,11 @@ const PlayerDetailPage = () => {
         rounded="md"
         border="1px solid #000"
       >
-        {isLoading ? (
-          <Box>
-            <Skeleton height="30px" mb={2} />
-            <SkeletonText noOfLines={10} spacing={4} skeletonHeight="20px" />
-          </Box>
-        ) : (
-          playerStatsData?.playerStats.body && (
-            <StatsTable
-              stats={playerStatsData.playerStats.body}
-              nbateams={nbateams}
-            />
-          )
+        {playerStatsData?.playerStats.body && (
+          <StatsTable
+            stats={playerStatsData.playerStats.body}
+            nbateams={nbateams}
+          />
         )}
       </Box>
 

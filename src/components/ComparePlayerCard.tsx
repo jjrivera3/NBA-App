@@ -60,18 +60,6 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
 
   const playerOverallRating = playerRating.overallAttribute ?? 0;
 
-  const handleClick = () => {
-    setPlayerData({
-      player,
-      firstColor: firstColor || "#000000",
-      teamID: player.teamID || "unknown",
-      espnLogo1: teamLogo || "defaultLogo.png",
-      teamCity: player.rating.team,
-      teamName: player.rating.team,
-      playerRating: playerRating,
-    });
-  };
-
   const teamAbbreviation = player.team === "GS" ? "GSW" : player.team;
   const playerProfileUrl = `/${teamAbbreviation
     .toLowerCase()
@@ -151,7 +139,7 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
             </Text>
           </Stack>
 
-          <Link to={playerProfileUrl} onClick={handleClick}>
+          <Link to={playerProfileUrl}>
             <Button
               w={"full"}
               mt={2}

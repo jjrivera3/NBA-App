@@ -37,24 +37,6 @@ const PlayerCard = ({ player, firstColor }: Props) => {
       : playerAvatar
   );
 
-  const { teamID, espnLogo1, teamCity, teamName } = useTeamStore(
-    (state) => state
-  );
-
-  const setPlayerData = usePlayerStore((state) => state.setPlayerData);
-
-  const handleClick = () => {
-    setPlayerData({
-      player,
-      firstColor: firstColor || "#000000",
-      teamID: teamID || "unknown",
-      espnLogo1: espnLogo1 || "defaultLogo.png",
-      teamCity: teamCity || "Unknown City",
-      teamName: teamName || "Unknown Team",
-      playerRating: null,
-    });
-  };
-
   const isLoading = !player;
   const stats = player?.stats || { pts: "0", reb: "0", ast: "0" };
   const teamAbbreviation = player.team === "GS" ? "GSW" : player.team;
@@ -141,7 +123,7 @@ const PlayerCard = ({ player, firstColor }: Props) => {
               </Stack>
             )}
           </Center>
-          <Link to={playerProfileUrl} onClick={handleClick}>
+          <Link to={playerProfileUrl}>
             <Button
               w={"full"}
               mt={8}

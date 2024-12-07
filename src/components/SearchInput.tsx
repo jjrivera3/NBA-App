@@ -70,7 +70,6 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearchClose }) => {
           rating: playerRating || null,
         };
 
-        // Call handleSelectPlayer to navigate and perform necessary actions
         handleSelectPlayer(
           updatedPlayer.longName,
           updatedPlayer.playerID,
@@ -78,12 +77,33 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearchClose }) => {
           navigate
         );
 
-        // Clear the search state and close the search
         setSearchText("");
         setFilteredPlayers([]);
         onSearchClose();
       }
     }
+  };
+
+  const handlePlayerClick = (player: Player) => {
+    const playerRating = ratings.find(
+      (rating) => normalizeName(rating.name) === normalizeName(player.longName)
+    );
+
+    const updatedPlayer = {
+      ...player,
+      rating: playerRating || null,
+    };
+
+    handleSelectPlayer(
+      updatedPlayer.longName,
+      updatedPlayer.playerID,
+      updatedPlayer.team,
+      navigate
+    );
+
+    setSearchText("");
+    setFilteredPlayers([]);
+    onSearchClose();
   };
 
   if (isError) return <p>Error fetching rosters.</p>;
@@ -134,24 +154,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearchClose }) => {
                   cursor: "pointer",
                   color: "white",
                 }}
-                onClick={() => {
-                  const playerRating = ratings.find(
-                    (rating) =>
-                      normalizeName(rating.name) ===
-                      normalizeName(player.longName)
-                  );
-
-                  const updatedPlayer = {
-                    ...player,
-                    rating: playerRating || null,
-                  };
-
-                  console.log("Selected Player with Rating:", updatedPlayer);
-
-                  setSearchText("");
-                  setFilteredPlayers([]);
-                  onSearchClose();
-                }}
+                onClick={() => handlePlayerClick(player)}
                 px={3}
                 py={2}
                 color="white"

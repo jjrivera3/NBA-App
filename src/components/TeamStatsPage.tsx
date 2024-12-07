@@ -2,28 +2,27 @@ import { Box } from "@chakra-ui/react";
 import "datatables.net-bs5";
 import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 import $ from "jquery";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Utah_Jazz from "../assets/Utah_Jazz.png";
 import nbaTeams from "../data/nbateams";
 import useTeamColor from "../hooks/useTeamColor";
 import useTeamInfo from "../hooks/useTeamInfo";
-import { useTeamStore } from "../useTeamStore";
 import TeamHeading from "./TeamHeading";
+import { useTeamStore } from "../useTeamStore";
 
 const TeamStatsPage = () => {
   const { teamAbv } = useParams<{ teamAbv: string }>();
   const lowercasedTeamAbv = teamAbv?.toLowerCase();
   const playersWithRatings = useTeamStore((state) => state.playersWithRatings);
+
   const selectedAbv = nbaTeams.find(
     (team) => team.info.abbrev.toLowerCase() === lowercasedTeamAbv
   );
   const teamId = selectedAbv ? selectedAbv.teamId : null;
 
   const teamColor = useTeamColor(teamId);
-  const { data: teamInfo } = useTeamInfo(teamId, {
-    schedules: "true",
-  });
+  const { data: teamInfo } = useTeamInfo(teamId, { schedules: "true" });
 
   const selectedTeam = Array.isArray(teamInfo?.body)
     ? teamInfo.body.find(
@@ -42,22 +41,16 @@ const TeamStatsPage = () => {
       lengthChange: false,
       order: [[0, "asc"]],
       info: false,
-
       columnDefs: [
         {
           orderSequence: ["desc", "asc"],
-          targets: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+          targets: Array.from({ length: 10 }, (_, i) => i + 2),
         },
-        {
-          targets: 1, // Position column index
-          width: "80px", // Set the maximum width
-        },
+        { targets: 1, width: "80px" }, // Position column width
       ],
-
-      rowCallback: function (row, _data, index) {
+      rowCallback: (row, _data, index) => {
         $(row).css("background-color", index % 2 === 0 ? "#2b2b2b" : "#202020");
       },
-
       destroy: true,
     });
 
@@ -107,7 +100,7 @@ const TeamStatsPage = () => {
   };
 
   const cellStyle: React.CSSProperties = {
-    textAlign: "start" as "left",
+    textAlign: "start",
     padding: "var(--chakra-space-2) var(--chakra-space-4)",
     fontSize: "var(--chakra-fontSizes-sm)",
     lineHeight: "var(--chakra-lineHeights-4)",
@@ -118,12 +111,12 @@ const TeamStatsPage = () => {
     <>
       <Box pt={7}>
         <TeamHeading
-          teamCity={selectedTeam.teamCity}
-          teamName={selectedTeam.teamName}
-          conference={selectedTeam.conference}
+          teamCity={selectedTeam?.teamCity}
+          teamName={selectedTeam?.teamName}
+          conference={selectedTeam?.conference}
           espnLogo1={espnLogo1}
-          wins={selectedTeam.wins}
-          loss={selectedTeam.loss}
+          wins={selectedTeam?.wins}
+          loss={selectedTeam?.loss}
           firstColor={teamColor || defaultColor}
           teamAbv={teamAbv ?? ""}
         />
@@ -158,7 +151,6 @@ const TeamStatsPage = () => {
             {playersWithRatings.map((player) => (
               <tr key={player.playerID}>
                 <td
-                  className="player-cell"
                   style={{
                     ...cellStyle,
                     fontWeight: "bold",
@@ -180,39 +172,17 @@ const TeamStatsPage = () => {
                   />
                   {player.longName}
                 </td>
-                <td className="position-cell" style={cellStyle}>
-                  {player.pos}
-                </td>
-                <td className="gp-cell" style={cellStyle}>
-                  {player.stats?.gamesPlayed || "-"}
-                </td>
-                <td className="mins-cell" style={cellStyle}>
-                  {player.stats?.mins || "-"}
-                </td>
-                <td className="pts-cell" style={cellStyle}>
-                  {player.stats?.pts || "-"}
-                </td>
-                <td className="reb-cell" style={cellStyle}>
-                  {player.stats?.reb || "-"}
-                </td>
-                <td className="ast-cell" style={cellStyle}>
-                  {player.stats?.ast || "-"}
-                </td>
-                <td className="stl-cell" style={cellStyle}>
-                  {player.stats?.stl || "-"}
-                </td>
-                <td className="blk-cell" style={cellStyle}>
-                  {player.stats?.blk || "-"}
-                </td>
-                <td className="fgp-cell" style={cellStyle}>
-                  {player.stats?.fgp || "-"}
-                </td>
-                <td className="tptfgp-cell" style={cellStyle}>
-                  {player.stats?.tptfgp || "-"}
-                </td>
-                <td className="ftp-cell" style={cellStyle}>
-                  {player.stats?.ftp || "-"}
-                </td>
+                <td style={cellStyle}>{player.pos}</td>
+                <td style={cellStyle}>{player.stats?.gamesPlayed || "-"}</td>
+                <td style={cellStyle}>{player.stats?.mins || "-"}</td>
+                <td style={cellStyle}>{player.stats?.pts || "-"}</td>
+                <td style={cellStyle}>{player.stats?.reb || "-"}</td>
+                <td style={cellStyle}>{player.stats?.ast || "-"}</td>
+                <td style={cellStyle}>{player.stats?.stl || "-"}</td>
+                <td style={cellStyle}>{player.stats?.blk || "-"}</td>
+                <td style={cellStyle}>{player.stats?.fgp || "-"}</td>
+                <td style={cellStyle}>{player.stats?.tptfgp || "-"}</td>
+                <td style={cellStyle}>{player.stats?.ftp || "-"}</td>
               </tr>
             ))}
           </tbody>
@@ -237,11 +207,8 @@ const TeamStatsPage = () => {
           table.table-striped tbody tr:nth-of-type(even) {
             background-color: #202020;
           }
-          span.dt-column-order {
+               span.dt-column-order {
             display: none;
-          }
-          table.dataTable tbody > tr.selected > * {
-            box-shadow: inset 0 0 0 9999px #444;
           }
         `}</style>
       </Box>
