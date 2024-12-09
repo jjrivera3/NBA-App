@@ -17,7 +17,6 @@ import Player from "../entities/Player";
 import playerAvatar from "../assets/player_avatar.png";
 import { Link } from "react-router-dom";
 import { svgString } from "../services/svgString";
-import { usePlayerStore } from "../usePlayerStore";
 import RatingTeamScore from "./RatingTeamScore";
 import nbaTeams from "../data/nbateams";
 import { Property } from "csstype"; // Import for type safety
@@ -55,8 +54,6 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
       setAvatarSrc(playerAvatar);
     }
   }, [player]);
-
-  const setPlayerData = usePlayerStore((state) => state.setPlayerData);
 
   const playerOverallRating = playerRating.overallAttribute ?? 0;
 
@@ -136,6 +133,15 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
               color={"gray.200"}
             >
               {player?.weight} lbs
+            </Text>
+            <Text
+              mt={1}
+              fontSize={{ base: "14px", md: "16px" }}
+              color={"gray.200"}
+            >
+              {player?.college === "-" || !player?.college
+                ? "-"
+                : player.college}
             </Text>
           </Stack>
 

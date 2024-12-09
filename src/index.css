@@ -40,3 +40,19 @@ button, a {
   font-weight: 500;
   font-size: 15px;
 }
+
+.athletes{
+  font-size: 13px!important;
+}
+
+@media screen and (min-width: 860px) {
+  .css-1726vc4 {
+      padding-right: 50px!important;
+  }
+}
+
+@media (max-width: 767px) {
+  .athletes {
+    font-size: 11px!important;
+  }
+}

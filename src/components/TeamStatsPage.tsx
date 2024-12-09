@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/react";
 import "datatables.net-bs5";
 import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 import $ from "jquery";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Utah_Jazz from "../assets/Utah_Jazz.png";
 import nbaTeams from "../data/nbateams";
@@ -33,6 +33,8 @@ const TeamStatsPage = () => {
   const espnLogo1 =
     selectedTeam?.teamID === "29" ? Utah_Jazz : selectedTeam?.espnLogo1;
   const defaultColor = "#000000";
+
+  console.log(selectedTeam);
 
   useEffect(() => {
     const table = $("#teamStatsTable").DataTable({
@@ -161,7 +163,7 @@ const TeamStatsPage = () => {
                   }}
                 >
                   <img
-                    src={player.espnHeadshot}
+                    src={player.nbaComHeadshot}
                     alt={player.longName || "Player Image"}
                     style={{
                       width: "40px",

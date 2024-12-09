@@ -1,24 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
-import APIClient from "../services/fantasy-stats-api-client";
-import NewsResponse from "../entities/NewsResponse";
+import APIClient from "../services/nba-api-client";
 
 interface NewsParams {
   playerID?: string;
   teamID?: string;
   teamAbv?: string;
-  topNews?: string;
 }
 
 const useNews = (params: NewsParams) => {
-  const apiClient = new APIClient<NewsResponse>("/getNBANews");
+  const apiClient = new APIClient("/nba-news");
 
   return useQuery({
     queryKey: ["news", params], // Include params in queryKey for uniqueness
     queryFn: async () => {
       // Ensure recentNews is always true
       const queryParams = {
-        ...params,
-        recentNews: "true", // Always include recentNews
+        params: { limit: "8" },
       };
 
       // Fetch the data using the API client with the provided query parameters

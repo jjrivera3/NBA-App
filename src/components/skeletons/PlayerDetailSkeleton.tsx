@@ -1,13 +1,4 @@
-import {
-  Box,
-  Flex,
-  Skeleton,
-  VStack,
-  HStack,
-  Image,
-  Grid,
-} from "@chakra-ui/react";
-import playerAvatar from "../../assets/player_avatar.png"; // Import default avatar
+import { Box, Flex, Skeleton, VStack, HStack, Grid } from "@chakra-ui/react";
 
 const PlayerDetailSkeleton = () => {
   return (
@@ -21,10 +12,10 @@ const PlayerDetailSkeleton = () => {
         boxShadow="2xl"
         rounded="md"
         overflow="hidden"
+        background="linear-gradient(360deg, #26262640 30%, #000000 125%)"
         border="1px solid #000"
         mt={5}
-        height={{ base: "700px", md: "460px" }} // Adjusted height for mobile
-        bg="#26262640"
+        height={{ base: "950px", md: "460px" }} // Adjusted height for mobile
       >
         <Flex
           direction={{ base: "column", md: "row" }}
@@ -42,23 +33,21 @@ const PlayerDetailSkeleton = () => {
             ml={{ base: 0, md: 10 }}
             mt={{ base: 12, md: 10 }}
           >
-            {/* Replace player image with avatar taking full image area */}
-            <Image
-              src={playerAvatar} // Use player avatar
-              alt="Loading Avatar"
-              boxSize={{ base: "200px", md: "250px" }} // Adjust to match actual height
+            {/* Flashing Skeleton for Avatar */}
+            <Skeleton
+              boxSize={{ base: "200px", md: "250px" }} // Match the player avatar size
               borderRadius="md"
-              objectFit="cover"
-              fallbackSrc={playerAvatar}
+              startColor="#262626"
+              endColor="#333333"
             />
             {/* Skeleton for Player Info */}
             <VStack
               alignItems={{ base: "center", md: "flex-start" }}
               spacing={2}
               mb={{ base: 4, md: 0 }}
-              ml={{ base: 0, md: 10 }}
+              ml={{ base: 0, md: 12 }}
             >
-              <Flex align="center">
+              <Flex align="center" mt={2} mb={4}>
                 <Skeleton height="25px" width="25px" borderRadius="full" />
                 <Skeleton height="20px" width="100px" ml={2} />
               </Flex>
@@ -73,9 +62,9 @@ const PlayerDetailSkeleton = () => {
 
           {/* Skeletons stacked on top of each other */}
           <VStack
-            spacing={4}
-            mt={{ base: 5, md: 10 }}
-            mr={{ base: 0, md: "140px" }}
+            spacing={5}
+            mt={{ base: 5, md: 14 }}
+            mr={{ base: 0, md: "145px" }}
             align={{ base: "center", md: "flex-start" }}
           >
             <Skeleton height="20px" width="150px" />
@@ -115,7 +104,7 @@ const PlayerDetailSkeleton = () => {
         <Flex
           justify="space-between"
           align="center"
-          mt={{ base: 5, md: 10 }}
+          mt={{ base: 5, md: 12 }}
           paddingX="15px"
           paddingY="10px"
           height="100px"

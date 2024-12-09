@@ -4,8 +4,9 @@ import {
   Text,
   VStack,
   useBreakpointValue,
+  Button,
 } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import hero_bg from "../assets/hero_bg.jpeg";
 import TeamGrid from "./TeamGrid";
 import TeamSchedule from "./TeamSchedule";
@@ -43,7 +44,7 @@ function HeroSection() {
             borderRadius="md"
             boxShadow="xl"
             textAlign="center"
-            h={["300px", "300px"]} // Smaller height for mobile
+            h={["350px", "300px"]} // Smaller height for mobile
             display="flex"
             alignItems="center"
             justifyContent="center"
@@ -62,7 +63,7 @@ function HeroSection() {
             {/* Text Content */}
             <VStack spacing={4} zIndex={2}>
               <Text
-                fontSize={["xl", "3xl"]} // Adjust font size for mobile
+                fontSize={["lg", "3xl"]} // Adjust font size for mobile
                 fontWeight={600}
                 color="#f8991d"
                 textShadow="2px 2px 8px rgba(0, 0, 0, 0.99)"
@@ -71,7 +72,7 @@ function HeroSection() {
               </Text>
               <Text
                 fontSize={["sm", "lg"]} // Adjust font size for mobile
-                maxW="1000px"
+                maxW="1200px"
                 textShadow="2px 2px 8px rgba(0, 0, 0, 0.99)"
                 px={[0, 0]} // Add padding for better readability on mobile
                 textAlign={textAlign}
@@ -81,6 +82,18 @@ function HeroSection() {
                 gain valuable insights, and explore everything NBA. Stay in the
                 game with us!
               </Text>
+              {/* Compare Players Button */}
+              <Link to="/compare-players">
+                <Button
+                  colorScheme="orange"
+                  bg="#f8991d"
+                  _hover={{ bg: "#d87d12" }}
+                  size="md"
+                  mt={4}
+                >
+                  Compare Players
+                </Button>
+              </Link>
             </VStack>
           </Box>
         </>

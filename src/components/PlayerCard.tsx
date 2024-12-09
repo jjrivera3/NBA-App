@@ -1,24 +1,22 @@
 import {
-  Heading,
   Avatar,
   Box,
+  Button,
   Center,
   Flex,
-  Text,
-  Stack,
-  Button,
-  Image,
-  useColorModeValue,
-  Spinner,
+  Heading,
   HStack,
+  Image,
+  Spinner,
+  Stack,
+  Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
-import Player from "../entities/Player";
-import playerAvatar from "../assets/player_avatar.png";
-import { Link } from "react-router-dom";
-import { svgString } from "../services/svgString";
 import { useState } from "react";
-import { useTeamStore } from "../useTeamStore";
-import { usePlayerStore } from "../usePlayerStore";
+import { Link } from "react-router-dom";
+import playerAvatar from "../assets/player_avatar.png";
+import Player from "../entities/Player";
+import { svgString } from "../services/svgString";
 import RatingTeamScore from "./RatingTeamScore";
 
 interface Props {

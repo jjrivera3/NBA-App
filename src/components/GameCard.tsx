@@ -176,7 +176,7 @@ const GameCard: React.FC<GameProps> = ({ game }) => {
               </Text>
               <Box
                 mx={2}
-                color="white"
+                color="#f8991d"
                 style={{
                   marginLeft: isAwayWinner ? "-3px" : undefined,
                   marginRight: isHomeWinner ? "-3px" : undefined,

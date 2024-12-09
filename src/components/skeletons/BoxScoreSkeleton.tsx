@@ -34,8 +34,8 @@ const BoxScoreSkeleton = () => {
           <Flex align="center" justify={{ base: "center", md: "space-evenly" }}>
             {/* Away Team */}
             <Flex direction="row" align="center">
-              <Flex direction="column" align="center" mx={4}>
-                <SkeletonCircle size={{ base: "60px", md: "100px" }} />
+              <Flex direction="column" align="center" mx={8}>
+                <SkeletonCircle size={{ base: "60px", md: "80px" }} />
                 <SkeletonText mt={2} noOfLines={1} width="50px" />
                 <SkeletonText mt={1} noOfLines={1} width="30px" />
               </Flex>
@@ -47,8 +47,8 @@ const BoxScoreSkeleton = () => {
             {/* Home Team */}
             <Flex direction="row" align="center">
               <Skeleton height="40px" width="70px" />
-              <Flex direction="column" align="center" mx={4}>
-                <SkeletonCircle size={{ base: "60px", md: "100px" }} />
+              <Flex direction="column" align="center" mx={8}>
+                <SkeletonCircle size={{ base: "60px", md: "80px" }} />
                 <SkeletonText mt={2} noOfLines={1} width="50px" />
                 <SkeletonText mt={1} noOfLines={1} width="30px" />
               </Flex>
