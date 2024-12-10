@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useBreakpointValue } from "@chakra-ui/react";
 import "datatables.net-bs5";
 import "datatables.net-bs5/css/dataTables.bootstrap5.min.css";
 import $ from "jquery";
@@ -155,7 +155,8 @@ const TeamStatsPage = () => {
                 <td
                   style={{
                     ...cellStyle,
-                    fontWeight: "bold",
+                    fontWeight: "600",
+                    fontSize: useBreakpointValue({ base: "12px", md: "14px" }),
                     color: "white",
                     display: "flex",
                     alignItems: "center",
@@ -172,8 +173,13 @@ const TeamStatsPage = () => {
                       objectFit: "cover",
                     }}
                   />
-                  {player.longName}
+                  {useBreakpointValue({
+                    base: player.shortName, // Display shortName on mobile
+                    md: player.shortName, // Display shortName on mobile
+                    lg: player.longName, // Display longName on medium screens and up
+                  })}
                 </td>
+
                 <td style={cellStyle}>{player.pos}</td>
                 <td style={cellStyle}>{player.stats?.gamesPlayed || "-"}</td>
                 <td style={cellStyle}>{player.stats?.mins || "-"}</td>

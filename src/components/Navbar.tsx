@@ -169,6 +169,25 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
                 Compare Players
               </ChakraLink>
 
+              <ChakraLink
+                as={Link}
+                to="/about"
+                fontSize="lg"
+                _hover={{ color: "#f37021" }}
+                onClick={onClose}
+              >
+                About
+              </ChakraLink>
+              <ChakraLink
+                as="a"
+                href="mailto:joseph@heatcheckhub.com"
+                fontSize="lg"
+                _hover={{ color: "#f37021" }}
+                onClick={onClose}
+              >
+                Contact
+              </ChakraLink>
+
               {isMobile && (
                 <Box width="100%" mt={4}>
                   <TeamList

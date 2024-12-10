@@ -22,13 +22,13 @@ const Footer = () => {
             About
           </Link>
           <Link
-            href="/contact"
+            href="mailto:joseph@heatcheckhub.com"
             _hover={{ textDecoration: "underline", color: "gray.400" }}
           >
             Contact
           </Link>
           <Link
-            href="/privacy"
+            href="/privacypolicy"
             _hover={{ textDecoration: "underline", color: "gray.400" }}
           >
             Privacy Policy

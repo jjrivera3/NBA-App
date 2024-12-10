@@ -1,9 +1,10 @@
 import axios, { AxiosRequestConfig } from "axios";
 
+// Use Vite's import.meta.env to access the environment variable
 const basketballAxiosInstance = axios.create({
   baseURL: "https://basketball-head.p.rapidapi.com",
   headers: {
-    "x-rapidapi-key": "256fd56781msh523522a92b2e3a3p117802jsndb7be0b6b755",
+    "x-rapidapi-key": import.meta.env.VITE_RAPIDAPI_KEY || "", // Access API key from .env
     "x-rapidapi-host": "basketball-head.p.rapidapi.com",
   },
 });

@@ -9,6 +9,9 @@ import Scoreboard from "./components/Scoreboard/Scoreboard";
 import BoxScore from "./components/BoxScore";
 import ComparePlayers from "./pages/ComparePlayers";
 import TeamStatsPage from "./components/TeamStatsPage";
+import PrivacyPolicy from "./components/PrivacyPolicy";
+
+import AboutPage from "./components/AboutPage";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +54,14 @@ const router = createBrowserRouter([
       {
         path: ":teamAbv/team-stats",
         element: <TeamStatsPage />,
+      },
+      {
+        path: "/privacypolicy",
+        element: <PrivacyPolicy />,
+      },
+      {
+        path: "/about",
+        element: <AboutPage />,
       },
     ],
   },
