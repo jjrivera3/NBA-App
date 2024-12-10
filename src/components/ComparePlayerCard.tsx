@@ -110,10 +110,21 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
                 fontSize={{ base: "14px", md: "16px" }}
                 fontWeight={500}
                 fontFamily={"body"}
+                textAlign="center"
+                lineHeight={5}
               >
-                {player?.espnName}
+                {useBreakpointValue({
+                  base: (
+                    <>
+                      {player?.espnName?.split(" ")[0]} <br />
+                      {player?.espnName?.split(" ")[1]}
+                    </>
+                  ),
+                  md: player?.espnName,
+                })}
               </Heading>
             </Flex>
+
             <HStack mt={{ base: 0, md: 3 }} mb={3}>
               <RatingTeamScore playerRating={playerOverallRating} />
             </HStack>

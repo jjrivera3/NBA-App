@@ -11,13 +11,13 @@ import {
   Tr,
   useBreakpointValue,
 } from "@chakra-ui/react";
+import { useEffect } from "react"; // Import useEffect
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa";
+import { useLocation, useParams } from "react-router-dom";
 import { BoxScoreData, Player } from "../entities/BoxScoreTypes";
 import useBoxScore from "../hooks/useBoxScore";
-import { useParams, useLocation } from "react-router-dom";
 import { formatDateTime } from "../utils/scoreboardUtils";
 import BoxScoreSkeleton from "./skeletons/BoxScoreSkeleton";
-import { useEffect } from "react"; // Import useEffect
 
 const BoxScore = () => {
   const { gameId } = useParams<{ gameId: string }>();

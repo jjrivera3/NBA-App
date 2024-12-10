@@ -3,7 +3,7 @@ import axios, { AxiosRequestConfig } from "axios";
 const nbaAxiosInstance = axios.create({
   baseURL: "https://api-basketball-nba.p.rapidapi.com",
   headers: {
-    "x-rapidapi-key": import.meta.env.VITE_RAPIDAPI_KEY || "", // Access NBA API key from environment variable
+    "x-rapidapi-key": import.meta.env.VITE_RAPIDAPI_KEY || "",
     "x-rapidapi-host": "api-basketball-nba.p.rapidapi.com",
   },
 });

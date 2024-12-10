@@ -109,10 +109,9 @@ const useGameData = () => {
       const shortDetail = game.status.type.shortDetail || "";
       const gameDate = competition ? new Date(competition.date) : new Date();
 
-      // Ensure gameDateFormatted is always a string
       const gameDateFormatted =
         formatGameDate(gameDate) === formatGameDate(today)
-          ? "Today"
+          ? formatGameDate(today) // Use today's formatted date
           : formatGameDate(gameDate) || ""; // Default to an empty string if undefined
 
       const oddsDetails =

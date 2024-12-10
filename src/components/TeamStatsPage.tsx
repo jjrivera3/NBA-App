@@ -34,7 +34,7 @@ const TeamStatsPage = () => {
     selectedTeam?.teamID === "29" ? Utah_Jazz : selectedTeam?.espnLogo1;
   const defaultColor = "#000000";
 
-  console.log(selectedTeam);
+  const showImage = useBreakpointValue({ base: false, md: true });
 
   useEffect(() => {
     const table = $("#teamStatsTable").DataTable({
@@ -48,40 +48,19 @@ const TeamStatsPage = () => {
           orderSequence: ["desc", "asc"],
           targets: Array.from({ length: 10 }, (_, i) => i + 2),
         },
-        { targets: 1, width: "80px" }, // Position column width
+        { targets: 1, width: "80px" },
       ],
       rowCallback: (row, _data, index) => {
         $(row).css("background-color", index % 2 === 0 ? "#2b2b2b" : "#202020");
+        $(row)
+          .find("td")
+          .not(":first")
+          .each((_, td) => {
+            $(td).addClass("custom-td-class");
+          });
       },
       destroy: true,
     });
-
-    $("#teamStatsTable tbody").on("click", "tr", function () {
-      const selectedData = table.row(this).data();
-      console.log("Selected Row Data:", selectedData);
-      $(this).toggleClass("selected-row");
-    });
-
-    $("#teamStatsTable tbody")
-      .on("mouseover", "tr", function () {
-        $(this).addClass("highlight");
-      })
-      .on("mouseout", "tr", function () {
-        $(this).removeClass("highlight");
-      });
-
-    $("#teamStatsTable th")
-      .on("mouseover", function () {
-        const columnIndex = $(this).index();
-        $("#teamStatsTable tbody tr").each(function () {
-          $(this).find("td").eq(columnIndex).addClass("highlight-column");
-        });
-      })
-      .on("mouseout", function () {
-        $("#teamStatsTable tbody tr")
-          .find("td")
-          .removeClass("highlight-column");
-      });
 
     return () => {
       table.destroy();
@@ -123,7 +102,14 @@ const TeamStatsPage = () => {
           teamAbv={teamAbv ?? ""}
         />
       </Box>
-      <Box overflowX="auto" background="#26262640" padding="5px">
+
+      <Box
+        overflowX="auto"
+        background="#26262640"
+        padding="5px"
+        position="relative"
+        maxWidth="100%" // Ensure the box fits within the screen
+      >
         <table
           id="teamStatsTable"
           className="table table-striped table-bordered"
@@ -155,7 +141,7 @@ const TeamStatsPage = () => {
                 <td
                   style={{
                     ...cellStyle,
-                    fontWeight: "600",
+                    fontWeight: "500",
                     fontSize: useBreakpointValue({ base: "12px", md: "14px" }),
                     color: "white",
                     display: "flex",
@@ -163,20 +149,21 @@ const TeamStatsPage = () => {
                     gap: "10px",
                   }}
                 >
-                  <img
-                    src={player.nbaComHeadshot}
-                    alt={player.longName || "Player Image"}
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                    }}
-                  />
+                  {showImage && (
+                    <img
+                      src={player.nbaComHeadshot}
+                      alt={player.longName || "Player Image"}
+                      style={{
+                        width: "35px",
+                        height: "35px",
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  )}
                   {useBreakpointValue({
                     base: player.shortName, // Display shortName on mobile
-                    md: player.shortName, // Display shortName on mobile
-                    lg: player.longName, // Display longName on medium screens and up
+                    md: player.longName, // Display longName on medium screens and up
                   })}
                 </td>
 
@@ -215,8 +202,51 @@ const TeamStatsPage = () => {
           table.table-striped tbody tr:nth-of-type(even) {
             background-color: #202020;
           }
-               span.dt-column-order {
+          span.dt-column-order {
             display: none;
+          } 
+          .custom-td-class {
+            font-weight: normal;
+            text-align: center;
+            padding: 5px;
+          }
+          table.table.dataTable.table-striped>tbody>tr:nth-of-type(2n+1)>* {
+            box-shadow: none;
+          }
+          /* Mobile-specific adjustments */
+          @media (max-width: 500px) {
+            table#teamStatsTable td {
+              width: 155px !important;
+            }
+          }
+
+          /* Custom scrollbar styles */
+          ::-webkit-scrollbar {
+            height: 10px;
+          }
+
+          ::-webkit-scrollbar-track {
+            background: transparent;
+          }
+
+          ::-webkit-scrollbar-thumb {
+            background: #f8991d;
+            border-radius: 10px;
+          }
+
+          ::-webkit-scrollbar-thumb:hover {
+            background: #f8991d;
+          }
+
+          /* Optional: Add a shadow effect at the end of the scrollable area */
+          .scroll-indicator {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 15px;
+            background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.5));
+            pointer-events: none;
           }
         `}</style>
       </Box>

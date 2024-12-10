@@ -23,10 +23,14 @@ const Layout = () => {
     }
   }, [location.pathname]);
 
+  // Determine padding based on the current page
+  const pagePadding = location.pathname === "/compare-players" ? 2 : 5;
+  const pageMargin = location.pathname === "/compare-players" ? 8 : 0;
+
   return (
     <>
       <NavBar onTeamSelect={handleTeamSelect} selectedTeamId={selectedTeamId} />
-      <Box padding={5}>
+      <Box padding={pagePadding} mt={pageMargin}>
         <Grid
           templateAreas={{
             base: `"nav" "main"`,
