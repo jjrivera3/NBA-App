@@ -27,7 +27,7 @@ export interface FetchResponse<T> {
 const fantasyStatsAxiosInstance = axios.create({
   baseURL: "https://tank01-fantasy-stats.p.rapidapi.com",
   headers: {
-    "x-rapidapi-key": "256fd56781msh523522a92b2e3a3p117802jsndb7be0b6b755",
+    "x-rapidapi-key": import.meta.env.VITE_RAPIDAPI_KEY || "", // Access Fantasy API key from environment variable
     "x-rapidapi-host": "tank01-fantasy-stats.p.rapidapi.com",
   },
 });

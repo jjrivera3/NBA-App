@@ -4,7 +4,7 @@ import axios, { AxiosRequestConfig } from "axios";
 const basketballAxiosInstance = axios.create({
   baseURL: "https://basketball-head.p.rapidapi.com",
   headers: {
-    "x-rapidapi-key": import.meta.env.VITE_RAPIDAPI_KEY || "", // Access API key from .env
+    "x-rapidapi-key": import.meta.env.VITE_RAPIDAPI_KEY || "",
     "x-rapidapi-host": "basketball-head.p.rapidapi.com",
   },
 });
