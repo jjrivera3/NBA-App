@@ -16,7 +16,7 @@ const UpcomingGameSkeleton: React.FC = () => {
       <Text mt={2} fontSize="xl" fontWeight="bold">
         Upcoming Game
       </Text>
-      <Box height="180px" mt={4} mb={2}>
+      <Box height="165px" mt={4} mb={2}>
         <Flex align="center" justify="space-evenly">
           {/* Left Side - Away Team Placeholder */}
           <Flex align="center">

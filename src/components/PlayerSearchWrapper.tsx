@@ -5,6 +5,7 @@ import ratings from "../data/ratings";
 import useTeamColor from "../hooks/useTeamColor";
 import ComparePlayerCard from "./ComparePlayerCard";
 import { normalizeName } from "../utils/normalizeName";
+import { getMappedPlayerName2 } from "../utils/playerNameMap2";
 
 interface PlayerSearchWrapperProps {
   label: string;
@@ -27,10 +28,14 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
 
   useEffect(() => {
     if (selectedPlayer && !selectedPlayer.rating) {
-      const normalizedPlayerName = normalizeName(selectedPlayer.longName);
+      // Map the playerName to its standardized version
+      let playerName = normalizeName(selectedPlayer.longName);
+      if (playerName) {
+        playerName = getMappedPlayerName2(playerName);
+      }
 
       const rating = ratings.find(
-        (rating) => normalizeName(rating.name) === normalizedPlayerName
+        (rating) => normalizeName(rating.name) === playerName
       );
 
       const playerWithRating = { ...selectedPlayer, rating: rating || null };
@@ -39,8 +44,6 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
 
       if (rating) {
         onPlayerSelect(playerWithRating, rating);
-        console.log("playerwithrating", playerWithRating);
-        console.log("rating", rating);
       }
     }
   }, [selectedPlayer, onPlayerSelect]);
@@ -84,7 +87,11 @@ const PlayerSearchWrapper: React.FC<PlayerSearchWrapperProps> = ({
   };
 
   const handlePlayerSelect = (player: any) => {
-    setSelectedPlayer(player);
+    // Map the playerName to its standardized version
+    let playerName = normalizeName(player.longName);
+
+    const updatedPlayer = { ...player, longName: playerName };
+    setSelectedPlayer(updatedPlayer);
     setSearchText("");
     setFilteredPlayers([]);
   };

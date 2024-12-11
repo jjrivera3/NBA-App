@@ -23,7 +23,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 interface NavBarProps {
-  onTeamSelect: (teamId: string, teamAbv: string) => void;
+  onTeamSelect: (teamId: string | null, teamAbv: string) => void;
   selectedTeamId: string | null;
 }
 
@@ -43,7 +43,7 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
   const logoSize = useBreakpointValue({ base: "28px", md: "34px" });
   const logoTextSize = useBreakpointValue({ base: "18px", md: "17px" });
 
-  const handleSelectTeam = (teamId: string, teamAbv: string) => {
+  const handleSelectTeam = (teamId: string | null, teamAbv: string) => {
     onTeamSelect(teamId, teamAbv);
     onClose();
     onSearchClose();
@@ -86,7 +86,10 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
 
       {!isMobile && (
         <Box flex="1" marginX={4} overflow="visible">
-          <SearchInput onSearchClose={onSearchClose} />
+          <SearchInput
+            onSearchClose={onSearchClose}
+            onTeamSelect={onTeamSelect}
+          />
         </Box>
       )}
 
@@ -146,7 +149,10 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
                 to="/"
                 fontSize="lg"
                 _hover={{ color: "#f37021" }}
-                onClick={onClose}
+                onClick={() => {
+                  onClose();
+                  onTeamSelect(null, ""); // Reset selected team when navigating
+                }}
               >
                 Home
               </ChakraLink>
@@ -155,7 +161,10 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
                 to="/scoreboard"
                 fontSize="lg"
                 _hover={{ color: "#f37021" }}
-                onClick={onClose}
+                onClick={() => {
+                  onClose();
+                  onTeamSelect(null, ""); // Reset selected team when navigating
+                }}
               >
                 Scoreboard
               </ChakraLink>
@@ -164,17 +173,22 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
                 to="/compare-players"
                 fontSize="lg"
                 _hover={{ color: "#f37021" }}
-                onClick={onClose}
+                onClick={() => {
+                  onClose();
+                  onTeamSelect(null, ""); // Reset selected team when navigating
+                }}
               >
                 Compare Players
               </ChakraLink>
-
               <ChakraLink
                 as={Link}
                 to="/about"
                 fontSize="lg"
                 _hover={{ color: "#f37021" }}
-                onClick={onClose}
+                onClick={() => {
+                  onClose();
+                  onTeamSelect(null, ""); // Reset selected team when navigating
+                }}
               >
                 About
               </ChakraLink>
@@ -183,7 +197,10 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
                 href="mailto:joseph@heatcheckhub.com"
                 fontSize="lg"
                 _hover={{ color: "#f37021" }}
-                onClick={onClose}
+                onClick={() => {
+                  onClose();
+                  onTeamSelect(null, ""); // Reset selected team when navigating
+                }}
               >
                 Contact
               </ChakraLink>
@@ -209,7 +226,10 @@ const NavBar: React.FC<NavBarProps> = ({ onTeamSelect, selectedTeamId }) => {
           <DrawerHeader>Search</DrawerHeader>
           <DrawerBody overflow="visible">
             <Box overflow="visible">
-              <SearchInput onSearchClose={onSearchClose} />
+              <SearchInput
+                onSearchClose={onSearchClose}
+                onTeamSelect={onTeamSelect} // Pass down onTeamSelect
+              />
             </Box>
           </DrawerBody>
         </DrawerContent>

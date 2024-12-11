@@ -19,16 +19,22 @@ import { usePlayerAttributesStore } from "../usePlayerAttributesStore";
 import { usePlayerStore } from "../usePlayerStore";
 import { normalizeName } from "../utils/normalizeName";
 import PlayerDetailSkeleton from "../components/skeletons/PlayerDetailSkeleton";
+import { getMappedPlayerName } from "../utils/playerNameMap";
 
 const PlayerDetailPage = () => {
   const { player, firstColor, teamID, setPlayerData } = usePlayerStore(
     (state) => state
   );
-  const { playerName } = useParams<{ playerName: string }>(); // Capture playerName from the URL
+  let { playerName } = useParams<{ playerName: string }>();
+
+  // Map the playerName to its standardized version
+  if (playerName) {
+    playerName = getMappedPlayerName(playerName);
+  }
+
   const { data: findPlayer, isLoading: isPlayerLoading } = useFindPlayerId(
     playerName || ""
   );
-
   // Safely access findPlayer data
   const normalizedPlayerName = findPlayer?.body?.[0]?.espnName
     ? normalizeName(findPlayer.body[0].espnName)
@@ -45,7 +51,6 @@ const PlayerDetailPage = () => {
   const playerWithRating = findPlayer?.body?.[0]
     ? { ...findPlayer.body[0], rating }
     : null;
-  console.log("Player with rating:", playerWithRating?.rating.team);
 
   useEffect(() => {
     if (playerWithRating) {
@@ -59,8 +64,6 @@ const PlayerDetailPage = () => {
           (team) => team.teamId === playerWithRating.teamID
         );
 
-        console.log(team?.name);
-
         setPlayerData({
           player: playerWithRating,
           firstColor: team?.info.colors[0] || "#000000",
@@ -70,8 +73,6 @@ const PlayerDetailPage = () => {
           teamName: playerWithRating.rating.team || "unknown1",
           playerRating: playerWithRating.rating,
         });
-
-        console.log("Updated player store with:", playerWithRating);
       }
     }
   }, [playerWithRating, player, setPlayerData]);
@@ -186,24 +187,25 @@ const PlayerDetailPage = () => {
         )}
       </Box>
 
-      <Box
-        as="section"
-        padding="20px"
-        borderRadius="md"
-        w="full"
-        mt={5}
-        bg="#26262640"
-        boxShadow="lg"
-        rounded="md"
-        border="1px solid #000"
-      >
-        {playerStatsData?.playerStats.body && (
-          <StatsTable
-            stats={playerStatsData.playerStats.body}
-            nbateams={nbateams}
-          />
+      {playerStatsData?.playerStats?.body &&
+        playerStatsData.playerStats.body.length > 0 && (
+          <Box
+            as="section"
+            padding="20px"
+            borderRadius="md"
+            w="full"
+            mt={5}
+            bg="#26262640"
+            boxShadow="lg"
+            rounded="md"
+            border="1px solid #000"
+          >
+            <StatsTable
+              stats={playerStatsData.playerStats.body}
+              nbateams={nbateams}
+            />
+          </Box>
         )}
-      </Box>
 
       <Box
         as="section"

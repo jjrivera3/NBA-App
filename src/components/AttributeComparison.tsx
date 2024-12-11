@@ -15,6 +15,11 @@ const AttributeComparison: React.FC<AttributeComparisonProps> = ({
 }) => {
   const difference = player1Value - player2Value;
 
+  const getDifferenceColor = (diff: number) => {
+    if (diff === 0) return "gray.500";
+    return diff > 0 ? "green.500" : "red.500";
+  };
+
   return (
     <Flex
       justify="space-evenly"
@@ -24,7 +29,7 @@ const AttributeComparison: React.FC<AttributeComparisonProps> = ({
     >
       <HStack>
         <Text
-          color={difference > 0 ? "green.500" : "red.500"}
+          color={getDifferenceColor(difference)}
           textAlign="center"
           fontSize="13px"
           fontWeight="500"
@@ -84,7 +89,7 @@ const AttributeComparison: React.FC<AttributeComparisonProps> = ({
           {player2Value}
         </Text>
         <Text
-          color={-difference > 0 ? "green.500" : "red.500"}
+          color={getDifferenceColor(-difference)}
           fontSize="13px"
           fontWeight="500"
           display="flex"

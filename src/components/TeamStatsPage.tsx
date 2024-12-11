@@ -34,7 +34,7 @@ const TeamStatsPage = () => {
     selectedTeam?.teamID === "29" ? Utah_Jazz : selectedTeam?.espnLogo1;
   const defaultColor = "#000000";
 
-  const showImage = useBreakpointValue({ base: false, md: true });
+  const showImage = useBreakpointValue({ base: false, md: false, lg: true });
 
   useEffect(() => {
     const table = $("#teamStatsTable").DataTable({
@@ -48,7 +48,7 @@ const TeamStatsPage = () => {
           orderSequence: ["desc", "asc"],
           targets: Array.from({ length: 10 }, (_, i) => i + 2),
         },
-        { targets: 1, width: "80px" },
+        { targets: 0, width: "280px" },
       ],
       rowCallback: (row, _data, index) => {
         $(row).css("background-color", index % 2 === 0 ? "#2b2b2b" : "#202020");
@@ -87,6 +87,8 @@ const TeamStatsPage = () => {
     lineHeight: "var(--chakra-lineHeights-4)",
     borderBottom: "1px solid var(--chakra-colors-gray-700)",
   };
+
+  console.log(playersWithRatings);
 
   return (
     <>
@@ -131,7 +133,11 @@ const TeamStatsPage = () => {
               <th style={thStyle}>STL</th>
               <th style={thStyle}>BLK</th>
               <th style={thStyle}>FG%</th>
+              <th style={thStyle}>FGM</th>
+              <th style={thStyle}>FGA</th>
               <th style={thStyle}>3P%</th>
+              <th style={thStyle}>3PM</th>
+              <th style={thStyle}>3PA</th>
               <th style={thStyle}>FT%</th>
             </tr>
           </thead>
@@ -142,7 +148,7 @@ const TeamStatsPage = () => {
                   style={{
                     ...cellStyle,
                     fontWeight: "500",
-                    fontSize: useBreakpointValue({ base: "12px", md: "14px" }),
+                    fontSize: useBreakpointValue({ base: "12px", md: "13px" }),
                     color: "white",
                     display: "flex",
                     alignItems: "center",
@@ -163,7 +169,8 @@ const TeamStatsPage = () => {
                   )}
                   {useBreakpointValue({
                     base: player.shortName, // Display shortName on mobile
-                    md: player.longName, // Display longName on medium screens and up
+                    md: player.shortName, // Display shortName on mobile
+                    lg: player.longName, // Display longName on medium screens and up
                   })}
                 </td>
 
@@ -176,7 +183,11 @@ const TeamStatsPage = () => {
                 <td style={cellStyle}>{player.stats?.stl || "-"}</td>
                 <td style={cellStyle}>{player.stats?.blk || "-"}</td>
                 <td style={cellStyle}>{player.stats?.fgp || "-"}</td>
+                <td style={cellStyle}>{player.stats?.fgm || "-"}</td>
+                <td style={cellStyle}>{player.stats?.fga || "-"}</td>
                 <td style={cellStyle}>{player.stats?.tptfgp || "-"}</td>
+                <td style={cellStyle}>{player.stats?.tptfgm || "-"}</td>
+                <td style={cellStyle}>{player.stats?.tptfga || "-"}</td>
                 <td style={cellStyle}>{player.stats?.ftp || "-"}</td>
               </tr>
             ))}
@@ -213,6 +224,11 @@ const TeamStatsPage = () => {
           table.table.dataTable.table-striped>tbody>tr:nth-of-type(2n+1)>* {
             box-shadow: none;
           }
+          table.table-striped tbody tr:hover {
+            background-color: #444 !important; /* Highlight color */
+            font-weight: bold !important; /* Optional: Make text bold */
+            cursor: pointer; /* Optional: Change cursor to pointer */
+}
           /* Mobile-specific adjustments */
           @media (max-width: 500px) {
             table#teamStatsTable td {
@@ -220,34 +236,8 @@ const TeamStatsPage = () => {
             }
           }
 
-          /* Custom scrollbar styles */
-          ::-webkit-scrollbar {
-            height: 10px;
-          }
-
-          ::-webkit-scrollbar-track {
-            background: transparent;
-          }
-
-          ::-webkit-scrollbar-thumb {
-            background: #f8991d;
-            border-radius: 10px;
-          }
-
-          ::-webkit-scrollbar-thumb:hover {
-            background: #f8991d;
-          }
-
-          /* Optional: Add a shadow effect at the end of the scrollable area */
-          .scroll-indicator {
-            position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            width: 15px;
-            background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.5));
-            pointer-events: none;
-          }
+        
+        
         `}</style>
       </Box>
     </>

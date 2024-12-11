@@ -12,9 +12,14 @@ const Layout = () => {
   const location = useLocation();
   const isMobile = useBreakpointValue({ base: true, lg: false });
 
-  const handleTeamSelect = (teamId: string, teamAbv: string) => {
-    setSelectedTeamId(teamId);
-    navigate(`/${teamAbv.toLowerCase()}`);
+  const handleTeamSelect = (teamId: string | null, teamAbv: string) => {
+    if (teamId === null) {
+      setSelectedTeamId(null);
+      navigate(`/`); // Navigate to the home page or any default route
+    } else {
+      setSelectedTeamId(teamId);
+      navigate(`/${teamAbv.toLowerCase()}`);
+    }
   };
 
   useEffect(() => {
@@ -23,14 +28,10 @@ const Layout = () => {
     }
   }, [location.pathname]);
 
-  // Determine padding based on the current page
-  const pagePadding = location.pathname === "/compare-players" ? 2 : 5;
-  const pageMargin = location.pathname === "/compare-players" ? 8 : 0;
-
   return (
     <>
       <NavBar onTeamSelect={handleTeamSelect} selectedTeamId={selectedTeamId} />
-      <Box padding={pagePadding} mt={pageMargin}>
+      <Box padding={5}>
         <Grid
           templateAreas={{
             base: `"nav" "main"`,

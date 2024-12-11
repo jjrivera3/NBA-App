@@ -306,7 +306,12 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
                   fontWeight: "bold", // Make the font bold
                 }}
               >
-                {lastStat.season === "N/A" ? "" : lastStat.season}{" "}
+                {lastStat && lastStat.season
+                  ? lastStat.season === "N/A"
+                    ? "Rookie Season"
+                    : lastStat.season
+                  : "Rookie Season"}
+
                 {/* Remove 'N/A' */}
               </td>
               <td className="team-cell team-cell-custom" style={cellStyle}>

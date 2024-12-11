@@ -1,17 +1,24 @@
-import { Flex, HStack, Image, Text, VStack } from "@chakra-ui/react";
+import { Button, Flex, HStack, Image, Text, VStack } from "@chakra-ui/react";
 import RatingScore from "../RatingScore";
 import { usePlayerStore } from "../../usePlayerStore";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { useNavigate, useParams } from "react-router-dom"; // For navigation
 
 const PlayerInfo = () => {
-  const { player, teamName, espnLogo1 } = usePlayerStore((state) => state); // Get player from store
+  const { player, teamName, espnLogo1, firstColor } = usePlayerStore(
+    (state) => state
+  ); // Get player from store
+
+  const navigate = useNavigate(); // React Router hook for navigation
+  const { teamAbv } = useParams<{ teamAbv: string }>();
+
+  // Back to Team Button Click Handler
+  const handleBackToTeamClick = () => {
+    navigate(`/${teamAbv}`); // Correctly use navigate
+  };
 
   // Define the responsive font size as a constant
   const responsiveFontSize = { base: 22, sm: 24, md: 22, xl: 32 };
-
-  const fontSize =
-    player?.espnName === "Shai Gilgeous-Alexander"
-      ? responsiveFontSize
-      : responsiveFontSize;
 
   if (!player) return null; // Handle case when player is not available
 
@@ -34,10 +41,10 @@ const PlayerInfo = () => {
         </Text>
       </Flex>
       <HStack align="flex-start" spacing={2}>
-        <Text fontSize={fontSize} fontWeight="200" color="white">
+        <Text fontSize={responsiveFontSize} fontWeight="200" color="white">
           {player.espnName.split(" ")[0]} {/* First name */}
         </Text>
-        <Text fontSize={fontSize} fontWeight="600" color="white">
+        <Text fontSize={responsiveFontSize} fontWeight="600" color="white">
           {player.espnName.split(" ").slice(1).join(" ")} {/* Last name */}
         </Text>
       </HStack>
@@ -50,6 +57,18 @@ const PlayerInfo = () => {
       >
         #{player.jerseyNum} • {player.pos}
       </Text>
+      <Button
+        onClick={handleBackToTeamClick}
+        zIndex="10"
+        color="#fff"
+        variant="solid"
+        background={firstColor || "#000"} // Provide a fallback color
+        size="sm"
+        borderRadius="md"
+        leftIcon={<ChevronLeftIcon />} // Add the backwards caret
+      >
+        Back to Team
+      </Button>
     </VStack>
   );
 };

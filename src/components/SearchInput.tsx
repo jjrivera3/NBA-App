@@ -19,9 +19,12 @@ import ratings from "../data/ratings";
 
 interface SearchInputProps {
   onSearchClose: () => void;
+  onTeamSelect: (teamId: string | null, teamAbv: string) => void; // Add onTeamSelect prop
 }
-
-const SearchInput: React.FC<SearchInputProps> = ({ onSearchClose }) => {
+const SearchInput: React.FC<SearchInputProps> = ({
+  onSearchClose,
+  onTeamSelect,
+}) => {
   const ref = useRef<HTMLInputElement>(null);
   const [filteredPlayers, setFilteredPlayers] = useState<Player[]>([]);
   const [searchText, setSearchText] = useState("");
@@ -70,6 +73,9 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearchClose }) => {
           rating: playerRating || null,
         };
 
+        // Reset selected team
+        onTeamSelect(null, "");
+
         handleSelectPlayer(
           updatedPlayer.longName,
           updatedPlayer.playerID,
@@ -93,6 +99,9 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearchClose }) => {
       ...player,
       rating: playerRating || null,
     };
+
+    // Reset selected team
+    onTeamSelect(null, "");
 
     handleSelectPlayer(
       updatedPlayer.longName,
