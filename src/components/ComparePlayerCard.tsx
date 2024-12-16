@@ -70,6 +70,33 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
     md: "row",
   });
 
+  const calculateAge = (birthDate: string | number): number => {
+    let birthDateString: string;
+
+    // If `birthDate` is a number, assume it's a Unix timestamp
+    if (typeof birthDate === "number") {
+      birthDateString = new Date(birthDate).toLocaleDateString("en-US");
+    } else {
+      birthDateString = birthDate;
+    }
+
+    const birthDateObject = new Date(birthDateString); // Parse the birth date
+    const today = new Date(); // Get the current date
+
+    let age = today.getFullYear() - birthDateObject.getFullYear(); // Calculate the year difference
+    const monthDiff = today.getMonth() - birthDateObject.getMonth(); // Calculate the month difference
+    const dayDiff = today.getDate() - birthDateObject.getDate(); // Calculate the day difference
+
+    // Adjust the age if the current month and day are before the birth month and day
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+      age--;
+    }
+
+    return age; // Return the calculated age
+  };
+
+  const playerAge = calculateAge(player.bDay);
+
   return (
     <Center mt={5} py={{ base: 0, md: 2 }}>
       <Box
@@ -132,21 +159,28 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
               #{player?.jerseyNum} | {player?.pos}
             </Text>
             <Text
-              mt={1}
+              mt={2}
+              fontSize={{ base: "14px", md: "16px" }}
+              color={"gray.200"}
+            >
+              {playerAge} yrs old
+            </Text>
+            <Text
+              mt={2}
               fontSize={{ base: "14px", md: "16px" }}
               color={"gray.200"}
             >
               {player?.height}"
             </Text>
             <Text
-              mt={1}
+              mt={2}
               fontSize={{ base: "14px", md: "16px" }}
               color={"gray.200"}
             >
               {player?.weight} lbs
             </Text>
             <Text
-              mt={1}
+              mt={2}
               fontSize={{ base: "14px", md: "16px" }}
               color={"gray.200"}
             >

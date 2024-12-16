@@ -6,7 +6,7 @@ export default interface Player {
   longName: any;
   exp: string;
   college: string;
-  bDay?: string;
+  bDay: number;
   stats: Stats;
   teamId: string;
   team: string;

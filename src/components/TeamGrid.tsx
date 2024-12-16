@@ -80,6 +80,8 @@ const TeamGrid = ({ teamAbv }: TeamGridProps) => {
     setPlayersWithRatings,
   ]);
 
+  console.log(playersWithRatings);
+
   return (
     <>
       {isTeamInfoLoading ? (

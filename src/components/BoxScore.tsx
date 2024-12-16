@@ -2,6 +2,7 @@ import {
   Box,
   Flex,
   Image,
+  Link,
   Table,
   Tbody,
   Td,
@@ -11,24 +12,22 @@ import {
   Tr,
   useBreakpointValue,
 } from "@chakra-ui/react";
-import { useEffect } from "react"; // Import useEffect
+import { useEffect } from "react";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa";
-import { useLocation, useParams } from "react-router-dom";
+import { Link as RouterLink, useLocation, useParams } from "react-router-dom";
 import { BoxScoreData, Player } from "../entities/BoxScoreTypes";
 import useBoxScore from "../hooks/useBoxScore";
-import { formatDateTime } from "../utils/scoreboardUtils";
 import BoxScoreSkeleton from "./skeletons/BoxScoreSkeleton";
 
 const BoxScore = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const location = useLocation();
-  const { game } = location.state || {}; // Retrieve game and selectedDate from state
-  const { selectedEvent } = location.state || {}; // Retrieve the passed selectedEvent
+  const { game } = location.state || {};
+  const { selectedEvent } = location.state || {};
 
   useEffect(() => {
-    // Scroll to the top of the page when the component loads
     window.scrollTo(0, 0);
-  }, []); // Empty dependency array ensures this runs only on mount
+  }, []);
 
   const options = {
     refetchOnWindowFocus: true,
@@ -44,7 +43,6 @@ const BoxScore = () => {
   const showImage = useBreakpointValue({ base: false, md: true });
 
   if (isLoading) return <BoxScoreSkeleton />;
-
   if (isError)
     return <Text color="red.500">Error loading box score data.</Text>;
 
@@ -62,17 +60,44 @@ const BoxScore = () => {
   const isAwayWinner = (awayScore ?? 0) > (homeScore ?? 0);
   const isHomeWinner = (homeScore ?? 0) > (awayScore ?? 0);
 
-  const formatColor = (color: string | undefined) => {
-    return color && !color.startsWith("#") ? `#${color}` : color || "gray";
+  const formatColor = (color: string | undefined) =>
+    color && !color.startsWith("#") ? `#${color}` : color || "gray";
+
+  const normalizeStatus = (status: string | undefined) => {
+    switch (status) {
+      case "STATUS_FINAL":
+      case "Final":
+        return "Final";
+      case "STATUS_IN_PROGRESS":
+      case "In Progress":
+        return "In Progress";
+      case "STATUS_SCHEDULED":
+      case "Scheduled":
+        return "Scheduled";
+      default:
+        return "Unknown";
+    }
   };
 
+  const gameStatus = normalizeStatus(game?.statusType);
+
   const renderBoxScoreHeader = () => {
-    const isFinal =
-      game?.statusType ||
-      selectedEvent.competitions[0].status.type.name === "STATUS_FINAL";
-    const isScheduled = game?.statusType === "Scheduled";
-    const isInProgress = game?.statusType === "In Progress";
-    const formattedTime = formatDateTime(game?.date);
+    const isFinal = gameStatus === "Final";
+
+    const formattedDate = game?.date
+      ? new Date(game.date).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        })
+      : game?.gameDateFormatted
+      ? game.gameDateFormatted
+      : "Date Unavailable";
+
+    const shortDetail =
+      game?.shortDetail ||
+      selectedEvent?.competitions[0]?.status.type.shortDetail;
+
+    console.log(game.gameDateFormatted);
 
     return (
       <Box mt={7} borderRadius="md" boxShadow="2xl" overflow="hidden">
@@ -82,17 +107,14 @@ const BoxScore = () => {
         </Flex>
 
         <Box
-          padding="35px"
+          padding="35px 0px"
           textAlign="center"
           background="linear-gradient(180deg, #484848 0%, #2e2e2e 100%, #353535 100%)"
           border="0px 1px 1px 1px solid #000"
           position="relative"
         >
           <Box mt={4} mb={2}>
-            <Flex
-              align="center"
-              justify={{ base: "center", md: "space-evenly" }}
-            >
+            <Flex align="center" justify="space-evenly">
               {/* Away Team */}
               <Flex direction="row" align="center">
                 <Flex direction="column" align="center" mx={2}>
@@ -123,7 +145,6 @@ const BoxScore = () => {
                   >
                     {awayScore}
                   </Text>
-                  {/* Show caret only if the game is final and the away team is the winner */}
                   {isAwayWinner && isFinal && (
                     <FaCaretLeft fontSize="24px" style={{ color: "#f8991d" }} />
                   )}
@@ -142,7 +163,6 @@ const BoxScore = () => {
               {/* Home Team */}
               <Flex direction="row" align="center">
                 <Flex align="center">
-                  {/* Show caret only if the game is final and the home team is the winner */}
                   {isHomeWinner && isFinal && (
                     <FaCaretRight
                       fontSize="24px"
@@ -181,64 +201,34 @@ const BoxScore = () => {
             </Flex>
           </Box>
 
-          {/* New Top-Left Box */}
+          {/* Game Short Detail and Date */}
           <Box
-            maxW="220px"
             display="flex"
+            justifyContent="space-between"
             alignItems="center"
-            flexDirection="column"
-            whiteSpace="nowrap"
             position="absolute"
             top={5}
             left={5}
+            right={5}
           >
+            {/* Left: Game Short Detail */}
             <Text
               fontWeight={600}
               fontSize="14px"
-              color={isFinal ? "white" : "#20da77"}
+              color={isFinal ? "white" : "#20da77"} // White for "Final," green for "In Progress"
             >
-              {game?.shortDetail
-                ? `${game.shortDetail} - ${
-                    game.date
-                      ? new Date(game.date).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                        })
-                      : game.gameDateFormatted
-                  }`
-                : selectedEvent?.competitions?.[0]?.status?.type?.shortDetail
-                ? `${selectedEvent.competitions[0].status.type.shortDetail} - ${
-                    selectedEvent.date
-                      ? new Date(selectedEvent.date).toLocaleDateString(
-                          "en-US",
-                          {
-                            month: "short",
-                            day: "numeric",
-                          }
-                        )
-                      : "Date Unavailable"
-                  }`
-                : isScheduled
-                ? formattedTime
-                : "Status Unavailable"}
+              {isFinal ? `Final - ${formattedDate}` : shortDetail}
             </Text>
 
-            {isInProgress && (
-              <Box
-                width="100%"
-                height="2px"
-                overflow="hidden"
-                position="relative"
-                mt={1}
+            {/* Right: Date for Non-Final Games */}
+            {!isFinal && (
+              <Text
+                fontSize="14px"
+                fontWeight={600}
+                color="white" // White text for non-final games
               >
-                <Box
-                  width="100%"
-                  height="2px"
-                  backgroundColor="#20da77"
-                  position="absolute"
-                  animation="animation-ariwm7 1.4s infinite alternate cubic-bezier(0.21, 0.85, 0.34, 0.98)"
-                />
-              </Box>
+                {formattedDate}
+              </Text>
             )}
           </Box>
         </Box>
@@ -250,16 +240,13 @@ const BoxScore = () => {
     const team = playerData.team;
     const { names, athletes, totals } = playerData.statistics[0];
 
-    // Define the desired stat order
     const statOrder = ["MIN", "PTS", "REB", "AST"];
 
-    // Reorder the `names` array
     const reorderedNames = [
       ...statOrder,
       ...names.filter((name) => !statOrder.includes(name)),
     ];
 
-    // Reorder each athlete's stats to match the new order
     const reorderedAthletes = athletes.map((athlete) => ({
       ...athlete,
       stats: [
@@ -271,7 +258,6 @@ const BoxScore = () => {
       ],
     }));
 
-    // Reorder totals to match the new order
     const reorderedTotals = [
       ...statOrder.map((statName) => {
         const index = names.indexOf(statName);
@@ -291,7 +277,6 @@ const BoxScore = () => {
         borderTop={`4px solid ${formatColor(team.color)}`}
         boxShadow="2xl"
       >
-        {/* Team Heading */}
         <Flex justify="space-between" align="center" mb={4} borderRadius="md">
           <Flex align="center">
             <Image
@@ -306,7 +291,6 @@ const BoxScore = () => {
           </Flex>
         </Flex>
 
-        {/* Player Statistics Table */}
         <Box overflowX="auto" position="relative" zIndex={10}>
           <Table variant="simple" size="sm">
             <Thead>
@@ -339,12 +323,16 @@ const BoxScore = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {reorderedAthletes.map((athlete, index) => (
+              {reorderedAthletes.map((athlete) => (
                 <Tr
-                  key={athlete.athlete.id || index}
-                  _hover={{ bg: "#333" }}
+                  role="group" // Group hover behavior
+                  _hover={{
+                    bg: "#333", // Highlight entire row background
+                    cursor: "pointer", // Show pointer cursor
+                  }}
                   borderBottom="1px solid #3a3a3a"
                 >
+                  {/* Player Name Cell */}
                   <Td
                     whiteSpace="nowrap"
                     position="sticky"
@@ -354,28 +342,44 @@ const BoxScore = () => {
                     width={{ base: "80px", md: "180px" }}
                     borderColor="#3a3a3a!important"
                     padding="5px"
+                    _groupHover={{
+                      bg: "#333", // Sync name cell background with row hover
+                    }}
                   >
-                    <Flex align="center">
-                      {showImage && (
-                        <Image
-                          src={athlete.athlete.headshot?.href}
-                          alt={athlete.athlete.displayName}
-                          boxSize={{ base: "30px", md: "40px" }}
-                          mr={2}
-                          borderRadius="full"
-                          objectFit="contain"
-                        />
-                      )}
-                      <Text
-                        fontWeight="600"
-                        whiteSpace="nowrap"
-                        fontSize={{ base: "11px", md: "13px" }}
-                        className="athletes"
-                      >
-                        {athlete.athlete.shortName}
-                      </Text>
-                    </Flex>
+                    <Link
+                      as={RouterLink}
+                      to={`/${team.abbreviation
+                        .toLowerCase()
+                        .replace(/\s+/g, "-")}/${athlete.athlete.displayName
+                        .toLowerCase()
+                        .replace(/\s+/g, "-")}`}
+                      textDecoration="none"
+                      _hover={{ textDecoration: "underline" }} // No underline on hover
+                    >
+                      <Flex align="center">
+                        {showImage && (
+                          <Image
+                            src={athlete.athlete.headshot?.href}
+                            alt={athlete.athlete.displayName}
+                            boxSize={{ base: "30px", md: "40px" }}
+                            mr={2}
+                            borderRadius="full"
+                            objectFit="contain"
+                          />
+                        )}
+                        <Text
+                          fontWeight="600"
+                          whiteSpace="nowrap"
+                          fontSize={{ base: "11px", md: "13px" }}
+                          color="white"
+                        >
+                          {athlete.athlete.shortName}
+                        </Text>
+                      </Flex>
+                    </Link>
                   </Td>
+
+                  {/* Stats Cells */}
                   {athlete.didNotPlay ? (
                     <Td
                       colSpan={reorderedNames.length}
@@ -394,6 +398,9 @@ const BoxScore = () => {
                         borderColor="#3a3a3a!important"
                         textAlign="center"
                         fontSize={{ base: "11px", md: "14px" }}
+                        _groupHover={{
+                          bg: "#333", // Sync stat cell background with row hover
+                        }}
                       >
                         {stat}
                       </Td>

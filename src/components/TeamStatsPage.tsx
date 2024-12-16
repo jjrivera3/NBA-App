@@ -45,25 +45,36 @@ const TeamStatsPage = () => {
       info: false,
       columnDefs: [
         {
-          orderSequence: ["desc", "asc"],
+          //@ts-ignore
+          orderSequence: ["desc", "asc", null],
           targets: Array.from({ length: 10 }, (_, i) => i + 2),
         },
         { targets: 0, width: "280px" },
       ],
       rowCallback: (row, _data, index) => {
         $(row).css("background-color", index % 2 === 0 ? "#2b2b2b" : "#202020");
-        $(row)
-          .find("td")
-          .not(":first")
-          .each((_, td) => {
-            $(td).addClass("custom-td-class");
-          });
       },
       destroy: true,
     });
 
+    // Add vertical column highlight
+    $("#teamStatsTable thead th")
+      .on("mouseover", function () {
+        const columnIndex = $(this).index();
+        $(`#teamStatsTable tbody tr`).each(function () {
+          $(this).find("td").eq(columnIndex).addClass("highlight-column");
+        });
+      })
+      .on("mouseout", function () {
+        const columnIndex = $(this).index();
+        $(`#teamStatsTable tbody tr`).each(function () {
+          $(this).find("td").eq(columnIndex).removeClass("highlight-column");
+        });
+      });
+
     return () => {
       table.destroy();
+      $("#teamStatsTable thead th").off("mouseover mouseout");
     };
   }, [playersWithRatings]);
 
@@ -213,9 +224,7 @@ const TeamStatsPage = () => {
           table.table-striped tbody tr:nth-of-type(even) {
             background-color: #202020;
           }
-          span.dt-column-order {
-            display: none;
-          } 
+    
           .custom-td-class {
             font-weight: normal;
             text-align: center;
@@ -229,6 +238,11 @@ const TeamStatsPage = () => {
             font-weight: bold !important; /* Optional: Make text bold */
             cursor: pointer; /* Optional: Change cursor to pointer */
 }
+            .highlight-column {
+  background-color: #444 !important; /* Highlight color */
+  font-weight: bold !important; /* Optional: Make text bold */
+}
+
           /* Mobile-specific adjustments */
           @media (max-width: 500px) {
             table#teamStatsTable td {

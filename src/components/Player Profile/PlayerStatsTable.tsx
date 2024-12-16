@@ -83,9 +83,9 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
       lengthChange: false,
       order: [[0, "asc"]],
       info: false,
-
+      //@ts-ignore
       columnDefs: statKeys.map((_, index) => ({
-        orderSequence: ["desc", "asc"],
+        orderSequence: ["desc", "asc", null],
         targets: index + 2,
       })),
       select: true,
@@ -96,8 +96,6 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
     });
 
     $("#statsTable tbody").on("click", "tr", function () {
-      const selectedData = table.row(this).data();
-      console.log("Selected Row Data:", selectedData);
       $(this).toggleClass("selected-row"); // Toggle selected class
     });
 
@@ -155,6 +153,8 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
     lineHeight: "var(--chakra-lineHeights-4)",
     borderBottom: "1px solid var(--chakra-colors-gray-700)",
   };
+
+  console.log(stats);
 
   return (
     <>
@@ -217,15 +217,13 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
                 return team.info.abbrev === row.team;
               });
 
-              const seattleColor = "#ffc200";
               const primaryColor =
                 row.team === "SEA"
-                  ? seattleColor
+                  ? "#ffc200"
+                  : row.team === "CHO"
+                  ? lighten(0.2, "#00788C") // Blue color for "CHA"
                   : teamData?.info.colors[0] || "#cccccc";
-              const teamColor =
-                row.team === "SEA"
-                  ? seattleColor
-                  : lighten(teamData?.light || 0.2, primaryColor);
+              const teamColor = lighten(teamData?.light || 0.2, primaryColor);
               const displayTeamAbbrev =
                 row.team === "N/A"
                   ? ""
@@ -233,6 +231,8 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
                   ? "PHO"
                   : row.team === "BRK"
                   ? "BKN"
+                  : row.team === "CHO"
+                  ? "CHA"
                   : row.team;
 
               return (
@@ -343,9 +343,7 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
         .selected-row {
           font-weight: 700 !important; /* Bold text for selected row */
         }
-        span.dt-column-order {
-          display: none;
-        }
+
         table.table.dataTable.table-striped > tbody > tr:nth-of-type(2n+1).selected > *,
         table.table.dataTable>tbody>tr.selected>* {
           box-shadow: inset 0 0 0 9999px #444;
@@ -365,6 +363,11 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
           width: 75px;
           max-width: 75px;
         }
+
+        table.dataTable thead>tr>th.dt-orderable-asc span.dt-column-order, table.dataTable thead>tr>th.dt-orderable-desc span.dt-column-order, table.dataTable thead>tr>th.dt-ordering-asc span.dt-column-order, table.dataTable thead>tr>th.dt-ordering-desc span.dt-column-order, table.dataTable thead>tr>td.dt-orderable-asc span.dt-column-order, table.dataTable thead>tr>td.dt-orderable-desc span.dt-column-order, table.dataTable thead>tr>td.dt-ordering-asc span.dt-column-order, table.dataTable thead>tr>td.dt-ordering-desc span.dt-column-order {
+    right: 0px;
+
+}
           
       `}</style>
       </Box>
