@@ -10,58 +10,30 @@ import BoxScore from "./components/BoxScore";
 import ComparePlayers from "./pages/ComparePlayers";
 import TeamStatsPage from "./components/TeamStatsPage";
 import PrivacyPolicy from "./components/PrivacyPolicy";
-
 import AboutPage from "./components/AboutPage";
+import RouteChangeTracker from "./RouteChangeTracker";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: <RouteChangeTracker />, // Track route changes here
     errorElement: <ErrorPage />,
     children: [
       {
-        index: true,
-        element: <HomePage />,
-      },
-      {
-        path: "scoreboard/:dateParam?",
-        element: <Scoreboard />,
-      },
-      {
-        path: ":teamAbv/schedule",
-        element: <TeamSchedule />,
-      },
-      {
-        path: ":teamAbv/depth-chart",
-        element: <DepthChart />,
-      },
-      {
-        path: ":teamAbv",
-        element: <HomePage />,
-      },
-      {
-        path: ":teamAbv/:playerName",
-        element: <PlayerDetailPage />,
-      },
-      {
-        path: "boxscore/:gameId",
-        element: <BoxScore />,
-      },
-      {
-        path: "/compare-players",
-        element: <ComparePlayers />,
-      },
-      {
-        path: ":teamAbv/team-stats",
-        element: <TeamStatsPage />,
-      },
-      {
-        path: "/privacypolicy",
-        element: <PrivacyPolicy />,
-      },
-      {
-        path: "/about",
-        element: <AboutPage />,
+        element: <Layout />, // Layout wrapper
+        children: [
+          { index: true, element: <HomePage /> },
+          { path: "scoreboard/:dateParam?", element: <Scoreboard /> },
+          { path: ":teamAbv/schedule", element: <TeamSchedule /> },
+          { path: ":teamAbv/depth-chart", element: <DepthChart /> },
+          { path: ":teamAbv", element: <HomePage /> },
+          { path: ":teamAbv/:playerName", element: <PlayerDetailPage /> },
+          { path: "boxscore/:gameId", element: <BoxScore /> },
+          { path: "compare-players", element: <ComparePlayers /> },
+          { path: ":teamAbv/team-stats", element: <TeamStatsPage /> },
+          { path: "privacypolicy", element: <PrivacyPolicy /> },
+          { path: "about", element: <AboutPage /> },
+        ],
       },
     ],
   },

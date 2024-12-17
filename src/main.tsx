@@ -6,6 +6,12 @@ import "./index.css";
 import router from "./routes";
 import theme from "./theme";
 
+declare global {
+  interface Window {
+    gtag: (...args: any[]) => void;
+  }
+}
+
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
 
@@ -13,10 +19,8 @@ const queryClient = new QueryClient();
 const container = document.getElementById("root");
 
 if (container) {
-  // Create the React root using React 18's createRoot API
   const root = createRoot(container);
 
-  // Render your application using root.render()
   root.render(
     <ChakraProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
