@@ -1,6 +1,6 @@
 # NBA Player Stats App
 
-Welcome to HEAT CHECK HUB, your go-to source for the latest NBA player stats, 2K ratings, live game scores, schedules, standings, and player news. Dive deep into detailed statistics, compare real-life performance with 2K ratings, and stay updated with everything NBA. Stay in the game with us!
+Welcome to **HEAT CHECK HUB**, your go-to source for the latest NBA player stats, 2K ratings, live game scores, schedules, standings, and player news. Dive deep into detailed statistics, compare real-life performance with 2K ratings, and stay updated with everything NBA. Stay in the game with us!
 
 ## Features
 
@@ -24,13 +24,26 @@ Welcome to HEAT CHECK HUB, your go-to source for the latest NBA player stats, 2K
 - **React Charts**: Library used for rendering charts to visualize player stats and team data.
 - **JavaScript/TypeScript**: Used for logic and data handling.
 
+## APIs Used
+
+The app utilizes the following APIs for fetching NBA data:
+
+1. [**API-Basketball-NBA**](https://rapidapi.com/belchiorarkad-FqvHs2EDOtP/api/api-basketball-nba)  
+   Provides comprehensive basketball data, including live scores, schedules, and team/player stats.
+
+2. [**Tank01 Fantasy Stats**](https://rapidapi.com/tank01/api/tank01-fantasy-stats)  
+   Offers player statistics, including advanced stats and fantasy performance.
+
+3. [**Basketball-Head API**](https://rapidapi.com/kdb-sports-kdb-sports-default/api/basketball-head)  
+   Delivers team and player-specific data, including game details and scoring summaries.
+
 ## Demo
 
 You can view a live demo of the application [here](#). _(Add link once deployed)_
 
 ## Screenshots
 
-![Alt text](./src/assets/Heat%20Check%20Hub%20Cover.png)
+![Homepage](./src/assets/Heat%20Check%20Hub%20Cover.png)
 
 ## Installation
 
@@ -41,3 +54,38 @@ To get started with the NBA Player Stats App locally, follow these steps:
 ```bash
 git clone https://github.com/your-username/nba-player-stats-app.git
 ```
+
+### 2. Install Dependencies
+
+```bash
+cd nba-player-stats-app
+npm install
+```
+
+### 3. Set Up Environment Variables
+
+```bash
+REACT_APP_API_BASKETBALL_NBA_KEY=your_api_key_here
+REACT_APP_TANK01_FANTASY_STATS_KEY=your_api_key_here
+REACT_APP_BASKETBALL_HEAD_KEY=your_api_key_here
+```
+
+### 4. Start the Development Server
+
+```bash
+npm start
+```
+
+## Contributing
+
+We welcome contributions to improve the NBA Player Stats App! Follow these steps:
+
+1. Fork the repository.
+2. Create a new branch: git checkout -b feature/YourFeatureName.
+3. Make your changes and commit them: git commit -m "Add some feature".
+4. Push to the branch: git push origin feature/YourFeatureName.
+5. Submit a pull request.
+
+## Contact
+
+For questions or feedback, reach out to: joseph@heatcheckhub.com
