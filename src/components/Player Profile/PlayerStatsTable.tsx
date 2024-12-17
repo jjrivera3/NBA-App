@@ -5,44 +5,8 @@ import "datatables.net-bs5";
 import "datatables.net-select";
 import { Box, Text } from "@chakra-ui/react";
 import { lighten } from "polished";
-
-interface Stat {
-  season: string;
-  team: string;
-  gamesPlayed: number;
-  gamesStarted: number;
-  minutesPerGame: number;
-  pointsPerGame: number;
-  reboundsPerGame: number;
-  assistsPerGame: number;
-  stealsPerGame: number;
-  blocksPerGame: number;
-  fieldGoalsMadePerGame: number;
-  fieldGoalAttemptsPerGame: number;
-  fieldGoalPercentage: number;
-  threePointFieldGoalsMadePerGame: number;
-  threePointFieldGoalAttemptsPerGame: number;
-  threePointFieldGoalPercentage: number;
-  freeThrowsMadePerGame: number;
-  freeThrowAttemptsPerGame: number;
-  freeThrowPercentage: number;
-  offensiveReboundsPerGame: number;
-  defensiveReboundsPerGame: number;
-  turnoversPerGame: number;
-  personalFoulsPerGame: number;
-  totalReboundsPerGame: number;
-}
-
-interface Team {
-  teamId: string;
-  name: string;
-  light: number;
-  info: {
-    abbrev: string;
-    colors: string[];
-    logoImage: string;
-  };
-}
+import { Stat } from "../../entities/Stats";
+import Team from "../../entities/Team";
 
 interface StatsTableProps {
   stats: Stat[];
@@ -90,10 +54,72 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
       })),
       select: true,
       rowCallback: function (row, _data, index) {
+        // Set the background color for alternate rows (optional)
         $(row).css("background-color", index % 2 === 0 ? "#2b2b2b" : "#202020");
+
+        const dataArray = _data as any[];
+
+        // Access the second element safely
+        const teamAbbrev = dataArray[1]; // The second column in the row is the team abbreviation
+
+        const teamData = nbateams.find((team) => {
+          if (
+            (teamAbbrev === "PHO" && team.info.abbrev === "PHX") ||
+            (teamAbbrev === "BRK" && team.info.abbrev === "BKN")
+          ) {
+            return true;
+          }
+          return team.info.abbrev === teamAbbrev;
+        });
+
+        const primaryColor =
+          teamAbbrev === "SEA"
+            ? "#ffc200"
+            : teamAbbrev === "CHO"
+            ? lighten(0.2, "#00788C") // Blue color for "CHA"
+            : teamData?.info.colors[0] || "#cccccc";
+        const teamColor = lighten(teamData?.light || 0.2, primaryColor);
+
+        // Apply teamColor to the text color (font color) of the first and second td (Season and Team)
+        $(row).find("td").eq(0).css("color", teamColor); // First td (Season)
+        $(row).find("td").eq(1).css("color", teamColor); // Second td (Team)
       },
-      destroy: true,
+      destroy: true, // To destroy the table and reinitialize when stats change
     });
+
+    // Reset table content and add new rows when stats change
+    const updateTable = () => {
+      table.clear(); // Clear existing data
+      table.rows.add(
+        stats.slice(0, -1).map((row) => {
+          const displayTeamAbbrev =
+            row.team === "N/A"
+              ? ""
+              : row.team === "PHO"
+              ? "PHO"
+              : row.team === "BRK"
+              ? "BKN"
+              : row.team === "CHO"
+              ? "CHA"
+              : row.team;
+
+          return [
+            row.season,
+            displayTeamAbbrev,
+            ...statKeys.map((key) =>
+              row.season === "Career" && key === "gamesPlayed"
+                ? totalGamesPlayed
+                : row.season === "Career" && key === "gamesStarted"
+                ? totalGamesStarted
+                : row[key]
+            ),
+          ];
+        })
+      );
+      table.draw(); // Redraw the table with new data
+    };
+
+    updateTable(); // Initial update
 
     $("#statsTable tbody").on("click", "tr", function () {
       $(this).toggleClass("selected-row"); // Toggle selected class
@@ -121,7 +147,7 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
     return () => {
       table.destroy();
     };
-  }, [stats]);
+  }, [stats, nbateams]); // Re-run effect on stats or nbateams change
 
   const totalGamesPlayed = stats.reduce((total, stat) => {
     return stat.season !== "Career" ? total + Number(stat.gamesPlayed) : total;
@@ -152,6 +178,7 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
     fontSize: "var(--chakra-fontSizes-sm)",
     lineHeight: "var(--chakra-lineHeights-4)",
     borderBottom: "1px solid var(--chakra-colors-gray-700)",
+    whiteSpace: "nowrap", // Prevent text from wrapping
   };
 
   console.log(stats);
@@ -173,7 +200,7 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
           className="table table-striped table-bordered"
           style={{
             minWidth: "1000px",
-            marginTop: "10px",
+            marginTop: "5px",
             borderCollapse: "collapse",
           }}
         >
@@ -205,81 +232,7 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
             </tr>
           </thead>
 
-          <tbody>
-            {stats.slice(0, -1).map((row, index) => {
-              const teamData = nbateams.find((team) => {
-                if (
-                  (row.team === "PHO" && team.info.abbrev === "PHX") ||
-                  (row.team === "BRK" && team.info.abbrev === "BKN")
-                ) {
-                  return true;
-                }
-                return team.info.abbrev === row.team;
-              });
-
-              const primaryColor =
-                row.team === "SEA"
-                  ? "#ffc200"
-                  : row.team === "CHO"
-                  ? lighten(0.2, "#00788C") // Blue color for "CHA"
-                  : teamData?.info.colors[0] || "#cccccc";
-              const teamColor = lighten(teamData?.light || 0.2, primaryColor);
-              const displayTeamAbbrev =
-                row.team === "N/A"
-                  ? ""
-                  : row.team === "PHO"
-                  ? "PHO"
-                  : row.team === "BRK"
-                  ? "BKN"
-                  : row.team === "CHO"
-                  ? "CHA"
-                  : row.team;
-
-              return (
-                <tr key={index}>
-                  <td
-                    className="season-cell"
-                    style={{
-                      ...cellStyle,
-                      fontWeight: "bold",
-                      whiteSpace: "nowrap",
-                      color: teamColor,
-                      minWidth: "112px",
-                      width: "112px",
-                      maxWidth: "112px",
-                    }}
-                  >
-                    {row.season}
-                  </td>
-                  <td
-                    className="team-cell team-cell-custom"
-                    style={{
-                      ...cellStyle,
-                      fontWeight: "bold",
-                      color: teamColor,
-                    }}
-                  >
-                    {displayTeamAbbrev}
-                  </td>
-                  {statKeys.map((key, idx) => (
-                    <td
-                      key={idx}
-                      className="stats-cell"
-                      style={{
-                        ...cellStyle,
-                      }}
-                    >
-                      {row.season === "Career" && key === "gamesPlayed"
-                        ? totalGamesPlayed
-                        : row.season === "Career" && key === "gamesStarted"
-                        ? totalGamesStarted
-                        : row[key]}
-                    </td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
+          <tbody>{/* Rows will be inserted by DataTable */}</tbody>
         </table>
 
         <table
@@ -287,7 +240,7 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
           className="table table-striped table-bordered"
           style={{
             minWidth: "1000px",
-            marginTop: "10px",
+            marginTop: "5px",
             borderCollapse: "collapse",
           }}
         >
@@ -300,9 +253,9 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
                 className="season-cell"
                 style={{
                   ...cellStyle,
-                  minWidth: "112px",
-                  width: "112px",
-                  maxWidth: "112px",
+                  minWidth: "140px",
+                  width: "140px",
+                  maxWidth: "140px",
                   fontWeight: "bold", // Make the font bold
                 }}
               >
@@ -311,12 +264,9 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
                     ? "Rookie Season"
                     : lastStat.season
                   : "Rookie Season"}
-
-                {/* Remove 'N/A' */}
               </td>
               <td className="team-cell team-cell-custom" style={cellStyle}>
-                {lastStat.team === "N/A" ? "" : lastStat.team}{" "}
-                {/* Remove 'N/A' */}
+                {lastStat.team === "N/A" ? "" : lastStat.team}
               </td>
               {statKeys.map((key, idx) => (
                 <td key={idx} className="stats-cell" style={cellStyle}>
@@ -341,34 +291,53 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
           font-weight: 700 !important;
         }
         .selected-row {
-          font-weight: 700 !important; /* Bold text for selected row */
+          font-weight: 700 !important;
         }
-
         table.table.dataTable.table-striped > tbody > tr:nth-of-type(2n+1).selected > *,
-        table.table.dataTable>tbody>tr.selected>* {
+        table.table.dataTable > tbody > tr.selected > * {
           box-shadow: inset 0 0 0 9999px #444;
-          font-weight:700!important;
+          font-weight: 700 !important;
+        }
+ 
+
+        td.stats-cell {
+          font-weight: bold;
+                    text-align:center;
+          padding: var(--chakra-space-1) var(--chakra-space-4)!important;
         }
 
-        /* Apply styles to the stats-cell class */
-        .stats-cell {
-          min-width: 70px;
-          width: 70px;
-          max-width: 70px;
+        table.dataTable thead > tr > th.dt-orderable-asc span.dt-column-order,
+        table.dataTable thead > tr > th.dt-orderable-desc span.dt-column-order {
+          right: 0px;
         }
-
-        /* Apply styles to the team-cell-custom class only */
-        .team-cell-custom {
-          min-width: 75px;
+        table td:first-child { 
+          min-width: 140px;
+          padding: 5px 15px;
+          font-size: var(--chakra-fontSizes-sm);
+          font-weight: bold;
+          text-align:left;!important
+        }
+        table td:nth-child(2) { 
+          font-weight: bold;
+          text-align:left;!important
+          padding-left:15px;!important
+           min-width: 60px;
+          width: 60px;
+          max-width: 60px;
+        }
+        td {
+          font-size: var(--chakra-fontSizes-sm);
+          text-align:center;
+          padding: var(--chakra-space-1) var(--chakra-space-4)!important;
+                  min-width: 75px;
           width: 75px;
           max-width: 75px;
+   
+      }
+        td.dt-type-numeric {
+        text-align: left !important;
+
         }
-
-        table.dataTable thead>tr>th.dt-orderable-asc span.dt-column-order, table.dataTable thead>tr>th.dt-orderable-desc span.dt-column-order, table.dataTable thead>tr>th.dt-ordering-asc span.dt-column-order, table.dataTable thead>tr>th.dt-ordering-desc span.dt-column-order, table.dataTable thead>tr>td.dt-orderable-asc span.dt-column-order, table.dataTable thead>tr>td.dt-orderable-desc span.dt-column-order, table.dataTable thead>tr>td.dt-ordering-asc span.dt-column-order, table.dataTable thead>tr>td.dt-ordering-desc span.dt-column-order {
-    right: 0px;
-
-}
-          
       `}</style>
       </Box>
     </>

@@ -329,7 +329,7 @@ const TeamSchedule = () => {
                           );
                           const {
                             logoImage: opponentLogo,
-                            name: opponentName,
+                            abbrev: opponentAbbrev,
                           } = opponentDetails || {};
                           const gameTime = formatTime(game.gameTime_epoch);
                           const formattedDate = formatDate(game.gameDate);
@@ -361,6 +361,7 @@ const TeamSchedule = () => {
 
                           return (
                             <Tooltip
+                              key={game.gameID}
                               label="Click to view box score"
                               fontSize="sm"
                               placement="top"
@@ -370,7 +371,6 @@ const TeamSchedule = () => {
                               isDisabled={!score} // Tooltip only enabled if score exists
                             >
                               <Tr
-                                key={game.gameID}
                                 borderBottom="1px solid #2d2d2d"
                                 bg={index % 2 === 0 ? "#232323" : "#2A2A2A"}
                                 cursor={score ? "pointer" : "default"} // Only pointer cursor if score exists
@@ -411,7 +411,7 @@ const TeamSchedule = () => {
                                     {opponentLogo && (
                                       <Image
                                         src={opponentLogo}
-                                        alt={`${opponentName} logo`}
+                                        alt={`${opponentAbbrev} logo`}
                                         boxSize="25px"
                                         mr={2}
                                       />
@@ -421,7 +421,9 @@ const TeamSchedule = () => {
                                       fontSize="14px"
                                       color="white"
                                     >
-                                      {isMobile ? opponentAbbrev : opponentName}
+                                      {isMobile
+                                        ? opponentAbbrev
+                                        : opponentDetails?.name}
                                     </Text>
                                   </Flex>
                                 </Td>

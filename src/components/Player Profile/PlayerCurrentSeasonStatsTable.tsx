@@ -198,7 +198,13 @@ const PlayerCurrentSeasonStatsTable = ({
           <tbody>
             {player?.stats && (
               <tr>
-                <td style={{ ...cellStyle, whiteSpace: "nowrap" }}>
+                <td
+                  className="team-cell2"
+                  style={{
+                    ...cellStyle,
+                    whiteSpace: "nowrap",
+                  }}
+                >
                   {(() => {
                     const abbreviationMap: Record<string, string> = {
                       GS: "GSW",
@@ -228,6 +234,13 @@ const PlayerCurrentSeasonStatsTable = ({
                     );
                   })()}
                 </td>
+
+                <style>{`
+  .team-cell2 {
+    min-width: 215px!important;
+    width: 215px!important;
+  }
+`}</style>
 
                 <td style={cellStyle}>{player.stats.gamesPlayed}</td>
                 <td style={cellStyle}>{player.stats.mins}</td>

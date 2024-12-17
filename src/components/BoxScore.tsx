@@ -2,6 +2,7 @@ import {
   Box,
   Flex,
   Image,
+  keyframes,
   Link,
   Table,
   Tbody,
@@ -79,25 +80,39 @@ const BoxScore = () => {
     }
   };
 
-  const gameStatus = normalizeStatus(game?.statusType);
+  const gameStatus = normalizeStatus(
+    game?.statusType || selectedEvent?.competitions[0].status.type.name
+  );
 
   const renderBoxScoreHeader = () => {
     const isFinal = gameStatus === "Final";
+    const isInProgress = gameStatus === "In Progress"; // Check if game is in progress
 
-    const formattedDate = game?.date
+    const formattedDate = game?.gameDateFormatted
+      ? game.gameDateFormatted
+      : game?.date
       ? new Date(game.date).toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",
         })
-      : game?.gameDateFormatted
-      ? game.gameDateFormatted
+      : selectedEvent?.competitions[0]?.date
+      ? new Date(selectedEvent.competitions[0].date).toLocaleDateString(
+          "en-US",
+          {
+            month: "short",
+            day: "numeric",
+          }
+        )
       : "Date Unavailable";
 
     const shortDetail =
       game?.shortDetail ||
       selectedEvent?.competitions[0]?.status.type.shortDetail;
 
-    console.log(game.gameDateFormatted);
+    const lineAnimation = keyframes`
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+`;
 
     return (
       <Box mt={7} borderRadius="md" boxShadow="2xl" overflow="hidden">
@@ -231,6 +246,27 @@ const BoxScore = () => {
               </Text>
             )}
           </Box>
+          <Box width="100%" height="2px" overflow="hidden" position="relative">
+            <Box
+              width="5%"
+              height="2px"
+              backgroundColor="#20da77"
+              position="absolute"
+              marginTop={-5}
+              animation={`${lineAnimation} 1.7s infinite alternate cubic-bezier(0.21, 0.85, 0.34, 0.98)`}
+            />
+          </Box>
+
+          {/* Animated Line for In Progress Games */}
+          {isInProgress && (
+            <Box
+              position="absolute"
+              bottom="0"
+              left="0"
+              width="100%"
+              height="4px"
+            />
+          )}
         </Box>
       </Box>
     );
@@ -323,8 +359,9 @@ const BoxScore = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {reorderedAthletes.map((athlete) => (
+              {reorderedAthletes.map((athlete, index) => (
                 <Tr
+                  key={index}
                   role="group" // Group hover behavior
                   _hover={{
                     bg: "#333", // Highlight entire row background
