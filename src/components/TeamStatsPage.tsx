@@ -45,8 +45,7 @@ const TeamStatsPage = () => {
       info: false,
       columnDefs: [
         {
-          //@ts-ignore
-          orderSequence: ["desc", "asc", null],
+          orderSequence: ["desc", "asc", ""],
           targets: Array.from({ length: 10 }, (_, i) => i + 2),
         },
         { targets: 0, width: "280px" },
@@ -94,12 +93,20 @@ const TeamStatsPage = () => {
   const cellStyle: React.CSSProperties = {
     textAlign: "start",
     padding: "var(--chakra-space-2) var(--chakra-space-4)",
-    fontSize: "var(--chakra-fontSizes-sm)",
+    fontSize: useBreakpointValue({ base: "11px", md: "14px" }),
     lineHeight: "var(--chakra-lineHeights-4)",
     borderBottom: "1px solid var(--chakra-colors-gray-700)",
   };
 
-  console.log(playersWithRatings);
+  // Add the sticky header CSS
+  const stickyHeaderStyle: React.CSSProperties = {
+    position: "sticky",
+    top: 0,
+    zIndex: 2,
+    backgroundColor: "#1f1f1f", // Matches your background color
+    color: "#f9f9f9", // Matches the header text color
+    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.2)", // Optional: Adds shadow to the sticky header
+  };
 
   return (
     <>
@@ -119,7 +126,7 @@ const TeamStatsPage = () => {
       <Box
         overflowX="auto"
         background="#26262640"
-        padding="5px"
+        padding={{ base: 0, md: "5px" }}
         position="relative"
         maxWidth="100%" // Ensure the box fits within the screen
       >
@@ -134,8 +141,27 @@ const TeamStatsPage = () => {
         >
           <thead style={{ backgroundColor: "#1f1f1f", color: "#f9f9f9" }}>
             <tr>
-              <th style={thStyle}>Player</th>
-              <th style={thStyle}>Pos</th>
+              <th
+                style={{
+                  ...thStyle,
+                  ...stickyHeaderStyle,
+                  position: "sticky", // Make the header sticky
+                  left: 0, // Stick the first header on the left
+                  zIndex: 3, // Ensure it's above other rows
+                }}
+              >
+                Player
+              </th>
+              <th
+                style={{
+                  ...thStyle,
+                  position: "sticky", // Sticky for 'Pos' column
+                  left: 0, // Ensure it sticks alongside 'Player'
+                  zIndex: 2, // Slightly lower z-index than "Player"
+                }}
+              >
+                Pos
+              </th>
               <th style={thStyle}>GP</th>
               <th style={thStyle}>MIN</th>
               <th style={thStyle}>PTS</th>
@@ -152,110 +178,100 @@ const TeamStatsPage = () => {
               <th style={thStyle}>FT%</th>
             </tr>
           </thead>
+
           <tbody>
-            {playersWithRatings.map((player) => (
-              <tr key={player.playerID}>
-                <td
+            {playersWithRatings.map((player, index) => {
+              const rowColor = index % 2 === 0 ? "#2b2b2b" : "#202020"; // Alternating background colors
+              return (
+                <tr
+                  key={player.playerID}
                   style={{
-                    ...cellStyle,
-                    fontWeight: "500",
-                    fontSize: useBreakpointValue({ base: "12px", md: "13px" }),
-                    color: "white",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
+                    backgroundColor: rowColor, // Apply alternating row color
                   }}
                 >
-                  {showImage && (
-                    <img
-                      src={player.nbaComHeadshot}
-                      alt={player.longName || "Player Image"}
-                      style={{
-                        width: "35px",
-                        height: "35px",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  )}
-                  {useBreakpointValue({
-                    base: player.shortName, // Display shortName on mobile
-                    md: player.shortName, // Display shortName on mobile
-                    lg: player.longName, // Display longName on medium screens and up
-                  })}
-                </td>
-
-                <td style={cellStyle}>{player.pos}</td>
-                <td style={cellStyle}>{player.stats?.gamesPlayed || "-"}</td>
-                <td style={cellStyle}>{player.stats?.mins || "-"}</td>
-                <td style={cellStyle}>{player.stats?.pts || "-"}</td>
-                <td style={cellStyle}>{player.stats?.reb || "-"}</td>
-                <td style={cellStyle}>{player.stats?.ast || "-"}</td>
-                <td style={cellStyle}>{player.stats?.stl || "-"}</td>
-                <td style={cellStyle}>{player.stats?.blk || "-"}</td>
-                <td style={cellStyle}>{player.stats?.fgp || "-"}</td>
-                <td style={cellStyle}>{player.stats?.fgm || "-"}</td>
-                <td style={cellStyle}>{player.stats?.fga || "-"}</td>
-                <td style={cellStyle}>{player.stats?.tptfgp || "-"}</td>
-                <td style={cellStyle}>{player.stats?.tptfgm || "-"}</td>
-                <td style={cellStyle}>{player.stats?.tptfga || "-"}</td>
-                <td style={cellStyle}>{player.stats?.ftp || "-"}</td>
-              </tr>
-            ))}
+                  <td
+                    style={{
+                      ...cellStyle,
+                      position: "sticky",
+                      left: 0,
+                      zIndex: 1, // Keeps the player name above other rows
+                      fontWeight: "500",
+                      fontSize: useBreakpointValue({
+                        base: "12px",
+                        md: "13px",
+                      }),
+                      color: "white",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      backgroundColor: "inherit", // Inherit background color from row
+                    }}
+                  >
+                    {showImage && (
+                      <img
+                        src={player.nbaComHeadshot}
+                        alt={player.longName || "Player Image"}
+                        style={{
+                          width: "35px",
+                          height: "35px",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                        }}
+                      />
+                    )}
+                    {useBreakpointValue({
+                      base: player.shortName,
+                      md: player.shortName,
+                      lg: player.longName,
+                    })}
+                  </td>
+                  <td style={cellStyle}>{player.pos}</td>
+                  <td style={cellStyle}>{player.stats?.gamesPlayed || "-"}</td>
+                  <td style={cellStyle}>{player.stats?.mins || "-"}</td>
+                  <td style={cellStyle}>{player.stats?.pts || "-"}</td>
+                  <td style={cellStyle}>{player.stats?.reb || "-"}</td>
+                  <td style={cellStyle}>{player.stats?.ast || "-"}</td>
+                  <td style={cellStyle}>{player.stats?.stl || "-"}</td>
+                  <td style={cellStyle}>{player.stats?.blk || "-"}</td>
+                  <td style={cellStyle}>{player.stats?.fgp || "-"}</td>
+                  <td style={cellStyle}>{player.stats?.fgm || "-"}</td>
+                  <td style={cellStyle}>{player.stats?.fga || "-"}</td>
+                  <td style={cellStyle}>{player.stats?.tptfgp || "-"}</td>
+                  <td style={cellStyle}>{player.stats?.tptfgm || "-"}</td>
+                  <td style={cellStyle}>{player.stats?.tptfga || "-"}</td>
+                  <td style={cellStyle}>{player.stats?.ftp || "-"}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
-
-        <style>{`
-          .highlight {
-            background-color: #444 !important;
-            font-weight: bold !important;
-          }
-          .highlight-column {
-            background-color: #444 !important;
-            font-weight: bold !important;
-          }
-          .selected-row {
-            background-color: #333 !important;
-            font-weight: bold !important;
-          }
-          table.table-striped tbody tr:nth-of-type(odd) {
-            background-color: #2b2b2b;
-          }
-          table.table-striped tbody tr:nth-of-type(even) {
-            background-color: #202020;
-          }
-    
-          .custom-td-class {
-            font-weight: normal;
-            text-align: center;
-            padding: 5px;
-          }
-          table.table.dataTable.table-striped>tbody>tr:nth-of-type(2n+1)>* {
-            box-shadow: none;
-          }
-          table.table-striped tbody tr:hover {
-            background-color: #444 !important; /* Highlight color */
-            font-weight: bold !important; /* Optional: Make text bold */
-            cursor: pointer; /* Optional: Change cursor to pointer */
-}
-            .highlight-column {
-  background-color: #444 !important; /* Highlight color */
-  font-weight: bold !important; /* Optional: Make text bold */
-}
-
-          /* Mobile-specific adjustments */
-          @media (max-width: 500px) {
-            table#teamStatsTable td {
-              width: 155px !important;
-            }
-          }
-
-        
-        
-        `}</style>
       </Box>
     </>
   );
 };
+
+<style>{`
+.highlight-column {
+  background-color: #444 !important; /* Highlight color */
+  font-weight: bold !important; /* Optional: Make text bold */
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 500px) {
+  table#teamStatsTable td {
+    width: 155px !important;
+  }
+  span.dt-column-order {
+    right: 0px!important;
+  }
+  th.dt-type-numeric.dt-orderable-asc.dt-orderable-desc {
+    padding: 0px !important;
+  }
+  td.dt-type-numeric {
+    padding: 0 !important;
+  }
+}
+
+`}</style>;
 
 export default TeamStatsPage;

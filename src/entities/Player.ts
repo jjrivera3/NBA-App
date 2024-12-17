@@ -2,6 +2,7 @@ import Ratings from "./Ratings";
 import Stats from "./Stats";
 
 export default interface Player {
+  injury: any;
   statistics: any;
   longName: any;
   exp: string;

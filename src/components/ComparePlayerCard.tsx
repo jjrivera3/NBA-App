@@ -155,13 +155,18 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
             <HStack mt={{ base: 0, md: 3 }} mb={3}>
               <RatingTeamScore playerRating={playerOverallRating} />
             </HStack>
-            <Text fontSize={{ base: "14px", md: "16px" }} color={"gray.200"}>
+            <Text
+              fontSize={{ base: "14px", md: "16px" }}
+              color={"gray.200"}
+              className="mobilePlayerInfo"
+            >
               #{player?.jerseyNum} | {player?.pos}
             </Text>
             <Text
               mt={2}
-              fontSize={{ base: "14px", md: "16px" }}
+              fontSize={{ base: "13px", md: "16px" }}
               color={"gray.200"}
+              className="mobilePlayerInfo"
             >
               {playerAge} yrs old
             </Text>
@@ -169,6 +174,7 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
               mt={2}
               fontSize={{ base: "14px", md: "16px" }}
               color={"gray.200"}
+              className="mobilePlayerInfo"
             >
               {player?.height}"
             </Text>
@@ -176,6 +182,7 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
               mt={2}
               fontSize={{ base: "14px", md: "16px" }}
               color={"gray.200"}
+              className="mobilePlayerInfo"
             >
               {player?.weight} lbs
             </Text>
@@ -183,6 +190,7 @@ const ComparePlayerCard = ({ player, firstColor, playerRating }: Props) => {
               mt={2}
               fontSize={{ base: "14px", md: "16px" }}
               color={"gray.200"}
+              className="mobilePlayerInfo"
             >
               {player?.college === "-" || !player?.college
                 ? "-"

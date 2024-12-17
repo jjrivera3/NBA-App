@@ -7,7 +7,7 @@ const TeamHeadingSkeleton = () => {
       padding={5}
       paddingY="20px"
       paddingX="20px"
-      minHeight="125px"
+      minHeight={{ base: "350px", md: "125px" }}
       background="linear-gradient(295deg, #555 0%, rgba(0, 0, 0, 0.3) 60%, rgb(12 12 12 / 80%) 100%)"
     >
       <Flex
@@ -22,7 +22,7 @@ const TeamHeadingSkeleton = () => {
           mb={{ base: 4, md: 0 }}
         >
           {/* Logo and Team Name Skeleton */}
-          <Flex align="center" mb={2}>
+          <Flex align="center" mt={{ base: 6, md: 0 }} mb={2}>
             <Skeleton
               boxSize={{ base: "30px", md: "40px" }}
               borderRadius="full"
@@ -32,7 +32,7 @@ const TeamHeadingSkeleton = () => {
               noOfLines={1}
               spacing="4"
               skeletonHeight="5"
-              width={{ base: "120px", md: "160px" }}
+              width={{ base: "170px", md: "160px" }}
             />
           </Flex>
 

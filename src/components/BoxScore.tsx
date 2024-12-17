@@ -409,6 +409,7 @@ const BoxScore = () => {
                           whiteSpace="nowrap"
                           fontSize={{ base: "11px", md: "13px" }}
                           color="white"
+                          className="boxScoreName"
                         >
                           {athlete.athlete.shortName}
                         </Text>

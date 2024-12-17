@@ -10,7 +10,6 @@ import TeamHeading from "./TeamHeading";
 import Utah_Jazz from "../assets/Utah_Jazz.png";
 import PlayerCardSkeleton from "./skeletons/PlayerCardSkeleton";
 import TeamHeadingSkeleton from "./skeletons/TeamHeadSkeleton";
-
 import { useTeamStore } from "../useTeamStore";
 import { useEffect } from "react";
 import TeamGridProps from "../entities/TeamGriptProps";
@@ -79,8 +78,6 @@ const TeamGrid = ({ teamAbv }: TeamGridProps) => {
     playersWithRatings,
     setPlayersWithRatings,
   ]);
-
-  console.log(playersWithRatings);
 
   return (
     <>

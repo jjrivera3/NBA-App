@@ -181,8 +181,6 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
     whiteSpace: "nowrap", // Prevent text from wrapping
   };
 
-  console.log(stats);
-
   return (
     <>
       <Text
@@ -338,6 +336,22 @@ const StatsTable = ({ stats, nbateams }: StatsTableProps) => {
         text-align: left !important;
 
         }
+  /* Mobile-specific adjustments */
+  @media (max-width: 500px) {
+           td.sorting_1  { 
+      min-width: 115px!important;
+    }
+      td {
+    font-size: 12px;
+    padding: 0px;
+    min-width: 65px;
+}
+    table td:first-child {
+
+    font-size: 12px;
+}
+        }
+      
       `}</style>
       </Box>
     </>

@@ -170,7 +170,7 @@ const PlayerDetailPage = () => {
 
       <Box
         as="section"
-        padding="20px"
+        padding={{ base: "10px", md: "20px" }}
         borderRadius="md"
         w="full"
         mt={5}
@@ -191,7 +191,7 @@ const PlayerDetailPage = () => {
         playerStatsData.playerStats.body.length > 0 && (
           <Box
             as="section"
-            padding="20px"
+            padding={{ base: "10px", md: "20px" }}
             borderRadius="md"
             w="full"
             mt={5}

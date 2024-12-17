@@ -10,10 +10,12 @@ import {
   Spinner,
   Stack,
   Text,
+  Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import injuryIcon from "../assets/Injury_icon.png";
 import playerAvatar from "../assets/player_avatar.png";
 import Player from "../entities/Player";
 import { svgString } from "../services/svgString";
@@ -45,6 +47,9 @@ const PlayerCard = ({ player, firstColor }: Props) => {
     .replace(/\s+/g, "-")}`;
 
   const playerRating = player?.rating?.overallAttribute ?? 0;
+
+  // Check if player has injury description
+  const hasInjuryDescription = player?.injury?.description;
 
   return (
     <Center mt={5} py={{ base: 1, md: 2 }}>
@@ -80,11 +85,27 @@ const PlayerCard = ({ player, firstColor }: Props) => {
 
         <Box p={6}>
           <Stack spacing={0} align={"center"} mb={5}>
-            <Heading fontSize={"16px"} fontWeight={500} fontFamily={"body"}>
-              {player?.espnName}
-            </Heading>
+            {/* Center the name and icon together */}
+            <Flex align="center" justify="center" gap={1}>
+              <Heading fontSize={"16px"} fontWeight={500} fontFamily={"body"}>
+                {player?.espnName}
+              </Heading>
+              {hasInjuryDescription && (
+                <Tooltip
+                  label={player.injury.description}
+                  aria-label="Injury Description"
+                >
+                  <Image
+                    src={injuryIcon}
+                    alt="Injury Icon"
+                    boxSize="13px"
+                    ml="1px"
+                  />
+                </Tooltip>
+              )}
+            </Flex>
+
             <HStack mt={2} mb={2}>
-              {/* Pass the playerRating to the RatingTeamScore component */}
               <RatingTeamScore playerRating={playerRating} />
             </HStack>
             <Text fontSize={"15px"} color={"gray.400"}>
