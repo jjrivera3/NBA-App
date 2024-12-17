@@ -39,10 +39,11 @@ The app utilizes the following APIs for fetching NBA data:
 
 ## Demo
 
-You can view a live demo of the application [here](#). _(Add link once deployed)_
+You can view a live demo of the application [here](https://nba-app-ivory.vercel.app/)
 
 ## Screenshots
 
+Homepage
 ![Homepage](./src/assets/Heat%20Check%20Hub%20Cover.png)
 
 ## Installation
@@ -52,28 +53,26 @@ To get started with the NBA Player Stats App locally, follow these steps:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/nba-player-stats-app.git
+git clone https://github.com/your-username/nba-app.git
 ```
 
 ### 2. Install Dependencies
 
 ```bash
-cd nba-player-stats-app
+cd nba-app
 npm install
 ```
 
 ### 3. Set Up Environment Variables
 
 ```bash
-REACT_APP_API_BASKETBALL_NBA_KEY=your_api_key_here
-REACT_APP_TANK01_FANTASY_STATS_KEY=your_api_key_here
-REACT_APP_BASKETBALL_HEAD_KEY=your_api_key_here
+VITE_RAPIDAPI_KEY=your_api_key_here
 ```
 
 ### 4. Start the Development Server
 
 ```bash
-npm start
+npm run dev
 ```
 
 ## Contributing
