@@ -30,7 +30,7 @@ You can view a live demo of the application [here](#). _(Add link once deployed)
 
 ## Screenshots
 
-![Player Stats Page](/src/assets/Heat Check Hub Cover.png)
+![Alt text](./src/assets/Heat%20Check%20Hub%20Cover.png)
 
 ## Installation
 
