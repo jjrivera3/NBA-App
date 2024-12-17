@@ -52,7 +52,11 @@ const useGameData = () => {
     }
   );
 
-  const { data: yestData, error: yestError } = useYesterdaysTodaysGame(
+  const {
+    data: yestData,
+    isLoading: yestLoading,
+    error: yestError,
+  } = useYesterdaysTodaysGame(
     {
       ...yesterdayDate,
       limit: "0",
@@ -193,9 +197,11 @@ const useGameData = () => {
       return a.startTime.getTime() - b.startTime.getTime();
     });
 
+  const isLoading = todayLoading || yestLoading; // Combined loading state
+
   return {
     games,
-    isLoading: todayLoading,
+    isLoading, // Add isLoading for combined state
     error: todayError || yestError,
     refetch,
   };

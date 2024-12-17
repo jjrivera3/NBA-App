@@ -40,6 +40,8 @@ const TodaysGames = () => {
     sliderRef.current?.slickNext();
   };
 
+  console.log(games);
+
   // Refetch data on component mount
   useEffect(() => {
     refetch();
@@ -93,7 +95,7 @@ const TodaysGames = () => {
 
       {isLoading ? (
         <Slider {...settings}>
-          {Array(6)
+          {Array(5)
             .fill("")
             .map((_, index) => (
               <GameSkeleton key={index} />
