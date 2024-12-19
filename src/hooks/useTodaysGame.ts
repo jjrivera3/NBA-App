@@ -24,6 +24,7 @@ const useTodaysGame = (
     queryFn: async () => {
       const queryParams = { ...params };
       const data = await apiClient.getAll<GameData>({ params: queryParams });
+
       return data;
     },
     refetchOnWindowFocus: options.refetchOnWindowFocus,

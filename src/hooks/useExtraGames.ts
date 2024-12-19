@@ -14,14 +14,14 @@ interface GameData {
   // Add other properties from the structure if necessary
 }
 
-const useYesterdaysTodaysGame = (
+const useExtraGameData = (
   params: TodaysGameParams,
   p0: { refetchOnWindowFocus: boolean; staleTime: number }
 ) => {
   const apiClient = new APIClient("/nbascoreboard");
 
   return useQuery({
-    queryKey: ["yesterdaysGame", params], // Include params in queryKey for uniqueness
+    queryKey: ["extraGame", params], // Include params in queryKey for uniqueness
     queryFn: async () => {
       const queryParams = {
         ...params,
@@ -38,4 +38,4 @@ const useYesterdaysTodaysGame = (
   });
 };
 
-export default useYesterdaysTodaysGame;
+export default useExtraGameData;

@@ -40,8 +40,6 @@ const TodaysGames = () => {
     sliderRef.current?.slickNext();
   };
 
-  console.log(games);
-
   // Refetch data on component mount
   useEffect(() => {
     refetch();

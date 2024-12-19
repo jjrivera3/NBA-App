@@ -67,6 +67,12 @@ const useGameData = () => {
     }
   );
 
+  const totalEvents =
+    (yestData as GameData)?.events?.length +
+    (todayData as GameData)?.events?.length;
+
+  console.log(totalEvents);
+
   useEffect(() => {
     //@ts-ignore
     if (todayData?.events) {
@@ -199,11 +205,12 @@ const useGameData = () => {
 
   const isLoading = todayLoading || yestLoading; // Combined loading state
 
+  // Return the combined state with the refetch function
   return {
     games,
     isLoading, // Add isLoading for combined state
     error: todayError || yestError,
-    refetch,
+    refetch, // Ensure the refetch function is returned
   };
 };
 
