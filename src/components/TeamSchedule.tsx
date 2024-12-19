@@ -62,6 +62,8 @@ const TeamSchedule = () => {
       ? "GS"
       : teamAbv1 === "NOP"
       ? "NO"
+      : teamAbv1 === "PHX"
+      ? "PHO"
       : teamAbv1;
 
   // Check for a matching team in nbaTeamBoxScoreId

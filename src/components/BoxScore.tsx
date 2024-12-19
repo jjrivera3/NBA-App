@@ -385,11 +385,19 @@ const BoxScore = () => {
                   >
                     <Link
                       as={RouterLink}
-                      to={`/${team.abbreviation
-                        .toLowerCase()
-                        .replace(/\s+/g, "-")}/${athlete.athlete.displayName
-                        .toLowerCase()
-                        .replace(/\s+/g, "-")}`}
+                      to={`/${(() => {
+                        const adjustedAbbreviation =
+                          team.abbreviation.toLowerCase() === "gs"
+                            ? "gsw"
+                            : team.abbreviation.toLowerCase() === "sa"
+                            ? "sas"
+                            : team.abbreviation.toLowerCase() === "no"
+                            ? "nop"
+                            : team.abbreviation.toLowerCase();
+                        return `${adjustedAbbreviation}/${athlete.athlete.displayName
+                          .toLowerCase()
+                          .replace(/\s+/g, "-")}`;
+                      })()}`}
                       textDecoration="none"
                       _hover={{ textDecoration: "underline" }} // No underline on hover
                     >
