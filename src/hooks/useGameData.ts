@@ -8,7 +8,7 @@ const useGameData = () => {
   const [refetchInterval, setRefetchInterval] = useState<number | false>(false);
   const [staleTime, setStaleTime] = useState<number | undefined>(
     10 * 60 * 1000
-  ); // Default staleTime for non-live games
+  ); // Default staleTime for non-live games when not live
 
   const formatGameDate = (date: Date) => {
     if (!date) return ""; // Ensure a string is always returned
