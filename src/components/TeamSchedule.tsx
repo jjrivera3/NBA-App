@@ -66,7 +66,7 @@ const TeamSchedule = () => {
       ? "PHO"
       : teamAbv1;
 
-  // Check for a matching team in nbaTeamBoxScoreId
+  // Check for a matching team in nbaTeamBoxScoreId's
   const matchingTeam = nbaTeamBoxScoreId.find(
     (team) => team.abbreviation === selectedAbv?.abbreviation
   );
