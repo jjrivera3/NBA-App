@@ -54,7 +54,7 @@ const TeamSchedule = () => {
 
   const teamAbv1 = selectedAbv?.abbreviation;
 
-  // Change "SA" to "SAS"
+  // Change "SA" to "SAS" and a few other
   const adjustedTeamAbv1 =
     teamAbv1 === "SAS"
       ? "SA"
