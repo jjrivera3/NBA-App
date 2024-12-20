@@ -14,9 +14,20 @@ const PlayerInfo = () => {
 
   // Back to Team Button Click Handler
   const handleBackToTeamClick = () => {
-    navigate(`/${teamAbv}`); // Correctly use navigate
-  };
+    let adjustedTeamAbv = teamAbv;
 
+    if (teamAbv === "gs") {
+      adjustedTeamAbv = "gsw";
+    } else if (teamAbv === "sa") {
+      adjustedTeamAbv = "sas";
+    } else if (teamAbv === "no") {
+      adjustedTeamAbv = "nop";
+    } else if (teamAbv === "pho") {
+      adjustedTeamAbv = "phx";
+    }
+
+    navigate(`/${adjustedTeamAbv}`); // Correctly use navigate
+  };
   // Define the responsive font size as a constant
   const responsiveFontSize = { base: 22, sm: 24, md: 22, xl: 32 };
 
