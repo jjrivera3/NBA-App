@@ -1603,7 +1603,7 @@ const ratings: Ratings[] = [
   },
   {
     name: "Dennis Schroder",
-    team: "Brooklyn Nets",
+    team: "Golden State Warriors",
     overallAttribute: 78,
     closeShot: 79,
     midRangeShot: 86,

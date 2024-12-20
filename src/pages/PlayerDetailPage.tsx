@@ -63,6 +63,7 @@ const PlayerDetailPage = () => {
         const team = nbateams.find(
           (team) => team.teamId === playerWithRating.teamID
         );
+        console.log(player?.team);
 
         setPlayerData({
           player: playerWithRating,
@@ -70,7 +71,7 @@ const PlayerDetailPage = () => {
           teamID: playerWithRating.teamID || "unknown",
           espnLogo1: team?.info.logoImage || "defaultLogo.png",
           teamCity: team?.info.city || "unknown2",
-          teamName: playerWithRating.rating.team || "unknown1",
+          teamName: playerWithRating.rating?.team ?? player?.team ?? "unknown1",
           playerRating: playerWithRating.rating,
         });
       }
