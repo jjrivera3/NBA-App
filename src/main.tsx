@@ -6,11 +6,11 @@ import "./index.css";
 import router from "./routes";
 import theme from "./theme";
 
-declare global {
-  interface Window {
-    gtag: (...args: any[]) => void;
-  }
-}
+// declare global {
+//   interface Window {
+//     gtag: (...args: any[]) => void;
+//   }
+// }
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
