@@ -39,7 +39,7 @@ The app utilizes the following APIs for fetching NBA data:
 
 ## Demo
 
-You can view a live demo of the application [here](https://nba-app-ivory.vercel.app/)
+You can view a live demo of the application [here](https://www.heatcheckhub.com)
 
 ## Screenshots
 
