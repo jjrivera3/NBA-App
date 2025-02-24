@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 import usePlayerRating from "../hooks/usePlayerRating";
 
-const normalizeName = (name: string) => {
+const normalizeName = (name: string | undefined): string => {
+  if (!name) return "";
   return name
     .toLowerCase()
     .replace(/[\u0300-\u036f]/g, "") // Remove accents

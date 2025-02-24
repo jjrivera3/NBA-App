@@ -40,7 +40,7 @@ const PlayerCard = ({ player, firstColor }: Props) => {
   const teamAbbreviation = player.team === "GS" ? "GSW" : player.team;
   const playerProfileUrl = `/${teamAbbreviation
     .toLowerCase()
-    .replace(/\s+/g, "-")}/${player?.espnName
+    .replace(/\s+/g, "-")}/${(player?.espnName || "")
     .toLowerCase()
     .replace(/\s+/g, "-")}`;
 
