@@ -17,6 +17,8 @@ const TodaysGames = () => {
 
   const slidesToShow = 5;
 
+  console.log("These are the games", games);
+
   const settings = {
     dots: false,
     infinite: true,
@@ -25,9 +27,9 @@ const TodaysGames = () => {
     slidesToScroll: 1,
     arrows: false,
     responsive: [
-      { breakpoint: 1500, settings: { slidesToShow: 4 } },
-      { breakpoint: 1100, settings: { slidesToShow: 3 } },
-      { breakpoint: 768, settings: { slidesToShow: 2 } },
+      { breakpoint: 1500, settings: { slidesToShow: 1 } },
+      { breakpoint: 1100, settings: { slidesToShow: 1 } },
+      { breakpoint: 768, settings: { slidesToShow: 1 } },
       { breakpoint: 480, settings: { slidesToShow: 1 } },
     ],
   };

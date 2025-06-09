@@ -26,7 +26,7 @@ function Homepage() {
       ) : (
         <>
           <HeroSection />
-          <TodaysGames />
+          {/* <TodaysGames /> */}
           <Flex
             direction={{ base: "column", lg: "row" }}
             gap={6}
