@@ -5,7 +5,6 @@ import News from "../components/News";
 import TeamGrid from "../components/TeamGrid";
 import TeamSchedule from "../components/TeamSchedule";
 import TeamStandings from "../components/TeamStandings";
-import TodaysGames from "../components/TodaysGames";
 import TopPlayers from "../components/TopPlayers";
 import useTopPlayerStats from "../hooks/useTopPlayerStats";
 
