@@ -7,6 +7,7 @@ import TeamSchedule from "../components/TeamSchedule";
 import TeamStandings from "../components/TeamStandings";
 import TopPlayers from "../components/TopPlayers";
 import useTopPlayerStats from "../hooks/useTopPlayerStats";
+import TodaysGames from "../components/TodaysGames";
 
 function Homepage() {
   const { teamAbv, schedule } = useParams<{
@@ -25,7 +26,7 @@ function Homepage() {
       ) : (
         <>
           <HeroSection />
-          {/* <TodaysGames /> */}
+          <TodaysGames />
           <Flex
             direction={{ base: "column", lg: "row" }}
             gap={6}
