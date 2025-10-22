@@ -16,7 +16,7 @@ const useDepthChart = (teamId: string) => {
       return data;
     },
     enabled: true,
-    staleTime: 24 * 60 * 60 * 1000, // Cache the data for 24 hours
+    staleTime: 24 * 60 * 60 * 1000,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });

@@ -9,7 +9,7 @@ import nbaTeams from "../data/nbateams";
 import useTeamColor from "../hooks/useTeamColor";
 import useTeamInfo from "../hooks/useTeamInfo";
 import TeamHeading from "./TeamHeading";
-import { useTeamStore } from "../useTeamStore";
+import { useTeamStore } from "../stores/useTeamStore";
 
 const TeamStatsPage = () => {
   const { teamAbv } = useParams<{ teamAbv: string }>();

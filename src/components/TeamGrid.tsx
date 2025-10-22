@@ -10,7 +10,7 @@ import TeamHeading from "./TeamHeading";
 import Utah_Jazz from "../assets/Utah_Jazz.png";
 import PlayerCardSkeleton from "./skeletons/PlayerCardSkeleton";
 import TeamHeadingSkeleton from "./skeletons/TeamHeadSkeleton";
-import { useTeamStore } from "../useTeamStore";
+import { useTeamStore } from "../stores/useTeamStore";
 import { useEffect } from "react";
 import TeamGridProps from "../entities/TeamGriptProps";
 

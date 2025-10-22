@@ -1,6 +1,6 @@
 import { Box, Flex, Grid, Text, useBreakpointValue } from "@chakra-ui/react";
 import { lighten } from "polished";
-import { usePlayerStore } from "../usePlayerStore";
+import { usePlayerStore } from "../stores/usePlayerStore";
 
 const PlayerStats = ({
   firstColor,

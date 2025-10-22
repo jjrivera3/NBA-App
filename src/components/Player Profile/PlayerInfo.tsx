@@ -1,6 +1,6 @@
 import { Button, Flex, HStack, Image, Text, VStack } from "@chakra-ui/react";
 import RatingScore from "../RatingScore";
-import { usePlayerStore } from "../../usePlayerStore";
+import { usePlayerStore } from "../../stores/usePlayerStore";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { useNavigate, useParams } from "react-router-dom"; // For navigation
 

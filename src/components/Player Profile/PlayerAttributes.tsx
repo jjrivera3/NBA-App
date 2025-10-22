@@ -8,7 +8,7 @@ import {
   Heading,
   Divider,
 } from "@chakra-ui/react";
-import { usePlayerAttributesStore } from "../../usePlayerAttributesStore";
+import { usePlayerAttributesStore } from "../../stores/usePlayerAttributesStore";
 
 interface AttributeBarProps {
   label: string;

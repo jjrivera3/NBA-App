@@ -16,7 +16,7 @@ export interface FetchResponse<T> {
     conference: string;
     teamName: string;
     teamCity: string;
-    schedule: any;
+    schedule: string;
     forEach(arg0: (team: any) => void): unknown;
     teamId: string;
     seasonId: string;

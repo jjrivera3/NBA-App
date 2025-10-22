@@ -1,5 +1,5 @@
 import { VStack, Text } from "@chakra-ui/react";
-import { usePlayerStore } from "../../usePlayerStore"; // Import the player store
+import { usePlayerStore } from "../../stores/usePlayerStore"; // Import the player store
 
 const PlayerAdditionalInfo = () => {
   const { player } = usePlayerStore((state) => state); // Get player from the store

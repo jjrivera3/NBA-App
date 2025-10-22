@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { mountStoreDevtool } from "simple-zustand-devtools";
-import Player from "./entities/Player";
+import Player from "../entities/Player";
 
 interface PlayerState {
   player: Player | null;

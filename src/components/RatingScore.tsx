@@ -1,5 +1,5 @@
 import { Badge } from "@chakra-ui/react";
-import { usePlayerStore } from "../usePlayerStore"; // Import Zustand store
+import { usePlayerStore } from "../stores/usePlayerStore"; // Import Zustand store
 
 const RatingScore = () => {
   const playerRating = usePlayerStore(

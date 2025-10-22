@@ -3,8 +3,8 @@ import nbaTeams from "../data/nbateams";
 import ratings from "../data/ratings"; // Import ratings data
 import Player from "../entities/Player";
 import TeamStore from "../entities/TeamStore";
-import { usePlayerAttributesStore } from "../usePlayerAttributesStore";
-import { usePlayerStore } from "../usePlayerStore";
+import { usePlayerAttributesStore } from "../stores/usePlayerAttributesStore";
+import { usePlayerStore } from "../stores/usePlayerStore";
 import useTeamInfo from "./useTeamInfo";
 import { normalizeName } from "../utils/normalizeName"; // Import normalizeName
 
