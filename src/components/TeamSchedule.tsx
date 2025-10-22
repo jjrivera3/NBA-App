@@ -30,6 +30,15 @@ import UpcomingGame from "./UpcomingGame";
 import TeamHeadingSkeleton from "./skeletons/TeamHeadSkeleton";
 import UpcomingGameSkeleton from "./skeletons/UpcomingGameSkeleton";
 
+type ScheduleScore = {
+  gameID: string;
+  gameStatus: string; // "Completed" | "Scheduled" etc.
+  homeResult?: "W" | "L";
+  awayResult?: "W" | "L";
+  homePts?: number;
+  awayPts?: number;
+};
+
 const formatTime = (epoch: string | number) => {
   const timeInSeconds = typeof epoch === "string" ? Number(epoch) : epoch;
   const date = new Date(timeInSeconds * 1000);
@@ -75,9 +84,13 @@ const TeamSchedule = () => {
   const { data: scheduleScoresData, isLoading: isScheduleLoading } =
     adjustedTeamAbv1
       ? useTeamScheduleScores(adjustedTeamAbv1)
-      : { data: null, isLoading: false };
+      : ({ data: null, isLoading: false } as const);
 
-  const scheduleScores = scheduleScoresData?.body?.schedule || [];
+  // Guard against string | undefined and avoid never[] by typing the fallback
+  const rawSchedule = scheduleScoresData?.body?.schedule;
+  const scheduleScores: ScheduleScore[] = Array.isArray(rawSchedule)
+    ? (rawSchedule as ScheduleScore[])
+    : [];
 
   const selectedTeam = Array.isArray(teamInfo?.body)
     ? teamInfo.body.find(
@@ -94,7 +107,9 @@ const TeamSchedule = () => {
     selectedTeam?.teamID === "29" ? Utah_Jazz : selectedTeam?.espnLogo1;
   const defaultColor = "#000000";
 
-  const nextGame = useNextGame(selectedTeam?.teamSchedule || null);
+  const nextGame = useNextGame(
+    (selectedTeam?.teamSchedule as GameSchedule[] | null) || null
+  );
   const isHomeTeam =
     selectedTeam && nextGame && selectedTeam.teamID === nextGame?.teamIDHome;
   const opponentId = isHomeTeam ? nextGame?.teamIDAway : nextGame?.teamIDHome;
@@ -126,7 +141,7 @@ const TeamSchedule = () => {
               teamAbv={teamAbv ?? ""}
             />
             <UpcomingGame
-              isHomeTeam={isHomeTeam}
+              isHomeTeam={!!isHomeTeam}
               teamLogo={espnLogo1}
               teamAbbrev={selectedAbv?.info.abbrev}
               opponentLogo={opponentLogo}
@@ -167,9 +182,9 @@ const TeamSchedule = () => {
                         const formattedDate = formatDate(game.gameDate);
 
                         const score = scheduleScores.find(
-                          (score: { gameID: string; gameStatus: string }) =>
-                            score.gameID === game.gameID &&
-                            score.gameStatus === "Completed"
+                          (s) =>
+                            s.gameID === game.gameID &&
+                            s.gameStatus === "Completed"
                         );
                         const isSelectedTeamWinner =
                           score &&
@@ -338,9 +353,9 @@ const TeamSchedule = () => {
 
                           // Check if the game has a completed score
                           const score = scheduleScores.find(
-                            (score: { gameID: string; gameStatus: string }) =>
-                              score.gameID === game.gameID &&
-                              score.gameStatus === "Completed"
+                            (s) =>
+                              s.gameID === game.gameID &&
+                              s.gameStatus === "Completed"
                           );
 
                           const isSelectedTeamWinner =
@@ -370,12 +385,12 @@ const TeamSchedule = () => {
                               bg="gray.700"
                               color="white"
                               hasArrow
-                              isDisabled={!score} // Tooltip only enabled if score exists
+                              isDisabled={!score}
                             >
                               <Tr
                                 borderBottom="1px solid #2d2d2d"
                                 bg={index % 2 === 0 ? "#232323" : "#2A2A2A"}
-                                cursor={score ? "pointer" : "default"} // Only pointer cursor if score exists
+                                cursor={score ? "pointer" : "default"}
                                 sx={
                                   score
                                     ? {
@@ -385,7 +400,7 @@ const TeamSchedule = () => {
                                           cursor: "pointer",
                                         },
                                       }
-                                    : {} /* No hover effect for rows without a score */
+                                    : {}
                                 }
                                 onClick={() => {
                                   if (score) {
