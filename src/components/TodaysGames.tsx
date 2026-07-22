@@ -105,6 +105,31 @@ const TodaysGames = () => {
         <Text color="red.500">
           Error loading games. Please try again later.
         </Text>
+      ) : games.filter((game) => game.statusType !== "STATUS_CANCELED")
+          .length === 0 ? (
+        <Flex
+          direction="column"
+          align="center"
+          justify="center"
+          py={8}
+          gap={3}
+        >
+          <Text color="gray.400" fontSize={{ base: "sm", md: "md" }}>
+            No games scheduled right now.
+          </Text>
+          <Button
+            as={Link}
+            to="/scoreboard"
+            leftIcon={<CalendarIcon />}
+            bg="#f8991d"
+            color="#1a1a1a"
+            _hover={{ bg: "#e08a17" }}
+            fontWeight={600}
+            fontSize={14}
+          >
+            View Previous Games
+          </Button>
+        </Flex>
       ) : (
         <Slider ref={sliderRef} {...settings}>
           {games
