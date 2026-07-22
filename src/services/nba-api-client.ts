@@ -16,9 +16,10 @@ class NBAAPIClient {
   }
 
   getAll = <T>(config?: AxiosRequestConfig): Promise<T> => {
-    return nbaAxiosInstance
-      .get<T>(`${this.endpoint}/${config?.url || ""}`, config)
-      .then((res) => res.data);
+    // Only append config.url when present; otherwise a trailing slash
+    // (e.g. "/nbascoreboard/") makes RapidAPI 404.
+    const path = config?.url ? `${this.endpoint}/${config.url}` : this.endpoint;
+    return nbaAxiosInstance.get<T>(path, config).then((res) => res.data);
   };
 }
 

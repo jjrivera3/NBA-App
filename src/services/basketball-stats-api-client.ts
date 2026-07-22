@@ -16,9 +16,9 @@ class BasketballStatsAPIClient {
   }
 
   getAll = <T>(config?: AxiosRequestConfig): Promise<T> => {
-    return basketballAxiosInstance
-      .get<T>(`${this.endpoint}/${config?.url || ""}`, config)
-      .then((res) => res.data);
+    // Only append config.url when present; a trailing slash makes RapidAPI 404.
+    const path = config?.url ? `${this.endpoint}/${config.url}` : this.endpoint;
+    return basketballAxiosInstance.get<T>(path, config).then((res) => res.data);
   };
 }
 
