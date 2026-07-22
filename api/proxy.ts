@@ -1,9 +1,9 @@
 // Serverless proxy for RapidAPI.
 //
-// The browser never sees the RapidAPI key. It calls /api/rapidapi/<path>
-// with an `x-rapidapi-host` header naming which upstream it wants; this
-// function injects the secret key (from the server-only RAPIDAPI_KEY env var)
-// and forwards the request.
+// The browser never sees the RapidAPI key. It calls /api/rapidapi/<path...>
+// with an `x-rapidapi-host` header naming which upstream it wants. A rewrite in
+// vercel.json maps that (any depth) to this function as /api/proxy?path=<path...>,
+// and here we inject the secret key (RAPIDAPI_KEY) and forward the request.
 //
 // Set RAPIDAPI_KEY in Vercel: Project Settings -> Environment Variables.
 // Do NOT prefix it with VITE_ — that would bundle it back into the client.
@@ -29,9 +29,19 @@ export default async function handler(req: any, res: any) {
     return;
   }
 
-  // Keep the caller's path + query string, drop our own /api/rapidapi prefix.
-  const upstreamPath = req.url.replace(/^\/api\/rapidapi/, "");
-  const upstreamUrl = `https://${host}${upstreamPath}`;
+  // The upstream path arrives in the `path` query param (from the vercel.json
+  // rewrite); every other query param is the real upstream query string.
+  const parsed = new URL(req.url, "http://internal");
+  let path = parsed.searchParams.getAll("path").join("/");
+  parsed.searchParams.delete("path");
+
+  // Fallback for any direct hit that still carries the path in the URL.
+  if (!path) {
+    path = parsed.pathname.replace(/^\/api\/(rapidapi|proxy)\/?/, "");
+  }
+
+  const qs = parsed.searchParams.toString();
+  const upstreamUrl = `https://${host}/${path}${qs ? "?" + qs : ""}`;
 
   try {
     const upstream = await fetch(upstreamUrl, {

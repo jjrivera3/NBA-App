@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/api/rapidapi/:path*", "destination": "/api/proxy?path=:path*" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
