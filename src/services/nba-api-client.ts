@@ -1,9 +1,9 @@
 import axios, { AxiosRequestConfig } from "axios";
 
 const nbaAxiosInstance = axios.create({
-  baseURL: "https://api-basketball-nba.p.rapidapi.com",
+  // Routes through our serverless proxy, which injects the key server-side.
+  baseURL: "/api/rapidapi",
   headers: {
-    "x-rapidapi-key": import.meta.env.VITE_RAPIDAPI_KEY || "",
     "x-rapidapi-host": "api-basketball-nba.p.rapidapi.com",
   },
 });

@@ -5,10 +5,10 @@ import axios from "axios";
 const fetchPlayerInfo = async (playerName: string) => {
   const options = {
     method: "GET",
-    url: "https://tank01-fantasy-stats.p.rapidapi.com/getNBAPlayerInfo",
+    // Routes through our serverless proxy, which injects the key server-side.
+    url: "/api/rapidapi/getNBAPlayerInfo",
     params: { playerName, statsToGet: "averages" },
     headers: {
-      "x-rapidapi-key": "256fd56781msh523522a92b2e3a3p117802jsndb7be0b6b755",
       "x-rapidapi-host": "tank01-fantasy-stats.p.rapidapi.com",
     },
   };

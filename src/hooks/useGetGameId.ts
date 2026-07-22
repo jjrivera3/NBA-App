@@ -9,14 +9,13 @@ const useGetGameID = (teamId: any, season = "2025", _options = {}) => {
 
       const response = await axios.request({
         method: "GET",
-        url: "https://api-basketball-nba.p.rapidapi.com/nba-schedule-team",
+        // Routes through our serverless proxy, which injects the key server-side.
+        url: "/api/rapidapi/nba-schedule-team",
         params: {
           season: season,
           teamId: teamId,
         },
         headers: {
-          "x-rapidapi-key":
-            "256fd56781msh523522a92b2e3a3p117802jsndb7be0b6b755",
           "x-rapidapi-host": "api-basketball-nba.p.rapidapi.com",
         },
       });

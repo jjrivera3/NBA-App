@@ -25,9 +25,9 @@ export interface FetchResponse<T> {
 }
 
 const fantasyStatsAxiosInstance = axios.create({
-  baseURL: "https://tank01-fantasy-stats.p.rapidapi.com",
+  // Routes through our serverless proxy, which injects the key server-side.
+  baseURL: "/api/rapidapi",
   headers: {
-    "x-rapidapi-key": import.meta.env.VITE_RAPIDAPI_KEY || "",
     "x-rapidapi-host": "tank01-fantasy-stats.p.rapidapi.com",
   },
 });
